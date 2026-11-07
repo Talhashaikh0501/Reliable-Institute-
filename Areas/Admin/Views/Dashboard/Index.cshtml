@@ -20,9 +20,9 @@
         <section class="ra-panel"><div class="ra-panel-heading"><div><span>QUICK ACCESS</span><h3>Manage your institute</h3></div><span class="ra-panel-note">Your workspace</span></div>
             <div class="ra-shortcuts">
                 <a class="ra-shortcut" asp-area="Admin" asp-controller="Students" asp-action="Index"><span class="ra-shortcut-icon ra-icon-blue">♙</span><span><b>Students</b><small>Admissions & records</small></span><i>↗</i></a>
-                <a class="ra-shortcut" href="#" aria-disabled="true"><span class="ra-shortcut-icon ra-icon-violet">▦</span><span><b>Classes & batches</b><small>Organise classrooms</small></span><i>↗</i></a>
+                <a class="ra-shortcut" asp-area="Admin" asp-controller="Batches" asp-action="Index"><span class="ra-shortcut-icon ra-icon-violet">▦</span><span><b>Classes & batches</b><small>Organise classrooms</small></span><i>↗</i></a>
                 <a class="ra-shortcut" href="#" aria-disabled="true"><span class="ra-shortcut-icon ra-icon-amber">₹</span><span><b>Fee management</b><small>Payments & receipts</small></span><i>↗</i></a>
-                <a class="ra-shortcut" href="#" aria-disabled="true"><span class="ra-shortcut-icon ra-icon-green">✓</span><span><b>Attendance</b><small>Daily student presence</small></span><i>↗</i></a>
+                <a class="ra-shortcut" asp-area="Admin" asp-controller="Attendance" asp-action="Index"><span class="ra-shortcut-icon ra-icon-green">✓</span><span><b>Attendance</b><small>Daily student presence</small></span><i>↗</i></a>
             </div>
         </section>
         <section class="ra-panel"><div class="ra-panel-heading"><div><span>STAY INFORMED</span><h3>Latest announcements</h3></div></div>

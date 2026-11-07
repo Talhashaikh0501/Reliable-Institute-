@@ -1,0 +1,8 @@
+@model ReliableAcademy.ViewModels.BatchFormViewModel
+@{
+    ViewData["Title"] = "Edit batch";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="ra-page-heading"><div><div class="ra-eyebrow">CLASSES & BATCHES <span>•</span> SETUP</div><h1>Edit batch</h1><p>Update the teaching group's details and schedule.</p></div><a class="ra-secondary-button" asp-action="Index">← Back to batches</a></div>
+<form asp-action="Edit" asp-route-id="@ViewContext.RouteData.Values["id"]" method="post" class="ra-panel ra-form-panel"><div asp-validation-summary="ModelOnly" class="ra-validation-summary"></div><partial name="_BatchForm" model="Model" /><div class="ra-form-actions"><a class="ra-secondary-button" asp-action="Index">Cancel</a><button class="ra-primary-button" type="submit">Save changes →</button></div></form>
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

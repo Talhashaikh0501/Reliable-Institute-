@@ -1,0 +1,26 @@
+@model ReliableAcademy.ViewModels.BatchListViewModel
+@{
+    ViewData["Title"] = "Classes & batches";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="ra-page-heading">
+    <div><div class="ra-eyebrow">INSTITUTE <span>•</span> CLASSROOMS</div><h1>Classes & batches</h1><p>Organise teaching groups by standard and academic year.</p></div>
+    @if (User.IsInRole("Admin")) { <a class="ra-primary-button" asp-action="Create">＋ Create batch</a> }
+</div>
+@if (TempData["Success"] is string success) { <div class="ra-alert-success" role="status">@success</div> }
+<section class="ra-panel ra-student-toolbar">
+    <form method="get" class="ra-filter-form"><label class="ra-check-filter"><input type="checkbox" name="includeInactive" value="true" checked="@Model.IncludeInactive" /> Include archived batches</label><button class="ra-secondary-button" type="submit">Apply</button><a class="ra-text-link" asp-action="Index">Clear</a></form>
+</section>
+<section class="ra-panel ra-table-panel">
+    <div class="ra-panel-heading"><div><span>TEACHING GROUPS</span><h3>Batch directory</h3></div><span class="ra-panel-note">@Model.Batches.Count batch(es)</span></div>
+    @if (Model.Batches.Count == 0) { <div class="ra-empty ra-student-empty"><span>▦</span><b>No batches created yet</b><p>Create batches before assigning students or taking attendance.</p></div> }
+    else {
+        <div class="table-responsive"><table class="ra-data-table">
+            <thead><tr><th>BATCH</th><th>STANDARD</th><th>ACADEMIC YEAR</th><th>SCHEDULE</th><th>STUDENTS</th><th>STATUS</th><th></th></tr></thead>
+            <tbody>@foreach (var batch in Model.Batches) {
+                <tr><td><b class="ra-student-name">@batch.Name</b></td><td><span class="ra-standard-pill">@((int)batch.Standard)th</span></td><td>@batch.AcademicYear</td><td>@(batch.StartTime?.ToString("hh:mm tt") ?? "—") – @(batch.EndTime?.ToString("hh:mm tt") ?? "—")</td><td>@batch.ActiveStudents</td><td><span class="ra-status-pill @(batch.IsActive ? "is-active" : "is-inactive")">@(batch.IsActive ? "Active" : "Archived")</span></td>
+                <td>@if (User.IsInRole("Admin")) { <div class="ra-row-actions"><a class="ra-row-action" asp-action="Edit" asp-route-id="@batch.Id">Edit</a><form asp-action="ToggleStatus" asp-route-id="@batch.Id" method="post"><button class="ra-row-action ra-link-button" type="submit">@(batch.IsActive ? "Archive" : "Restore")</button></form></div> }</td></tr>
+            }</tbody>
+        </table></div>
+    }
+</section>

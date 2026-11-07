@@ -37,6 +37,7 @@ public sealed class StudentsController(ApplicationDbContext db) : Controller
         });
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpGet]
     public async Task<IActionResult> Create()
     {
@@ -48,6 +49,7 @@ public sealed class StudentsController(ApplicationDbContext db) : Controller
         });
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(StudentFormViewModel model)
@@ -87,6 +89,7 @@ public sealed class StudentsController(ApplicationDbContext db) : Controller
         return RedirectToAction(nameof(Details), new { id = student.Id });
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpGet]
     public async Task<IActionResult> Edit(int id)
     {
@@ -112,6 +115,7 @@ public sealed class StudentsController(ApplicationDbContext db) : Controller
         });
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit(int id, StudentFormViewModel model)
@@ -161,6 +165,7 @@ public sealed class StudentsController(ApplicationDbContext db) : Controller
         return student is null ? NotFound() : View(student);
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> ToggleStatus(int id)

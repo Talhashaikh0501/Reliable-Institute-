@@ -1,0 +1,9 @@
+@model ReliableAcademy.ViewModels.BatchFormViewModel
+<div class="ra-form-section"><div class="ra-form-section-heading"><span>01</span><div><b>Batch details</b><small>Choose the standard, batch name and academic year.</small></div></div>
+<div class="ra-form-grid">
+    <div class="ra-field"><label asp-for="Name"></label><input asp-for="Name" placeholder="e.g. Morning Batch" /><span asp-validation-for="Name"></span></div>
+    <div class="ra-field"><label asp-for="Standard"></label><select asp-for="Standard"><option value="8">8th Standard</option><option value="9">9th Standard</option><option value="10">10th Standard</option><option value="11">11th Standard</option><option value="12">12th Standard</option></select><span asp-validation-for="Standard"></span></div>
+    <div class="ra-field"><label asp-for="AcademicYear"></label><input asp-for="AcademicYear" placeholder="2026-2027" /><span asp-validation-for="AcademicYear"></span></div>
+</div></div>
+<div class="ra-form-section"><div class="ra-form-section-heading"><span>02</span><div><b>Class schedule</b><small>Optional timings for this teaching group.</small></div></div>
+<div class="ra-form-grid"><div class="ra-field"><label asp-for="StartTime"></label><input asp-for="StartTime" type="time" /><span asp-validation-for="StartTime"></span></div><div class="ra-field"><label asp-for="EndTime"></label><input asp-for="EndTime" type="time" /><span asp-validation-for="EndTime"></span></div></div></div>

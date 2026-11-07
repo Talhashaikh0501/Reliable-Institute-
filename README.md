@@ -20,8 +20,10 @@ The institute teaches 8th, 9th, 10th, 11th and 12th standards (board curriculum 
 
 - Identity authentication foundation and Admin / Teacher roles
 - Student admissions, directory search and standard filtering
-- Student profiles, edit, archive and reactivation
+- Student profiles, edit, archive and reactivation (Admin write access; Teachers can view)
+- Class and batch creation, schedules, archive / restore and student counts (Admin manages; Teachers can view)
 - Batch assignment from active batches matching the selected standard
+- Daily attendance register by batch and date, including Present / Absent / Late / Leave, optional notes and audit attribution (Admin and Teachers)
 - Student profile summary for recorded fees and attendance
 
 ## Run locally

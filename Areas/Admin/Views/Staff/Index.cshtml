@@ -1,0 +1,24 @@
+@model IReadOnlyList<ReliableAcademy.ViewModels.TeacherAccountViewModel>
+@{
+    ViewData["Title"] = "Teacher accounts";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="ra-page-heading">
+    <div><div class="ra-eyebrow">PEOPLE <span>•</span> STAFF ACCESS</div><h1>Teacher accounts</h1><p>Create teacher logins and control access to the management system.</p></div>
+    <a class="ra-primary-button" asp-action="Create">＋ Add teacher</a>
+</div>
+@if (TempData["Success"] is string success) { <div class="ra-alert-success" role="status">@success</div> }
+@if (TempData["Error"] is string error) { <div class="ra-alert-error" role="alert">@error</div> }
+<section class="ra-panel ra-table-panel">
+    <div class="ra-panel-heading"><div><span>STAFF DIRECTORY</span><h3>Teaching team</h3></div><span class="ra-panel-note">@Model.Count teacher account(s)</span></div>
+    @if (Model.Count == 0) { <div class="ra-empty ra-student-empty"><span>♙</span><b>No teacher accounts yet</b><p>Create an account for each teacher who needs to mark attendance.</p></div> }
+    else {
+        <div class="table-responsive"><table class="ra-data-table">
+            <thead><tr><th>TEACHER ACCOUNT</th><th>MOBILE</th><th>ACCESS</th><th></th></tr></thead>
+            <tbody>@foreach (var teacher in Model) {
+                <tr><td><b class="ra-student-name">@teacher.Email</b></td><td>@(teacher.PhoneNumber ?? "—")</td><td><span class="ra-status-pill @(teacher.IsLocked ? "is-inactive" : "is-active")">@(teacher.IsLocked ? "Suspended" : "Active")</span></td>
+                    <td><form asp-action="ToggleAccess" asp-route-id="@teacher.UserId" method="post"><button class="ra-row-action ra-link-button" type="submit">@(teacher.IsLocked ? "Restore access" : "Suspend access")</button></form></td></tr>
+            }</tbody>
+        </table></div>
+    }
+</section>

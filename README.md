@@ -19,6 +19,7 @@ The institute teaches 8th, 9th, 10th, 11th and 12th standards (board curriculum 
 ## Current implementation
 
 - Identity authentication foundation and Admin / Teacher roles
+- Admin-only teacher account creation and access suspension / restoration
 - Student admissions, directory search and standard filtering
 - Student profiles, edit, archive and reactivation (Admin write access; Teachers can view)
 - Class and batch creation, schedules, archive / restore and student counts (Admin manages; Teachers can view)

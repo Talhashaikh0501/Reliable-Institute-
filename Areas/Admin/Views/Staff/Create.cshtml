@@ -1,0 +1,19 @@
+@model ReliableAcademy.ViewModels.TeacherFormViewModel
+@{
+    ViewData["Title"] = "Add teacher";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="ra-page-heading"><div><div class="ra-eyebrow">TEACHER ACCOUNTS <span>•</span> ACCESS SETUP</div><h1>Add a teacher</h1><p>Create a secure login for a member of the teaching team.</p></div><a class="ra-secondary-button" asp-action="Index">← Back to teachers</a></div>
+<form asp-action="Create" method="post" class="ra-panel ra-form-panel">
+    <div asp-validation-summary="ModelOnly" class="ra-validation-summary"></div>
+    <div class="ra-form-section"><div class="ra-form-section-heading"><span>01</span><div><b>Teacher credentials</b><small>These details will be used to sign in to the teacher workspace.</small></div></div>
+        <div class="ra-form-grid">
+            <div class="ra-field ra-field-wide"><label asp-for="Email"></label><input asp-for="Email" autocomplete="username" placeholder="teacher@example.com" /><span asp-validation-for="Email"></span></div>
+            <div class="ra-field"><label asp-for="PhoneNumber"></label><input asp-for="PhoneNumber" placeholder="Mobile number (optional)" /><span asp-validation-for="PhoneNumber"></span></div>
+            <div class="ra-field"><label asp-for="Password"></label><input asp-for="Password" autocomplete="new-password" placeholder="At least 8 characters" /><span asp-validation-for="Password"></span></div>
+            <div class="ra-field"><label asp-for="ConfirmPassword"></label><input asp-for="ConfirmPassword" autocomplete="new-password" placeholder="Enter password again" /><span asp-validation-for="ConfirmPassword"></span></div>
+        </div>
+    </div>
+    <div class="ra-form-actions"><a class="ra-secondary-button" asp-action="Index">Cancel</a><button class="ra-primary-button" type="submit">Create teacher account →</button></div>
+</form>
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

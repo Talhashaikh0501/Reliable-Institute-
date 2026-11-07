@@ -12,11 +12,11 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" /><link rel="stylesheet" href="~/css/site.css" asp-append-version="true" /><link rel="stylesheet" href="~/ReliableAcademy.styles.css" asp-append-version="true" />
 </head>
-<body class="@(isAdminArea ? "ra-app-body" : "ra-public-body")">
+<body class="@(isWorkspaceArea ? "ra-app-body" : "ra-public-body")">
 @if (isWorkspaceArea)
 {
 <aside class="ra-sidebar">
-<a class="ra-brand" asp-area="Admin" asp-controller="Dashboard" asp-action="Index"><span class="ra-brand-mark">R<span>.</span></span><span><b>RELIABLE</b><small>ACADEMY MANAGEMENT</small></span></a>
+<a class="ra-brand" asp-area="@(User.IsInRole("Teacher") ? "Teacher" : "Admin")" asp-controller="Dashboard" asp-action="Index"><span class="ra-brand-mark">R<span>.</span></span><span><b>RELIABLE</b><small>ACADEMY MANAGEMENT</small></span></a>
 <div class="ra-nav-label">@(User.IsInRole("Admin") ? "ADMIN WORKSPACE" : "TEACHING WORKSPACE")</div>
 <a class="ra-nav-link@Active("Dashboard")" asp-area="@(User.IsInRole("Teacher") ? "Teacher" : "Admin")" asp-controller="Dashboard" asp-action="Index"><span>▦</span> @(User.IsInRole("Teacher") ? "Teaching desk" : "Overview")</a>
 <div class="ra-nav-label ra-nav-label-spaced">INSTITUTE</div>

@@ -40,7 +40,24 @@
 }
 else
 {
-<header class="ra-public-header"><a class="ra-public-brand" asp-controller="Home" asp-action="Index"><span class="ra-brand-mark">R<span>.</span></span><span><b>RELIABLE</b><small>COACHING CLASSES</small></span></a><div class="ra-public-location">ROSHAN GATE <span>·</span> AURANGABAD</div><partial name="_LoginPartial" /></header><main>@RenderBody()</main>
+<header class="ra-public-header">
+<a class="ra-public-brand" asp-controller="Home" asp-action="Index"><span class="ra-brand-mark">R<span>.</span></span><span><b>RELIABLE</b><small>COACHING CLASSES</small></span></a>
+<div class="ra-public-location">ROSHAN GATE <span>·</span> AURANGABAD</div>
+@if (User.Identity?.IsAuthenticated == true)
+{
+    <partial name="_LoginPartial" />
+}
+else
+{
+    <details class="rci-signin-menu">
+        <summary>Sign In <span aria-hidden="true">⌄</span></summary>
+        <div class="rci-signin-options">
+            <a asp-area="Identity" asp-page="/Account/Login" asp-route-returnUrl="/Admin/Dashboard"><span class="rci-signin-option-icon">A</span><span><b>Admin Sign In</b><small>Institute management</small></span><i>↗</i></a>
+            <a asp-area="Identity" asp-page="/Account/Login" asp-route-returnUrl="/Admin/Dashboard"><span class="rci-signin-option-icon">T</span><span><b>Teacher Sign In</b><small>Teaching workspace</small></span><i>↗</i></a>
+        </div>
+    </details>
+}
+</header><main>@RenderBody()</main>
 }
 <script src="~/lib/jquery/dist/jquery.min.js"></script><script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script><script src="~/js/site.js" asp-append-version="true"></script>
 @await RenderSectionAsync("Scripts", required: false)

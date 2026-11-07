@@ -10,13 +10,13 @@
 }
 <div class="ra-page-heading">
     <div><div class="ra-eyebrow">STUDENT RECORDS <span>•</span> PROFILE</div><h1>@Model.FullName</h1><p>@Model.AdmissionNumber · @((int)Model.Standard)th Standard · @Model.AcademicYear</p></div>
-    <div class="ra-heading-actions"><a class="ra-secondary-button" asp-action="Index">← All students</a><a class="ra-primary-button" asp-action="Edit" asp-route-id="@Model.Id">Edit profile</a></div>
+    <div class="ra-heading-actions"><a class="ra-secondary-button" asp-action="Index">← All students</a>@if (User.IsInRole("Admin")) { <a class="ra-primary-button" asp-action="Edit" asp-route-id="@Model.Id">Edit profile</a> }</div>
 </div>
 @if (TempData["Success"] is string success) { <div class="ra-alert-success" role="status">@success</div> }
 <div class="ra-profile-summary">
     <div class="ra-profile-avatar">@Model.FullName.Trim().Substring(0, 1).ToUpperInvariant()</div>
     <div class="ra-profile-main"><span class="ra-status-pill @(Model.IsActive ? "is-active" : "is-inactive")">@(Model.IsActive ? "Active student" : "Archived student")</span><h2>@Model.FullName</h2><p>Admission date: @Model.AdmissionDate.ToString("dd MMM yyyy") · Batch: @(Model.Batch?.Name ?? "Not assigned")</p></div>
-    <form asp-action="ToggleStatus" asp-route-id="@Model.Id" method="post"><button type="submit" class="ra-secondary-button">@(Model.IsActive ? "Archive student" : "Reactivate student")</button></form>
+    @if (User.IsInRole("Admin")) { <form asp-action="ToggleStatus" asp-route-id="@Model.Id" method="post"><button type="submit" class="ra-secondary-button">@(Model.IsActive ? "Archive student" : "Reactivate student")</button></form> }
 </div>
 <div class="ra-stat-grid ra-profile-stats @(User.IsInRole("Admin") ? "" : "ra-profile-stats-teacher")">
     @if (User.IsInRole("Admin"))

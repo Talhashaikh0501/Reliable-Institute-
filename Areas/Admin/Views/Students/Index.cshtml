@@ -5,7 +5,7 @@
 }
 <div class="ra-page-heading">
     <div><div class="ra-eyebrow">INSTITUTE <span>•</span> STUDENT RECORDS</div><h1>Students</h1><p>Manage admissions, student details and class allocation.</p></div>
-    <a class="ra-primary-button" asp-action="Create"><span>＋</span> Add student</a>
+    @if (User.IsInRole("Admin")) { <a class="ra-primary-button" asp-action="Create"><span>＋</span> Add student</a> }
 </div>
 @if (TempData["Success"] is string success) { <div class="ra-alert-success" role="status">@success</div> }
 <section class="ra-panel ra-student-toolbar">

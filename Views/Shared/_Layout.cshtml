@@ -1,5 +1,5 @@
 @{
-    var isAdminArea = ViewContext.RouteData.Values["area"]?.ToString() == "Admin";
+    var currentArea = ViewContext.RouteData.Values["area"]?.ToString() ?? "";\n    var isAdminArea = currentArea == "Admin";\n    var isWorkspaceArea = isAdminArea || currentArea == "Teacher";
     var currentController = ViewContext.RouteData.Values["controller"]?.ToString() ?? "";
     string Active(string controller) => currentController.Equals(controller, StringComparison.OrdinalIgnoreCase) ? " active" : "";
 }
@@ -13,12 +13,12 @@
 <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" /><link rel="stylesheet" href="~/css/site.css" asp-append-version="true" /><link rel="stylesheet" href="~/ReliableAcademy.styles.css" asp-append-version="true" />
 </head>
 <body class="@(isAdminArea ? "ra-app-body" : "ra-public-body")">
-@if (isAdminArea)
+@if (isWorkspaceArea)
 {
 <aside class="ra-sidebar">
 <a class="ra-brand" asp-area="Admin" asp-controller="Dashboard" asp-action="Index"><span class="ra-brand-mark">R<span>.</span></span><span><b>RELIABLE</b><small>ACADEMY MANAGEMENT</small></span></a>
-<div class="ra-nav-label">WORKSPACE</div>
-<a class="ra-nav-link@Active("Dashboard")" asp-area="Admin" asp-controller="Dashboard" asp-action="Index"><span>▦</span> Overview</a>
+<div class="ra-nav-label">@(User.IsInRole("Admin") ? "ADMIN WORKSPACE" : "TEACHING WORKSPACE")</div>
+<a class="ra-nav-link@Active("Dashboard")" asp-area="@(User.IsInRole("Teacher") ? "Teacher" : "Admin")" asp-controller="Dashboard" asp-action="Index"><span>▦</span> @(User.IsInRole("Teacher") ? "Teaching desk" : "Overview")</a>
 <div class="ra-nav-label ra-nav-label-spaced">INSTITUTE</div>
 <a class="ra-nav-link@Active("Students")" asp-area="Admin" asp-controller="Students" asp-action="Index"><span>♙</span> Students</a>
 <a class="ra-nav-link@Active("Batches")" asp-area="Admin" asp-controller="Batches" asp-action="Index"><span>▤</span> Classes & batches</a>

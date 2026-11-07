@@ -1,0 +1,62 @@
+@model ReliableAcademy.Areas.Teacher.Controllers.TeacherDashboardViewModel
+@{
+    ViewData["Title"] = "Teaching desk";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="ra-dashboard">
+    <div class="ra-page-heading">
+        <div><div class="ra-eyebrow">TEACHER WORKSPACE <span>•</span> RELIABLE COACHING CLASSES</div>
+            <h1>Good day, @User.Identity?.Name?.Split('@')[0] 👋</h1>
+            <p>Your teaching day, organised in one place. Here is what needs your attention.</p>
+        </div>
+        <div class="ra-date"><span class="ra-live-dot"></span> @DateTime.Now.ToString("dddd, dd MMMM yyyy")</div>
+    </div>
+    <section class="ra-welcome"><div><span class="ra-welcome-label">YOUR TEACHING DESK</span>
+        <h2>Make every class count.</h2><p>Take attendance, review your batches and stay up to date with academic activity.</p>
+    </div><div class="ra-welcome-mark" aria-hidden="true">✦</div></section>
+    <div class="ra-section-heading"><div><span>YOUR DAY AT A GLANCE</span><h3>Teaching overview</h3></div></div>
+    <section class="ra-stat-grid">
+        <article class="ra-stat-card"><div class="ra-stat-top"><span class="ra-stat-icon ra-icon-blue">♙</span><span class="ra-stat-caption">STUDENTS</span></div><strong>@Model.ActiveStudents.ToString("N0")</strong><span class="ra-stat-foot">Currently enrolled</span></article>
+        <article class="ra-stat-card"><div class="ra-stat-top"><span class="ra-stat-icon ra-icon-violet">▦</span><span class="ra-stat-caption">BATCHES</span></div><strong>@Model.ActiveBatches.ToString("N0")</strong><span class="ra-stat-foot">Active learning groups</span></article>
+        <article class="ra-stat-card"><div class="ra-stat-top"><span class="ra-stat-icon ra-icon-green">✓</span><span class="ra-stat-caption">PRESENT TODAY</span></div><strong>@Model.PresentToday.ToString("N0")</strong><span class="ra-stat-foot">Students marked present</span></article>
+        <article class="ra-stat-card"><div class="ra-stat-top"><span class="ra-stat-icon ra-icon-amber">◷</span><span class="ra-stat-caption">ATTENDANCE</span></div><strong>@Model.AttendanceMarkedToday.ToString("N0")</strong><span class="ra-stat-foot">Records submitted today</span></article>
+    </section>
+    <div class="ra-content-grid">
+        <section class="ra-panel">
+            <div class="ra-panel-heading"><div><span>CLASSROOM OVERVIEW</span><h3>Your active batches</h3></div><a class="ra-row-action" asp-area="Admin" asp-controller="Batches" asp-action="Index">All batches ↗</a></div>
+            @if (Model.CurrentBatches.Count == 0) { <div class="ra-empty"><span>▦</span><b>No active batches yet</b><p>Active classes will appear here when they are created.</p></div> }
+            else
+            {
+                <div class="ra-shortcuts">
+                @foreach (var batch in Model.CurrentBatches)
+                {
+                    <a class="ra-shortcut" asp-area="Admin" asp-controller="Attendance" asp-action="Index" asp-route-batchId="@batch.Id">
+                        <span class="ra-shortcut-icon ra-icon-violet">@((int)batch.Standard)</span>
+                        <span><b>@batch.Name</b><small>@batch.StudentCount students · @(batch.StartTime?.ToString("hh:mm tt") ?? "Time not set")</small></span><i>↗</i>
+                    </a>
+                }
+                </div>
+            }
+            <div style="margin-top:16px"><a class="ra-primary-button" asp-area="Admin" asp-controller="Attendance" asp-action="Index">Take attendance <span>↗</span></a></div>
+        </section>
+        <section class="ra-panel">
+            <div class="ra-panel-heading"><div><span>ACADEMIC CALENDAR</span><h3>Upcoming exams</h3></div><a class="ra-row-action" asp-area="Admin" asp-controller="Academics" asp-action="Exams">View all ↗</a></div>
+            @if (Model.UpcomingExams.Count == 0) { <div class="ra-empty"><span>▧</span><b>No upcoming exams</b><p>Scheduled assessments will appear here.</p></div> }
+            else
+            {
+                @foreach (var exam in Model.UpcomingExams)
+                { <article class="ra-announcement"><b>@exam.Name</b><p>@exam.Subject.Name · @(exam.Batch?.Name ?? "All matching batches")</p><small>@exam.ExamDate.ToString("dd MMM yyyy") · @exam.MaximumMarks.ToString("0.##") marks</small></article> }
+            }
+        </section>
+    </div>
+    <section class="ra-panel" style="margin-top:15px">
+        <div class="ra-panel-heading"><div><span>INSTITUTE UPDATES</span><h3>Latest announcements</h3></div><a class="ra-row-action" asp-area="Admin" asp-controller="Academics" asp-action="Announcements">View all ↗</a></div>
+        @if (Model.Announcements.Count == 0) { <div class="ra-empty"><span>✦</span><b>You're all caught up</b><p>New teacher announcements will appear here.</p></div> }
+        else
+        {
+            @foreach (var item in Model.Announcements)
+            { <article class="ra-announcement"><b>@item.Title</b><p>@item.Message</p><small>@item.PublishedAtUtc.ToLocalTime().ToString("dd MMM, hh:mm tt")</small></article> }
+        }
+    </section>
+    <div class="ra-footer-note"><span>RELIABLE</span> TEACHER WORKSPACE <i>•</i> Focus on teaching</div>
+</div>

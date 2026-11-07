@@ -156,11 +156,15 @@ public sealed class StudentsController(ApplicationDbContext db) : Controller
     [HttpGet]
     public async Task<IActionResult> Details(int id)
     {
-        var student = await db.Students.AsNoTracking()
+        var query = db.Students.AsNoTracking()
             .Include(x => x.Batch)
-            .Include(x => x.FeePlans).ThenInclude(x => x.Payments)
             .Include(x => x.AttendanceRecords)
-            .FirstOrDefaultAsync(x => x.Id == id);
+            .AsQueryable();
+
+        if (User.IsInRole("Admin"))
+            query = query.Include(x => x.FeePlans).ThenInclude(x => x.Payments);
+
+        var student = await query.FirstOrDefaultAsync(x => x.Id == id);
 
         return student is null ? NotFound() : View(student);
     }

@@ -1,0 +1,36 @@
+@model ReliableAcademy.ViewModels.FeePlanListViewModel
+@{
+    ViewData["Title"] = "Fees & payments";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="ra-page-heading">
+    <div><div class="ra-eyebrow">FINANCE <span>•</span> FEE REGISTER</div><h1>Fees & payments</h1><p>Manage fee plans, track outstanding balances and record collections.</p></div>
+    <a class="ra-primary-button" asp-action="Create">＋ Create fee plan</a>
+</div>
+@if (TempData["Success"] is string success) { <div class="ra-alert-success" role="status">@success</div> }
+<section class="ra-panel ra-student-toolbar">
+    <form method="get" class="ra-filter-form">
+        <div class="ra-search-field"><label for="search">Find student</label><input id="search" name="search" value="@Model.Search" placeholder="Student name or admission number…" /></div>
+        <label class="ra-check-filter"><input type="checkbox" name="outstandingOnly" value="true" checked="@Model.OutstandingOnly" /> Outstanding only</label>
+        <button class="ra-secondary-button" type="submit">Apply filters</button><a class="ra-text-link" asp-action="Index">Clear</a>
+    </form>
+</section>
+<section class="ra-panel ra-table-panel">
+    <div class="ra-panel-heading"><div><span>FEE LEDGER</span><h3>Student fee plans</h3></div><span class="ra-panel-note">@Model.Plans.Count plan(s) shown · maximum 500</span></div>
+    @if (Model.Plans.Count == 0) { <div class="ra-empty ra-student-empty"><span>₹</span><b>No fee plans found</b><p>Create a fee plan to start recording payments.</p></div> }
+    else {
+        <div class="table-responsive"><table class="ra-data-table">
+            <thead><tr><th>STUDENT</th><th>ACADEMIC YEAR</th><th>NET FEE</th><th>PAID</th><th>BALANCE</th><th>DUE DATE</th><th>STATUS</th><th></th></tr></thead>
+            <tbody>@foreach (var plan in Model.Plans) {
+                var balance = plan.Balance;
+                var isOverdue = balance > 0 && plan.DueDate < DateOnly.FromDateTime(DateTime.Today);
+                <tr>
+                    <td><b class="ra-student-name">@plan.Student.FullName</b><small class="ra-table-sub">@plan.Student.AdmissionNumber · @((int)plan.Student.Standard)th</small></td>
+                    <td>@plan.AcademicYear</td><td>₹@plan.NetAmount.ToString("N2")</td><td>₹@plan.PaidAmount.ToString("N2")</td><td><b class="ra-balance-value">₹@balance.ToString("N2")</b></td><td>@plan.DueDate.ToString("dd MMM yyyy")</td>
+                    <td><span class="ra-status-pill @(balance <= 0 ? "is-active" : isOverdue ? "is-inactive" : "is-pending")">@(balance <= 0 ? "Paid" : isOverdue ? "Overdue" : "Pending")</span></td>
+                    <td>@if (balance > 0) { <a class="ra-row-action" asp-action="RecordPayment" asp-route-id="@plan.Id">Record payment ↗</a> }</td>
+                </tr>
+            }</tbody>
+        </table></div>
+    }
+</section>

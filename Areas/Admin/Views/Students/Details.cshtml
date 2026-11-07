@@ -18,10 +18,13 @@
     <div class="ra-profile-main"><span class="ra-status-pill @(Model.IsActive ? "is-active" : "is-inactive")">@(Model.IsActive ? "Active student" : "Archived student")</span><h2>@Model.FullName</h2><p>Admission date: @Model.AdmissionDate.ToString("dd MMM yyyy") · Batch: @(Model.Batch?.Name ?? "Not assigned")</p></div>
     <form asp-action="ToggleStatus" asp-route-id="@Model.Id" method="post"><button type="submit" class="ra-secondary-button">@(Model.IsActive ? "Archive student" : "Reactivate student")</button></form>
 </div>
-<div class="ra-stat-grid ra-profile-stats">
+<div class="ra-stat-grid ra-profile-stats @(User.IsInRole("Admin") ? "" : "ra-profile-stats-teacher")">
+    @if (User.IsInRole("Admin"))
+    {
     <article class="ra-stat-card"><span class="ra-stat-caption">NET FEES</span><strong>₹@netFees.ToString("N0")</strong><span class="ra-stat-foot">Assigned fee amount</span></article>
     <article class="ra-stat-card"><span class="ra-stat-caption">FEES PAID</span><strong>₹@paidFees.ToString("N0")</strong><span class="ra-stat-foot">Recorded payments</span></article>
     <article class="ra-stat-card"><span class="ra-stat-caption">BALANCE</span><strong>₹@Math.Max(0, netFees - paidFees).ToString("N0")</strong><span class="ra-stat-foot">Outstanding amount</span></article>
+    }
     <article class="ra-stat-card"><span class="ra-stat-caption">ATTENDANCE</span><strong>@attendanceRate%</strong><span class="ra-stat-foot">@presentTotal present / late of @attendanceTotal records</span></article>
 </div>
 <div class="ra-content-grid ra-profile-grid">

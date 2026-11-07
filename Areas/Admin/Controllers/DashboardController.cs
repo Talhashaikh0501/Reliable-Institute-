@@ -20,7 +20,7 @@ public class DashboardController(ApplicationDbContext db) : Controller
             ActiveBatches = await db.TeachingBatches.CountAsync(x => x.IsActive),
             PresentToday = await db.AttendanceRecords.CountAsync(x => x.AttendanceDate == today && x.Status == AttendanceStatus.Present),
             AbsentToday = await db.AttendanceRecords.CountAsync(x => x.AttendanceDate == today && x.Status == AttendanceStatus.Absent),
-            FeesCollectedThisMonth = await db.FeePayments.Where(x => x.PaidAtUtc >= monthStart).SumAsync(x => (decimal?)x.Amount) ?? 0,
+            FeesCollectedThisMonth = User.IsInRole("Admin") ? await db.FeePayments.Where(x => x.PaidAtUtc >= monthStart).SumAsync(x => (decimal?)x.Amount) ?? 0 : 0,
             RecentAnnouncements = await db.Announcements.Where(x => x.IsPublished && (x.ExpiresAtUtc == null || x.ExpiresAtUtc > DateTime.UtcNow)).OrderByDescending(x => x.PublishedAtUtc).Take(5).ToListAsync()
         };
         return View(model);

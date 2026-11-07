@@ -24,7 +24,8 @@ The institute teaches 8th, 9th, 10th, 11th and 12th standards (board curriculum 
 - Class and batch creation, schedules, archive / restore and student counts (Admin manages; Teachers can view)
 - Batch assignment from active batches matching the selected standard
 - Daily attendance register by batch and date, including Present / Absent / Late / Leave, optional notes and audit attribution (Admin and Teachers)
-- Student profile summary for recorded fees and attendance
+- Fee plans with discounts, outstanding balance calculations, partial / full payments, serializable payment recording and printable receipts (Admin only)
+- Student profile summary for recorded fees and attendance; financial figures are hidden from Teachers
 
 ## Run locally
 

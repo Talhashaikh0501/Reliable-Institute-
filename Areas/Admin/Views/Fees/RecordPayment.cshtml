@@ -1,0 +1,18 @@
+@model ReliableAcademy.ViewModels.RecordFeePaymentViewModel
+@{
+    ViewData["Title"] = "Record payment";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="ra-page-heading"><div><div class="ra-eyebrow">FINANCE <span>•</span> COLLECTION</div><h1>Record a payment</h1><p>Record a full or partial payment and generate a receipt.</p></div><a class="ra-secondary-button" asp-action="Index">← Back to fees</a></div>
+<section class="ra-panel ra-payment-context"><span class="ra-stat-caption">PAYMENT FOR</span><h2>@Model.StudentName</h2><p>Admission no. @Model.AdmissionNumber</p><div><span>Outstanding balance</span><strong>₹@Model.BalanceBeforePayment.ToString("N2")</strong></div></section>
+<form asp-action="RecordPayment" method="post" class="ra-panel ra-form-panel">
+    <input asp-for="FeePlanId" type="hidden" />
+    <div asp-validation-summary="ModelOnly" class="ra-validation-summary"></div>
+    <div class="ra-form-grid">
+        <div class="ra-field"><label asp-for="Amount"></label><div class="ra-currency-input"><span>₹</span><input asp-for="Amount" type="number" min="0.01" max="@Model.BalanceBeforePayment" step="0.01" /></div><span asp-validation-for="Amount"></span><small>Cannot exceed the outstanding balance.</small></div>
+        <div class="ra-field"><label asp-for="PaymentMethod"></label><select asp-for="PaymentMethod"><option>Cash</option><option>UPI</option><option>Bank Transfer</option><option>Cheque</option><option>Other</option></select><span asp-validation-for="PaymentMethod"></span></div>
+        <div class="ra-field ra-field-wide"><label asp-for="TransactionReference"></label><input asp-for="TransactionReference" placeholder="UPI transaction ID / cheque no. (optional)" /><span asp-validation-for="TransactionReference"></span></div>
+    </div>
+    <div class="ra-form-actions"><a class="ra-secondary-button" asp-action="Index">Cancel</a><button class="ra-primary-button" type="submit">Save payment & generate receipt →</button></div>
+</form>
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

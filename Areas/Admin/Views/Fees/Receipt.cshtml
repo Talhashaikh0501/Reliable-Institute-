@@ -1,0 +1,17 @@
+@model ReliableAcademy.ViewModels.FeeReceiptViewModel
+@{
+    ViewData["Title"] = "Payment receipt";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var payment = Model.Payment;
+    var student = payment.FeePlan.Student;
+}
+<div class="ra-page-heading ra-no-print"><div><div class="ra-eyebrow">FINANCE <span>•</span> PAYMENT CONFIRMATION</div><h1>Payment receipt</h1><p>Payment recorded successfully. Print or save this receipt for your records.</p></div><div class="ra-heading-actions"><a class="ra-secondary-button" asp-action="Index">← Fee register</a><button type="button" class="ra-primary-button" onclick="window.print()">Print receipt ⎙</button></div></div>
+<section class="ra-receipt">
+    <header class="ra-receipt-header"><div class="ra-receipt-brand"><span class="ra-brand-mark">R<span>.</span></span><div><b>RELIABLE COACHING CLASSES</b><small>ROSHAN GATE · AURANGABAD</small></div></div><div class="ra-receipt-title"><span>OFFICIAL</span><b>PAYMENT RECEIPT</b></div></header>
+    <div class="ra-receipt-meta"><div><small>RECEIPT NUMBER</small><b class="ra-mono">@payment.ReceiptNumber</b></div><div><small>PAYMENT DATE</small><b>@Model.PaidAtIndia.ToString("dd MMMM yyyy · hh:mm tt")</b></div></div>
+    <div class="ra-receipt-section"><span>RECEIVED FROM</span><h2>@student.FullName</h2><p>Admission No. @student.AdmissionNumber · @((int)student.Standard)th Standard</p><p>Academic year: @payment.FeePlan.AcademicYear</p></div>
+    <div class="ra-receipt-table"><div><span>Fee description</span><b>Tuition / coaching fee</b></div><div><span>Payment method</span><b>@payment.PaymentMethod</b></div>@if (!string.IsNullOrWhiteSpace(payment.TransactionReference)) { <div><span>Transaction reference</span><b>@payment.TransactionReference</b></div> }<div class="ra-receipt-amount"><span>AMOUNT RECEIVED</span><strong>₹@payment.Amount.ToString("N2")</strong></div></div>
+    <footer class="ra-receipt-footer"><div><b>Thank you for your payment.</b><p>Please retain this receipt for future reference.</p></div><div><small>RECEIVED BY</small><b>@(payment.ReceivedBy?.Email ?? "Institute Office")</b></div></footer>
+    <div class="ra-receipt-disclaimer">This is a computer-generated receipt from Reliable Coaching Classes.</div>
+</section>
+@section Scripts { <script>document.title = "Receipt @Model.Payment.ReceiptNumber · Reliable Coaching Classes";</script> }

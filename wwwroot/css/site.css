@@ -34,3 +34,74 @@
 @media(max-width:720px){.ra-receipt{padding:20px 16px}.ra-receipt-header{align-items:flex-start;gap:10px}.ra-receipt-brand b{font-size:10px}.ra-receipt-title b{font-size:11px}.ra-receipt-meta{grid-template-columns:1fr}.ra-receipt-footer{flex-direction:column}.ra-receipt-footer>div:last-child{text-align:left}.ra-stat-grid-teacher{grid-template-columns:repeat(2,minmax(0,1fr))}}
 
 .ra-alert-error{padding:12px 15px;margin:0 0 15px;border:1px solid #f0d1d1;background:#fff5f5;color:#a64040;border-radius:8px;font-size:11px}
+
+
+/* Reliable UI system refinement — shared by every management page */
+:root{
+    --ra-accent:#536fe5;
+    --ra-accent-soft:#eef1ff;
+    --ra-focus:rgba(83,111,229,.16);
+    --ra-radius:12px;
+}
+html{scroll-behavior:smooth}
+button,input,select,textarea{font-family:var(--ra-font)}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{
+    outline:3px solid var(--ra-focus);outline-offset:2px
+}
+.ra-page-heading{gap:18px;flex-wrap:wrap}
+.ra-page-heading h1{line-height:1.15}
+.ra-panel,.ra-stat-card{box-shadow:0 2px 8px rgba(20,35,60,.025);transition:border-color .18s ease,box-shadow .18s ease}
+.ra-panel:hover{border-color:#dfe5ef}
+.ra-primary-button{background:var(--ra-accent);border-color:var(--ra-accent);box-shadow:0 3px 8px rgba(83,111,229,.14)}
+.ra-primary-button:hover{background:#405bd0;border-color:#405bd0}
+.ra-nav-link.active{background:rgba(83,111,229,.22);box-shadow:inset 3px 0 #8194ff}
+.ra-status-pill.is-pending{background:#fff6e8;color:#ad7824}
+.ra-alert-error{padding:12px 15px;margin:0 0 15px;border:1px solid #f0d1d1;background:#fff5f5;color:#a33d3d;border-radius:8px;font-size:11px}
+.ra-link-button{border:0;background:transparent;padding:0;cursor:pointer;font:inherit}
+.ra-row-actions{display:flex;align-items:center;gap:12px}
+.ra-row-actions form,.ra-row-actions form button{margin:0}
+.ra-data-table td{vertical-align:middle}
+.ra-data-table th:first-child,.ra-data-table td:first-child{padding-left:20px}
+.ra-data-table th:last-child,.ra-data-table td:last-child{padding-right:20px}
+.ra-table-panel .table-responsive{max-width:100%}
+.ra-filter-form input[type="date"],.ra-filter-form input[type="datetime-local"],.ra-filter-form select{height:37px;border:1px solid #e5eaf0;border-radius:7px;padding:0 10px;background:#fff;color:#26364d;font:11px var(--ra-font)}
+.ra-field input:hover,.ra-field select:hover,.ra-field textarea:hover,.ra-search-field input:hover,.ra-filter-field select:hover{border-color:#cbd4e2}
+.ra-form-actions{align-items:center;flex-wrap:wrap}
+.ra-attendance-select,.ra-attendance-note{min-height:36px;border:1px solid #e5eaf0;border-radius:7px;padding:0 9px;background:#fff;color:#26364d;font:11px var(--ra-font)}
+.ra-attendance-note{width:100%;max-width:260px}
+.ra-attendance-table td{min-width:120px}
+.ra-attendance-table td:first-child{min-width:190px}
+.ra-profile-summary,.ra-stat-card,.ra-shortcut,.ra-panel{border-radius:var(--ra-radius)}
+.ra-empty{min-height:145px;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.ra-empty .ra-primary-button{margin-top:14px}
+.ra-footer-note{padding-bottom:8px}
+@media(max-width:720px){
+    .ra-sidebar{display:block;width:100%;height:auto;padding:13px 16px 10px;position:relative}
+    .ra-brand{margin:0 0 12px;width:max-content}
+    .ra-nav-label{display:none}
+    .ra-nav-link{display:inline-flex;white-space:nowrap;margin:2px 3px 2px 0;padding:9px 11px;font-size:10px;background:#192b48}
+    .ra-nav-link>span{font-size:13px;width:15px}
+    .ra-sidebar-bottom{display:block;margin-top:8px}
+    .ra-sidebar-help{display:none}
+    .ra-user{padding:8px 2px 0;border-top:1px solid #293951}
+    .ra-user b{font-size:9px}
+    .ra-main-content{padding:22px 14px 18px}
+    .ra-page-heading{margin-bottom:18px}
+    .ra-page-heading h1{font-size:25px}
+    .ra-stat-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .ra-data-table th:first-child,.ra-data-table td:first-child{padding-left:13px}
+    .ra-data-table th:last-child,.ra-data-table td:last-child{padding-right:13px}
+    .ra-table-panel{padding-top:15px}
+    .ra-table-panel>.ra-panel-heading{padding:0 14px}
+    .ra-attendance-actions{justify-content:stretch}
+    .ra-attendance-actions .ra-primary-button{width:100%}
+}
+@media(max-width:420px){
+    .ra-stat-grid{grid-template-columns:1fr 1fr;gap:7px}
+    .ra-stat-card{padding:11px;min-height:105px}
+    .ra-stat-caption{font-size:6px;letter-spacing:.8px}
+    .ra-stat-card>strong{font-size:19px}
+    .ra-welcome{padding:18px}
+    .ra-welcome-mark{display:none}
+    .ra-detail-list>div{grid-template-columns:105px 1fr}
+}

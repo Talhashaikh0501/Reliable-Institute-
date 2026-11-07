@@ -3,37 +3,88 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<section class="ra-home-hero">
+<section class="ra-home-hero ra-home-hero-v2">
     <div class="ra-home-hero-copy">
         <span class="ra-home-kicker"><i></i> ROSHAN GATE · AURANGABAD</span>
-        <h1>Build strong foundations.<br /><em>Shape brighter futures.</em></h1>
-        <p>Focused coaching for students from 8th to 12th standard, with learning support built around each stage of the academic journey.</p>
+        <h1>Every student deserves a <em>strong foundation.</em></h1>
+        <p>Reliable Coaching Classes is a learning space dedicated to helping school students understand their subjects, build confidence and move forward with clarity.</p>
         <div class="ra-home-actions">
-            <a class="ra-primary-button" asp-area="Identity" asp-page="/Account/Login">Staff portal <span>→</span></a>
-            <a class="ra-home-text-link" href="#programmes">Explore our programmes <span>↓</span></a>
+            <a class="ra-primary-button" href="#about">Get to know us <span>↓</span></a>
+            <a class="ra-home-text-link" href="#location">Find our location <span>↗</span></a>
         </div>
-        <div class="ra-home-trust"><span>8th–12th</span><i></i><span>Board-focused learning</span><i></i><span>Reliable Coaching Classes</span></div>
+        <div class="ra-home-trust"><span>Standards 8th–12th</span><i></i><span>Board-focused academics</span><i></i><span>Roshan Gate, Aurangabad</span></div>
     </div>
-    <div class="ra-home-hero-art" aria-hidden="true">
+    <div class="ra-home-hero-art ra-home-hero-art-v2" aria-hidden="true">
         <div class="ra-home-art-orbit"></div>
-        <div class="ra-home-art-card ra-home-art-card-main"><span class="ra-home-art-mark">R<span>.</span></span><b>LEARN WITH PURPOSE</b><small>Every lesson is a step forward.</small></div>
-        <div class="ra-home-art-card ra-home-art-card-note"><span>✦</span><b>8th – 12th</b><small>Academic programmes</small></div>
+        <div class="ra-home-art-card ra-home-art-card-main">
+            <span class="ra-home-art-mark">R<span>.</span></span>
+            <b>RELIABLE COACHING CLASSES</b>
+            <small>Learn with understanding. Grow with confidence.</small>
+        </div>
+        <div class="ra-home-art-card ra-home-art-card-note"><span>✦</span><b>8th – 12th</b><small>Learning through every stage</small></div>
         <div class="ra-home-art-lines"></div>
     </div>
 </section>
 
-<section class="ra-home-intro" id="programmes">
-    <div><span class="ra-home-kicker">OUR APPROACH</span><h2>Learning that grows<br />with every standard.</h2></div>
-    <p>From building core concepts to preparing for important board examinations, Reliable Coaching Classes supports students with a focused, structured learning environment.</p>
+<section class="ra-home-about" id="about">
+    <div class="ra-home-section-label">ABOUT THE INSTITUTE <span>01 / 04</span></div>
+    <div class="ra-home-about-grid">
+        <h2>A little about<br />Reliable.</h2>
+        <div>
+            <p class="ra-home-about-lead">Education is more than completing a syllabus. It is about understanding ideas, asking questions and developing the confidence to use what you learn.</p>
+            <p>At Reliable Coaching Classes, our focus is on school-level academics for students from 8th to 12th standard. We aim to make learning organised, meaningful and consistent, while supporting students through the different demands of each academic year.</p>
+        </div>
+    </div>
 </section>
 
-<section class="ra-home-programmes">
-    <article class="ra-home-programme"><span class="ra-home-programme-number">01</span><div class="ra-home-programme-icon">⌂</div><h3>Middle school</h3><p>Standards 8th and 9th — strengthen fundamentals, build confidence and develop consistent study habits.</p><span class="ra-home-standards">8TH · 9TH STANDARD</span></article>
-    <article class="ra-home-programme ra-home-programme-featured"><span class="ra-home-programme-number">02</span><div class="ra-home-programme-icon">✦</div><h3>Board preparation</h3><p>Standards 10th, 11th and 12th — focused academic support for the milestones that matter.</p><span class="ra-home-standards">10TH · 11TH · 12TH STANDARD</span></article>
-    <article class="ra-home-programme"><span class="ra-home-programme-number">03</span><div class="ra-home-programme-icon">▤</div><h3>Structured learning</h3><p>Organised batches and a clear academic journey help students stay engaged and on track.</p><span class="ra-home-standards">A CLEARER WAY TO LEARN</span></article>
+<section class="ra-home-learning">
+    <div class="ra-home-section-label">OUR ACADEMIC FOCUS <span>02 / 04</span></div>
+    <div class="ra-home-learning-heading">
+        <h2>Support at every<br />stage of school.</h2>
+        <p>Different standards bring different challenges. Our academic focus follows students through these important years, with board-oriented learning at the centre.</p>
+    </div>
+    <div class="ra-home-programmes ra-home-programmes-v2">
+        <article class="ra-home-programme">
+            <span class="ra-home-programme-number">01</span>
+            <div class="ra-home-programme-icon">⌂</div>
+            <h3>Build the basics</h3>
+            <p>For standards 8th and 9th: strengthen subject fundamentals, develop good study habits and prepare for the next academic step.</p>
+            <span class="ra-home-standards">STANDARDS 8TH · 9TH</span>
+        </article>
+        <article class="ra-home-programme ra-home-programme-featured">
+            <span class="ra-home-programme-number">02</span>
+            <div class="ra-home-programme-icon">✦</div>
+            <h3>Prepare with purpose</h3>
+            <p>For standards 10th, 11th and 12th: focused support for school academics and the important board examination years.</p>
+            <span class="ra-home-standards">STANDARDS 10TH · 11TH · 12TH</span>
+        </article>
+    </div>
 </section>
 
-<section class="ra-home-bottom">
-    <div><span class="ra-home-kicker">RELIABLE COACHING CLASSES</span><h2>A focused place to<br />take the next step.</h2><p>Visit us at Roshan Gate, Aurangabad.</p></div>
-    <a class="ra-secondary-button" asp-area="Identity" asp-page="/Account/Login">Staff sign in <span>↗</span></a>
+<section class="ra-home-values">
+    <div class="ra-home-section-label">WHAT GUIDES OUR APPROACH <span>03 / 04</span></div>
+    <h2>Learning built on<br /><em>the right things.</em></h2>
+    <div class="ra-home-value-grid">
+        <article><span>01</span><h3>Clear understanding</h3><p>Learning concepts properly, instead of relying only on memorisation.</p></article>
+        <article><span>02</span><h3>Consistent effort</h3><p>Building steady study habits and keeping students connected to their learning.</p></article>
+        <article><span>03</span><h3>Academic direction</h3><p>Keeping school subjects and board preparation at the heart of the journey.</p></article>
+    </div>
 </section>
+
+<section class="ra-home-location" id="location">
+    <div class="ra-home-location-copy">
+        <div class="ra-home-section-label">COME FIND US <span>04 / 04</span></div>
+        <h2>Rooted in<br /><em>Roshan Gate.</em></h2>
+        <p>Reliable Coaching Classes is located in the Roshan Gate area of Aurangabad, Maharashtra.</p>
+        <div class="ra-home-address"><span>OUR LOCATION</span><b>Plot No. 5, near Fatema Girls High School,<br />Nagsen Colony, Jinsi Road, Roshan Gate,<br />Aurangabad, Maharashtra – 431003</b></div>
+        <a class="ra-primary-button" href="https://www.google.com/maps/search/?api=1&query=Reliable+Coaching+Classes+Roshan+Gate+Aurangabad" target="_blank" rel="noopener">View on Google Maps <span>↗</span></a>
+    </div>
+    <div class="ra-home-location-art" aria-hidden="true"><div class="ra-home-map-mark">R<span>.</span></div><div class="ra-home-map-ring"></div><span>ROSHAN GATE<br />AURANGABAD</span></div>
+</section>
+
+<footer class="ra-home-footer">
+    <a class="ra-public-brand" asp-controller="Home" asp-action="Index"><span class="ra-brand-mark">R<span>.</span></span><span><b>RELIABLE</b><small>COACHING CLASSES</small></span></a>
+    <span>Learning today. Building tomorrow.</span>
+    <a asp-area="Identity" asp-page="/Account/Login">Staff sign in <span>↗</span></a>
+    <small>© @DateTime.Now.Year Reliable Coaching Classes</small>
+</footer>

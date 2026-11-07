@@ -1,0 +1,53 @@
+@model ReliableAcademy.ViewModels.StudentListViewModel
+@{
+    ViewData["Title"] = "Students";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="ra-page-heading">
+    <div><div class="ra-eyebrow">INSTITUTE <span>•</span> STUDENT RECORDS</div><h1>Students</h1><p>Manage admissions, student details and class allocation.</p></div>
+    <a class="ra-primary-button" asp-action="Create"><span>＋</span> Add student</a>
+</div>
+@if (TempData["Success"] is string success) { <div class="ra-alert-success" role="status">@success</div> }
+<section class="ra-panel ra-student-toolbar">
+    <form method="get" class="ra-filter-form">
+        <div class="ra-search-field"><label for="search">Search students</label><input id="search" name="search" value="@Model.Search" placeholder="Name, admission no. or phone…" /></div>
+        <div class="ra-filter-field">
+            <label for="standard">Standard</label>
+            <select id="standard" name="standard">
+                <option value="">All standards</option>
+                @foreach (var item in Enum.GetValues<StudentStandard>())
+                {
+                    if (Model.Standard == item) { <option value="@((int)item)" selected>@((int)item)th Standard</option> }
+                    else { <option value="@((int)item)">@((int)item)th Standard</option> }
+                }
+            </select>
+        </div>
+        <label class="ra-check-filter"><input type="checkbox" name="includeInactive" value="true" checked="@Model.IncludeInactive" /> Include archived</label>
+        <button class="ra-secondary-button" type="submit">Apply filters</button><a class="ra-text-link" asp-action="Index">Clear</a>
+    </form>
+</section>
+<section class="ra-panel ra-table-panel">
+    <div class="ra-panel-heading"><div><span>ENROLMENT REGISTER</span><h3>Student directory</h3></div><span class="ra-panel-note">@Model.Students.Count record(s) shown · maximum 300</span></div>
+    @if (Model.Students.Count == 0)
+    {
+        <div class="ra-empty ra-student-empty"><span>♙</span><b>No students found</b><p>Try changing your filters or add your first student.</p></div>
+    }
+    else
+    {
+        <div class="table-responsive"><table class="ra-data-table">
+            <thead><tr><th>STUDENT</th><th>ADMISSION NO.</th><th>STANDARD</th><th>BATCH</th><th>CONTACT</th><th>STATUS</th><th></th></tr></thead>
+            <tbody>
+            @foreach (var student in Model.Students)
+            {
+                <tr>
+                    <td><a class="ra-student-name" asp-action="Details" asp-route-id="@student.Id">@student.FullName</a><small class="ra-table-sub">@student.AcademicYear</small></td>
+                    <td><span class="ra-mono">@student.AdmissionNumber</span></td><td><span class="ra-standard-pill">@((int)student.Standard)th</span></td>
+                    <td>@(student.Batch?.Name ?? "—")</td><td>@(student.PhoneNumber ?? student.GuardianPhone ?? "—")</td>
+                    <td><span class="ra-status-pill @(student.IsActive ? "is-active" : "is-inactive")">@(student.IsActive ? "Active" : "Archived")</span></td>
+                    <td><a class="ra-row-action" asp-action="Details" asp-route-id="@student.Id">View <span>↗</span></a></td>
+                </tr>
+            }
+            </tbody>
+        </table></div>
+    }
+</section>

@@ -1,0 +1,46 @@
+@model ReliableAcademy.Models.Student
+@{
+    ViewData["Title"] = "Student profile";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var netFees = Model.FeePlans.Sum(x => x.NetAmount);
+    var paidFees = Model.FeePlans.Sum(x => x.PaidAmount);
+    var attendanceTotal = Model.AttendanceRecords.Count;
+    var presentTotal = Model.AttendanceRecords.Count(x => x.Status == AttendanceStatus.Present || x.Status == AttendanceStatus.Late);
+    var attendanceRate = attendanceTotal == 0 ? 0 : (int)Math.Round(presentTotal * 100d / attendanceTotal);
+}
+<div class="ra-page-heading">
+    <div><div class="ra-eyebrow">STUDENT RECORDS <span>•</span> PROFILE</div><h1>@Model.FullName</h1><p>@Model.AdmissionNumber · @((int)Model.Standard)th Standard · @Model.AcademicYear</p></div>
+    <div class="ra-heading-actions"><a class="ra-secondary-button" asp-action="Index">← All students</a><a class="ra-primary-button" asp-action="Edit" asp-route-id="@Model.Id">Edit profile</a></div>
+</div>
+@if (TempData["Success"] is string success) { <div class="ra-alert-success" role="status">@success</div> }
+<div class="ra-profile-summary">
+    <div class="ra-profile-avatar">@Model.FullName.Trim().Substring(0, 1).ToUpperInvariant()</div>
+    <div class="ra-profile-main"><span class="ra-status-pill @(Model.IsActive ? "is-active" : "is-inactive")">@(Model.IsActive ? "Active student" : "Archived student")</span><h2>@Model.FullName</h2><p>Admission date: @Model.AdmissionDate.ToString("dd MMM yyyy") · Batch: @(Model.Batch?.Name ?? "Not assigned")</p></div>
+    <form asp-action="ToggleStatus" asp-route-id="@Model.Id" method="post"><button type="submit" class="ra-secondary-button">@(Model.IsActive ? "Archive student" : "Reactivate student")</button></form>
+</div>
+<div class="ra-stat-grid ra-profile-stats">
+    <article class="ra-stat-card"><span class="ra-stat-caption">NET FEES</span><strong>₹@netFees.ToString("N0")</strong><span class="ra-stat-foot">Assigned fee amount</span></article>
+    <article class="ra-stat-card"><span class="ra-stat-caption">FEES PAID</span><strong>₹@paidFees.ToString("N0")</strong><span class="ra-stat-foot">Recorded payments</span></article>
+    <article class="ra-stat-card"><span class="ra-stat-caption">BALANCE</span><strong>₹@Math.Max(0, netFees - paidFees).ToString("N0")</strong><span class="ra-stat-foot">Outstanding amount</span></article>
+    <article class="ra-stat-card"><span class="ra-stat-caption">ATTENDANCE</span><strong>@attendanceRate%</strong><span class="ra-stat-foot">@presentTotal present / late of @attendanceTotal records</span></article>
+</div>
+<div class="ra-content-grid ra-profile-grid">
+    <section class="ra-panel"><div class="ra-panel-heading"><div><span>PERSONAL DETAILS</span><h3>Student information</h3></div></div>
+        <dl class="ra-detail-list">
+            <div><dt>Student phone</dt><dd>@(Model.PhoneNumber ?? "Not provided")</dd></div>
+            <div><dt>Email</dt><dd>@(Model.Email ?? "Not provided")</dd></div>
+            <div><dt>Date of birth</dt><dd>@(Model.DateOfBirth?.ToString("dd MMM yyyy") ?? "Not provided")</dd></div>
+            <div><dt>Division</dt><dd>@(Model.Division ?? "Not assigned")</dd></div>
+            <div><dt>Parent / guardian</dt><dd>@(Model.GuardianName ?? "Not provided")</dd></div>
+            <div><dt>Guardian phone</dt><dd>@(Model.GuardianPhone ?? "Not provided")</dd></div>
+            <div><dt>Address</dt><dd>@(Model.Address ?? "Not provided")</dd></div>
+        </dl>
+    </section>
+    <section class="ra-panel"><div class="ra-panel-heading"><div><span>ACADEMIC RECORD</span><h3>Attendance overview</h3></div></div>
+        @if (attendanceTotal == 0) { <div class="ra-empty"><span>✓</span><b>No attendance recorded yet</b><p>Attendance entries will appear here once marked.</p></div> }
+        else {
+            <div class="ra-attendance-meter"><div><b>@attendanceRate%</b><span>Attendance rate</span></div><div class="ra-meter-track"><span style="width:@attendanceRate%"></span></div></div>
+            <div class="ra-attendance-breakdown"><span>Present <b>@Model.AttendanceRecords.Count(x => x.Status == AttendanceStatus.Present)</b></span><span>Late <b>@Model.AttendanceRecords.Count(x => x.Status == AttendanceStatus.Late)</b></span><span>Absent <b>@Model.AttendanceRecords.Count(x => x.Status == AttendanceStatus.Absent)</b></span><span>Leave <b>@Model.AttendanceRecords.Count(x => x.Status == AttendanceStatus.Leave)</b></span></div>
+        }
+    </section>
+</div>

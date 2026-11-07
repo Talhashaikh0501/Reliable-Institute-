@@ -1,0 +1,15 @@
+@model ReliableAcademy.ViewModels.StudentFormViewModel
+@{
+    ViewData["Title"] = "Add student";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="ra-page-heading">
+    <div><div class="ra-eyebrow">STUDENT RECORDS <span>•</span> ADMISSIONS</div><h1>Add a student</h1><p>Create a student profile and assign their standard and batch.</p></div>
+    <a class="ra-secondary-button" asp-action="Index">← Back to students</a>
+</div>
+<form asp-action="Create" method="post" class="ra-panel ra-form-panel">
+    <div asp-validation-summary="ModelOnly" class="ra-validation-summary"></div>
+    <partial name="_StudentForm" model="Model" />
+    <div class="ra-form-actions"><a class="ra-secondary-button" asp-action="Index">Cancel</a><button class="ra-primary-button" type="submit">Save student <span>→</span></button></div>
+</form>
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

@@ -263,3 +263,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
  .ra-home-footer>span{width:100%}
  .ra-home-footer>small{margin-left:auto}
 }
+
+
+/* Homepage institute history and external profile links */
+.ra-home-history{padding:64px max(7vw,28px);background:#fff}.ra-home-history-content{display:grid;grid-template-columns:.85fr 1.15fr;gap:55px;margin-top:30px;align-items:start}.ra-home-history-year{font:800 12px var(--ra-display);letter-spacing:2px;color:#c69b50}.ra-home-history h2{font:800 clamp(28px,3.2vw,39px)/1.18 var(--ra-display);letter-spacing:-1.5px;color:#1b2a44;margin:12px 0}.ra-home-history-content>div+div{max-width:610px}.ra-home-history-content p{font-size:11px;line-height:1.9;color:#818da0;margin:0 0 12px}.ra-home-history-content a,.ra-home-review-link{font-size:10px;font-weight:700;color:#536fe5}.ra-home-history-content a span,.ra-home-review-link span{margin-left:5px}.ra-home-location-links{display:flex;align-items:center;gap:20px;flex-wrap:wrap}.ra-home-review-link{color:#596a83}.ra-home-review-link:hover,.ra-home-history-content a:hover{color:#344fc0}@media(max-width:620px){.ra-home-history{padding:45px 20px}.ra-home-history-content{grid-template-columns:1fr;gap:10px}}

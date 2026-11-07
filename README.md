@@ -29,7 +29,7 @@ The institute teaches 8th, 9th, 10th, 11th and 12th standards (board curriculum 
 1. Install Visual Studio 2022 (17.14 recommended), the ASP.NET and web development workload, .NET 9 SDK and SQL Server LocalDB.
 2. Open `ReliableAcademy.sln`.
 3. Restore NuGet packages.
-4. Open **Tools → NuGet Package Manager → Package Manager Console**.
+4. Open **Tools → NuGet Package Manager → Package Manager Console**. The repository includes a design-time DbContext factory so EF migrations can be generated without running the app's startup role seeding.
 5. Set the default project to `ReliableAcademy` and run:
 
    ```powershell

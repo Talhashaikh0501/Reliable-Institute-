@@ -267,3 +267,180 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 
 /* Homepage institute history and external profile links */
 .ra-home-history{padding:64px max(7vw,28px);background:#fff}.ra-home-history-content{display:grid;grid-template-columns:.85fr 1.15fr;gap:55px;margin-top:30px;align-items:start}.ra-home-history-year{font:800 12px var(--ra-display);letter-spacing:2px;color:#c69b50}.ra-home-history h2{font:800 clamp(28px,3.2vw,39px)/1.18 var(--ra-display);letter-spacing:-1.5px;color:#1b2a44;margin:12px 0}.ra-home-history-content>div+div{max-width:610px}.ra-home-history-content p{font-size:11px;line-height:1.9;color:#818da0;margin:0 0 12px}.ra-home-history-content a,.ra-home-review-link{font-size:10px;font-weight:700;color:#536fe5}.ra-home-history-content a span,.ra-home-review-link span{margin-left:5px}.ra-home-location-links{display:flex;align-items:center;gap:20px;flex-wrap:wrap}.ra-home-review-link{color:#596a83}.ra-home-review-link:hover,.ra-home-history-content a:hover{color:#344fc0}@media(max-width:620px){.ra-home-history{padding:45px 20px}.ra-home-history-content{grid-template-columns:1fr;gap:10px}}
+
+
+/* Reliable Coaching Classes — premium public institute identity */
+.rci-home{--rci-ink:#17251f;--rci-muted:#69756d;--rci-paper:#f5f3ec;--rci-cream:#e9e4d7;--rci-orange:#c66b42;--rci-green:#203b31;color:var(--rci-ink);font-family:var(--ra-font);overflow:hidden}
+.ra-public-header{height:82px;padding:0 max(7vw,32px);background:#fbfaf6;border-bottom:1px solid #e9e6dd}
+.ra-public-header .ra-public-brand{gap:12px}
+.ra-public-header .ra-brand-mark{width:42px;height:42px;border-radius:50%;background:var(--rci-green);color:#fff;font-size:22px}
+.ra-public-header .ra-brand-mark span{color:#e6a879}
+.ra-public-header .ra-public-brand b{font-size:14px;letter-spacing:2.4px;color:var(--rci-ink)}
+.ra-public-header .ra-public-brand small{font-size:8px;letter-spacing:1.7px;color:#7c847b}
+.ra-public-header .ra-public-location{font-size:9px;letter-spacing:1.5px;color:#7a8279}
+.ra-public-header .ra-public-location span{color:var(--rci-orange)}
+.ra-public-header .navbar-nav .nav-link{border:0!important;border-radius:0!important;background:transparent!important;color:#45544b!important;font-size:9px!important;letter-spacing:.8px;text-transform:uppercase;padding:12px 15px!important}
+.ra-public-header .navbar-nav .nav-link:hover{color:var(--rci-orange)!important}
+.rci-hero{background:var(--rci-green);color:#fff;position:relative}
+.rci-hero-inner{max-width:1440px;margin:auto;padding:92px max(8vw,40px) 72px;display:grid;grid-template-columns:1.12fr .88fr;gap:7%;align-items:center;min-height:610px}
+.rci-hero-copy{position:relative;z-index:2}
+.rci-eyebrow,.rci-section-kicker{font-size:9px;font-weight:800;letter-spacing:1.7px}
+.rci-eyebrow{color:#b7c6b9;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.rci-eyebrow>span{width:7px;height:7px;border-radius:50%;background:#e6a879}
+.rci-eyebrow i{font-style:normal;color:#e6a879}
+.rci-hero h1{font:700 clamp(46px,6.2vw,82px)/1.04 var(--ra-display);letter-spacing:-4.8px;color:#fbfaf6;margin:31px 0 22px}
+.rci-hero h1 em,.rci-intro h2 em,.rci-programme-heading h2 em,.rci-approach-heading h2 em,.rci-history h2 em,.rci-visit h2 em{font-style:normal;color:#e5a477}
+.rci-hero-lead{font-size:14px;line-height:1.95;color:#c4d0c7;max-width:500px;margin:0}
+.rci-hero-actions{display:flex;align-items:center;gap:27px;margin-top:33px}
+.rci-button{min-height:48px;padding:0 20px;display:inline-flex;align-items:center;justify-content:center;gap:22px;font-size:10px;font-weight:800;letter-spacing:.2px;transition:transform .2s,background .2s}
+.rci-button:hover{transform:translateY(-2px)}
+.rci-button span{font-size:15px}
+.rci-button-light{background:#f5f1e8;color:var(--rci-green)}
+.rci-button-light:hover{background:#fff;color:var(--rci-green)}
+.rci-link-light{font-size:10px;font-weight:700;color:#d3ddd5}
+.rci-link-light span{color:#e5a477;margin-left:6px}
+.rci-hero-meta{display:flex;align-items:center;gap:13px;flex-wrap:wrap;margin-top:54px;color:#9fb1a4;font-size:8px;letter-spacing:1.2px}
+.rci-hero-meta b{color:#fff;font-weight:800}
+.rci-hero-meta i{width:3px;height:3px;background:#d99a6e;border-radius:50%}
+.rci-hero-visual{height:410px;position:relative;background:#e8e1d1;color:var(--rci-green);padding:25px 28px;display:flex;flex-direction:column;justify-content:space-between;box-shadow:18px 18px 0 #162f27}
+.rci-visual-top{display:flex;justify-content:space-between;font-size:8px;font-weight:800;letter-spacing:1.5px;color:#778174}
+.rci-visual-monogram{position:absolute;top:50%;left:50%;transform:translate(-50%,-57%);font:800 clamp(170px,22vw,270px)/.8 var(--ra-display);letter-spacing:-28px;color:#254438}
+.rci-visual-monogram span{color:var(--rci-orange)}
+.rci-visual-rule{height:1px;background:#c9c2b3;position:absolute;left:28px;right:28px;top:72%}
+.rci-visual-bottom{display:flex;justify-content:space-between;align-items:end;position:relative;z-index:1}
+.rci-visual-bottom small,.rci-visual-bottom strong{display:block}
+.rci-visual-bottom small{font-size:8px;letter-spacing:1.5px;color:#7d8679;font-weight:800;margin-bottom:8px}
+.rci-visual-bottom strong{font:800 21px/1.08 var(--ra-display);letter-spacing:-.7px}
+.rci-visual-year{font:800 27px var(--ra-display);letter-spacing:-1px;color:#8a9588}
+.rci-visual-year span{color:var(--rci-orange)}
+.rci-visual-stamp{position:absolute;right:-25px;top:43%;width:68px;height:68px;border:1px solid #d28c63;border-radius:50%;background:#f5f0e6;display:grid;place-content:center;text-align:center;font:800 11px var(--ra-display);color:var(--rci-green);transform:rotate(12deg)}
+.rci-visual-stamp span{font-size:16px;color:var(--rci-orange)}
+.rci-hero-index{height:48px;border-top:1px solid #ffffff24;padding:0 max(8vw,40px);display:flex;align-items:center;gap:16px;color:#a8b9ad;font-size:8px;letter-spacing:1.5px}
+.rci-hero-index span:first-child{color:#e5a477;font-weight:800}.rci-hero-index span:last-child{margin-left:auto}
+.rci-intro,.rci-approach{padding:105px max(9vw,40px);background:#fbfaf6}
+.rci-section-kicker{color:#788278;display:flex;align-items:center;gap:12px}
+.rci-section-kicker span{color:var(--rci-orange);font:800 11px var(--ra-display);letter-spacing:0}
+.rci-intro-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:10%;margin-top:43px;align-items:start}
+.rci-intro h2,.rci-programme-heading h2,.rci-approach-heading h2,.rci-history h2,.rci-visit h2{font:700 clamp(36px,4.6vw,58px)/1.12 var(--ra-display);letter-spacing:-2.5px;margin:0;color:var(--rci-ink)}
+.rci-intro h2 em,.rci-approach-heading h2 em{color:var(--rci-orange)}
+.rci-intro-copy{padding-top:5px;max-width:490px}
+.rci-intro-lead{font:600 17px/1.65 var(--ra-display);color:#34473c;margin:0 0 18px}
+.rci-intro-copy>p:not(.rci-intro-lead){font-size:12px;line-height:2;color:var(--rci-muted);margin:0}
+.rci-inline-link{display:inline-flex;gap:14px;align-items:center;margin-top:25px;padding-bottom:7px;border-bottom:1px solid #c8c6b9;color:var(--rci-green);font-size:10px;font-weight:800}
+.rci-inline-link span{color:var(--rci-orange);font-size:14px}
+.rci-programmes{padding:88px max(9vw,40px) 100px;background:#203b31;color:#fff}
+.rci-kicker-light{color:#aebeb1}
+.rci-programme-heading{display:flex;justify-content:space-between;align-items:end;gap:40px;margin:36px 0 37px}
+.rci-programme-heading h2{color:#fbfaf6}
+.rci-programme-heading h2 em{color:#e5a477}
+.rci-programme-heading>p{max-width:280px;font-size:12px;line-height:1.9;color:#b7c6b9;margin:0 0 5px}
+.rci-programme-grid{display:grid;grid-template-columns:1fr 1fr;gap:17px}
+.rci-programme-card{background:#f2efe6;color:var(--rci-ink);padding:28px 31px 25px;min-height:290px;display:flex;flex-direction:column}
+.rci-programme-card-featured{background:#d9a078}
+.rci-card-top{display:flex;justify-content:space-between;font-size:8px;letter-spacing:1.6px;font-weight:800;color:#7c877c}
+.rci-card-top b{font:800 11px var(--ra-display);color:#a0a698}
+.rci-grade{font:800 clamp(52px,6vw,75px)/1 var(--ra-display);letter-spacing:-4px;margin:29px 0 12px;color:#203b31}
+.rci-grade i{font-style:normal;color:var(--rci-orange);font-size:.55em}
+.rci-programme-card h3{font:800 19px var(--ra-display);letter-spacing:-.6px;margin:0 0 9px}
+.rci-programme-card>p{font-size:11px;line-height:1.8;color:#68746a;max-width:390px;margin:0}
+.rci-programme-card-featured>p{color:#5f493c}
+.rci-card-foot{display:flex;justify-content:space-between;align-items:center;margin-top:auto;padding-top:26px;border-top:1px solid #203b3122;font-size:8px;letter-spacing:1.3px;font-weight:800;color:#6e796e}
+.rci-card-foot span:last-child{font-size:16px;color:var(--rci-orange)}
+.rci-approach-heading{display:flex;justify-content:space-between;align-items:end;gap:35px;margin:35px 0 45px}
+.rci-approach-heading>p{max-width:260px;font-size:12px;line-height:1.9;color:var(--rci-muted);margin:0 0 4px}
+.rci-principles{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid #deddd4;border-bottom:1px solid #deddd4}
+.rci-principles article{padding:25px 28px 29px 0;position:relative}
+.rci-principles article+article{border-left:1px solid #deddd4;padding-left:28px}
+.rci-principles article>span{font-size:8px;letter-spacing:1.5px;color:#8a9388;font-weight:800}
+.rci-principle-mark{font:300 29px var(--ra-display);color:var(--rci-orange);margin:28px 0 14px}
+.rci-principles h3{font:800 18px var(--ra-display);letter-spacing:-.4px;margin:0 0 9px}
+.rci-principles p{font-size:10px;line-height:1.9;color:var(--rci-muted);max-width:260px;margin:0}
+.rci-history{padding:85px max(9vw,40px);background:#a95f3e;color:#fff;display:grid;grid-template-columns:.55fr 1.2fr .8fr;gap:35px;align-items:center}
+.rci-history-year{font:800 clamp(48px,6vw,78px)/1 var(--ra-display);letter-spacing:-5px;color:#f1c6a8}
+.rci-history h2{color:#fff;margin:26px 0 17px;font-size:clamp(32px,3.8vw,48px)}
+.rci-history h2 em{color:#f2c6a7}
+.rci-history>div:nth-child(2)>p{font-size:11px;line-height:1.9;color:#f1d8c9;max-width:470px;margin:0 0 19px}
+.rci-history>div:nth-child(2)>a{font-size:10px;font-weight:800;color:#fff;border-bottom:1px solid #ffffff70;padding-bottom:6px}
+.rci-history>div:nth-child(2)>a span{margin-left:8px;color:#f4c6a4}
+.rci-history-side{border-left:1px solid #ffffff50;padding:20px 0 20px 28px}
+.rci-history-side>span,.rci-history-side>small{display:block;font-size:8px;letter-spacing:2px;color:#f0c9b0;font-weight:800}
+.rci-history-side>b{display:block;font:700 20px/1.35 var(--ra-display);margin:20px 0 28px}
+.rci-visit{padding:100px max(9vw,40px);background:#f0eee6;display:grid;grid-template-columns:1fr 1fr;gap:8%;align-items:center}
+.rci-visit h2{font-size:clamp(42px,5vw,62px);margin:29px 0 15px}
+.rci-visit h2 em{color:var(--rci-orange)}
+.rci-visit-copy>p{font-size:12px;line-height:1.9;color:var(--rci-muted);max-width:380px}
+.rci-address{margin:27px 0 25px;padding-left:16px;border-left:2px solid var(--rci-orange)}
+.rci-address span,.rci-address b{display:block}
+.rci-address span{font-size:8px;letter-spacing:1.5px;font-weight:800;color:#8a9388;margin-bottom:9px}
+.rci-address b{font-size:10px;line-height:1.9;color:#34473c}
+.rci-visit-actions{display:flex;align-items:center;gap:24px;flex-wrap:wrap}
+.rci-button-dark{background:var(--rci-green);color:#fff}
+.rci-button-dark:hover{background:#2d5142;color:#fff}
+.rci-visit-actions .rci-inline-link{margin:0}
+.rci-visit-art{height:370px;position:relative;overflow:hidden;background:#d9d4c5;display:grid;place-items:center}
+.rci-visit-grid{position:absolute;inset:0;background-image:linear-gradient(#203b3110 1px,transparent 1px),linear-gradient(90deg,#203b3110 1px,transparent 1px);background-size:32px 32px;mask-image:linear-gradient(135deg,black,transparent 85%)}
+.rci-visit-pin{width:155px;height:155px;border-radius:50%;display:grid;place-items:center;background:var(--rci-green);color:#fff;font:800 80px var(--ra-display);letter-spacing:-10px;box-shadow:0 0 0 18px #203b3110,0 0 0 38px #203b3108;z-index:1}
+.rci-visit-pin span{color:#e5a477}
+.rci-visit-caption{position:absolute;left:25px;bottom:23px}
+.rci-visit-caption span,.rci-visit-caption b{display:block}
+.rci-visit-caption span{font-size:8px;letter-spacing:1.5px;color:#69756d;font-weight:800;margin-bottom:7px}
+.rci-visit-caption b{font:800 10px/1.6 var(--ra-display);letter-spacing:1px;color:#203b31}
+.rci-visit-coordinates{position:absolute;right:22px;top:22px;font:700 8px var(--ra-display);letter-spacing:1px;color:#7c8678}
+.rci-footer{min-height:105px;padding:24px max(7vw,32px);background:#172b23;display:flex;align-items:center;gap:25px;color:#fff}
+.rci-footer-brand{display:flex;align-items:center;gap:10px;color:#fff;margin-right:auto}
+.rci-footer-mark{width:38px;height:38px;border-radius:50%;background:#e7e1d2;color:#203b31;display:grid;place-items:center;font:800 19px var(--ra-display);letter-spacing:-2px}
+.rci-footer-mark span{color:var(--rci-orange)}
+.rci-footer-brand b,.rci-footer-brand small{display:block}
+.rci-footer-brand b{font:800 12px var(--ra-display);letter-spacing:2px}
+.rci-footer-brand small{font-size:7px;letter-spacing:1.5px;color:#aebbb1;margin-top:3px}
+.rci-footer-note{font-size:9px;color:#aebbb1}
+.rci-footer-login{font-size:8px;letter-spacing:1.2px;font-weight:800;color:#f0c09e}
+.rci-footer-login span{margin-left:5px}
+.rci-footer>small{font-size:8px;color:#819187;white-space:nowrap}
+@media(max-width:900px){
+ .rci-hero-inner{grid-template-columns:1fr  .8fr;gap:5%;padding-left:6vw;padding-right:6vw}
+ .rci-hero h1{font-size:clamp(43px,6vw,65px)}
+ .rci-hero-visual{height:350px}
+ .rci-intro,.rci-programmes,.rci-approach,.rci-history,.rci-visit{padding-left:6vw;padding-right:6vw}
+ .rci-history{grid-template-columns:.4fr 1.2fr}
+ .rci-history-side{grid-column:2}
+}
+@media(max-width:650px){
+ .ra-public-header{height:68px;padding:0 18px}
+ .ra-public-header .ra-public-location{display:none}
+ .ra-public-header .navbar-nav .nav-link{padding:9px 10px!important;font-size:8px!important}
+ .rci-hero-inner{display:flex;flex-direction:column;align-items:stretch;gap:55px;padding:58px 23px 38px;min-height:0}
+ .rci-hero h1{font-size:clamp(45px,12vw,65px);letter-spacing:-3px;margin:25px 0 17px}
+ .rci-hero-lead{font-size:12px}
+ .rci-hero-actions{gap:18px;flex-wrap:wrap}
+ .rci-hero-meta{margin-top:32px;gap:9px;font-size:7px}
+ .rci-hero-visual{height:300px;margin:0 12px 0 0;padding:19px}
+ .rci-visual-monogram{font-size:190px}
+ .rci-visual-rule{left:19px;right:19px}
+ .rci-visual-stamp{right:-13px;width:57px;height:57px}
+ .rci-hero-index{padding:0 23px;font-size:7px;gap:9px}
+ .rci-intro,.rci-approach{padding:65px 23px}
+ .rci-intro-grid{grid-template-columns:1fr;gap:25px;margin-top:28px}
+ .rci-intro h2,.rci-programme-heading h2,.rci-approach-heading h2{font-size:clamp(37px,10vw,49px);letter-spacing:-1.8px}
+ .rci-intro-lead{font-size:15px}
+ .rci-programmes{padding:65px 23px 70px}
+ .rci-programme-heading,.rci-approach-heading{display:block;margin:28px 0}
+ .rci-programme-heading>p,.rci-approach-heading>p{margin-top:16px}
+ .rci-programme-grid{grid-template-columns:1fr}
+ .rci-programme-card{min-height:270px;padding:24px}
+ .rci-principles{grid-template-columns:1fr}
+ .rci-principles article,.rci-principles article+article{padding:22px 0;border-left:0;border-bottom:1px solid #deddd4}
+ .rci-principles article:last-child{border-bottom:0}
+ .rci-principle-mark{margin:17px 0 10px}
+ .rci-history{padding:65px 23px;grid-template-columns:1fr;gap:20px}
+ .rci-history h2{font-size:39px;margin:18px 0 14px}
+ .rci-history-side{grid-column:auto;margin-top:12px;padding-left:20px}
+ .rci-history-side>b{margin:12px 0 18px}
+ .rci-visit{padding:65px 23px;grid-template-columns:1fr;gap:32px}
+ .rci-visit h2{font-size:52px}
+ .rci-visit-art{height:270px}
+ .rci-footer{padding:24px 22px;display:grid;grid-template-columns:1fr auto;gap:16px}
+ .rci-footer-brand{grid-column:1/-1}
+ .rci-footer-note{grid-column:1/-1}
+ .rci-footer>small{white-space:normal;text-align:right}
+}

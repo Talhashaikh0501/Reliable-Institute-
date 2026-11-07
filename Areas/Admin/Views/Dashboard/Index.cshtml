@@ -2,11 +2,12 @@
 @{
     ViewData["Title"] = "Overview";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var isAdmin = User.IsInRole("Admin");
 }
 <div class="ra-dashboard">
-<div class="ra-page-heading"><div><div class="ra-eyebrow">RELIABLE COACHING CLASSES <span>•</span> ROSHAN GATE</div><h1>Good day, @User.Identity?.Name?.Split('@')[0] 👋</h1><p>Here is what's happening at your institute today.</p></div><div class="ra-date"><span class="ra-live-dot"></span> @DateTime.Now.ToString("dddd, dd MMMM yyyy")</div></div>
-<section class="ra-welcome"><div><span class="ra-welcome-label">INSTITUTE OVERVIEW</span><h2>Everything in one place.</h2><p>Manage students, track daily activity and stay on top of institute operations.</p></div><div class="ra-welcome-mark">R<span>.</span></div></section>
-<div class="ra-section-heading"><div><span>AT A GLANCE</span><h3>Today's snapshot</h3></div></div>
+<div class="ra-page-heading"><div><div class="ra-eyebrow">@(isAdmin ? "INSTITUTE MANAGEMENT" : "TEACHER WORKSPACE") <span>•</span> RELIABLE COACHING CLASSES</div><h1>@(isAdmin ? "Good day" : "Welcome back"), @User.Identity?.Name?.Split('@')[0] 👋</h1><p>@(isAdmin ? "Here is your institute at a glance. Keep every operation moving smoothly." : "Your teaching workspace is ready. Review today’s activity and jump into your daily tasks.")</p></div><div class="ra-date"><span class="ra-live-dot"></span> @DateTime.Now.ToString("dddd, dd MMMM yyyy")</div></div>
+<section class="ra-welcome"><div><span class="ra-welcome-label">@(isAdmin ? "ADMINISTRATOR OVERVIEW" : "YOUR TEACHING DESK")</span><h2>@(isAdmin ? "Your institute, in control." : "Make every class count.")</h2><p>@(isAdmin ? "Monitor admissions, attendance and collections from one clear workspace." : "Access student records, batches, attendance and academic updates in one place.")</p></div><div class="ra-welcome-mark">R<span>.</span></div></section>
+<div class="ra-section-heading"><div><span>@(isAdmin ? "AT A GLANCE" : "DAILY OVERVIEW")</span><h3>@(isAdmin ? "Today’s institute snapshot" : "Your institute today")</h3></div></div>
 <section class="ra-stat-grid @(User.IsInRole("Admin") ? "" : "ra-stat-grid-teacher")">
 <article class="ra-stat-card"><div class="ra-stat-top"><span class="ra-stat-icon ra-icon-blue">♙</span><span class="ra-stat-caption">ENROLMENT</span></div><strong>@Model.TotalStudents.ToString("N0")</strong><span class="ra-stat-foot">Active students</span></article>
 <article class="ra-stat-card"><div class="ra-stat-top"><span class="ra-stat-icon ra-icon-violet">▦</span><span class="ra-stat-caption">CLASSROOMS</span></div><strong>@Model.ActiveBatches.ToString("N0")</strong><span class="ra-stat-foot">Active batches</span></article>
@@ -14,7 +15,7 @@
 @if (User.IsInRole("Admin")) { <article class="ra-stat-card"><div class="ra-stat-top"><span class="ra-stat-icon ra-icon-amber">₹</span><span class="ra-stat-caption">FEE COLLECTION</span></div><strong>₹@Model.FeesCollectedThisMonth.ToString("N0")</strong><span class="ra-stat-foot">Collected this month</span></article> }
 </section>
 <div class="ra-content-grid">
-<section class="ra-panel"><div class="ra-panel-heading"><div><span>QUICK ACCESS</span><h3>Manage your institute</h3></div><span class="ra-panel-note">Your workspace</span></div><div class="ra-shortcuts">
+<section class="ra-panel"><div class="ra-panel-heading"><div><span>@(isAdmin ? "QUICK ACCESS" : "TEACHING TOOLS")</span><h3>@(isAdmin ? "Manage your institute" : "Get to your daily work")</h3></div><span class="ra-panel-note">Your workspace</span></div><div class="ra-shortcuts">
 <a class="ra-shortcut" asp-area="Admin" asp-controller="Students" asp-action="Index"><span class="ra-shortcut-icon ra-icon-blue">♙</span><span><b>Students</b><small>Admissions & records</small></span><i>↗</i></a>
 <a class="ra-shortcut" asp-area="Admin" asp-controller="Batches" asp-action="Index"><span class="ra-shortcut-icon ra-icon-violet">▦</span><span><b>Classes & batches</b><small>Organise classrooms</small></span><i>↗</i></a>
 <a class="ra-shortcut" asp-area="Admin" asp-controller="Academics" asp-action="Subjects"><span class="ra-shortcut-icon ra-icon-blue">∑</span><span><b>Subjects</b><small>Curriculum by standard</small></span><i>↗</i></a>
@@ -22,7 +23,8 @@
 <a class="ra-shortcut" asp-area="Admin" asp-controller="Attendance" asp-action="Index"><span class="ra-shortcut-icon ra-icon-green">✓</span><span><b>Attendance</b><small>Daily student presence</small></span><i>↗</i></a>
 @if (User.IsInRole("Admin")) {
 <a class="ra-shortcut" asp-area="Admin" asp-controller="Fees" asp-action="Index"><span class="ra-shortcut-icon ra-icon-amber">₹</span><span><b>Fee management</b><small>Payments & receipts</small></span><i>↗</i></a>
-<a class="ra-shortcut" asp-area="Admin" asp-controller="Academics" asp-action="Announcements"><span class="ra-shortcut-icon ra-icon-amber">✦</span><span><b>Announcements</b><small>Publish institute updates</small></span><i>↗</i></a>
+
+<a class="ra-shortcut" asp-area="Admin" asp-controller="Academics" asp-action="Announcements"><span class="ra-shortcut-icon ra-icon-amber">✦</span><span><b>Announcements</b><small>Institute updates</small></span><i>↗</i></a>
 <a class="ra-shortcut" asp-area="Admin" asp-controller="Staff" asp-action="Index"><span class="ra-shortcut-icon ra-icon-green">♟</span><span><b>Teachers</b><small>Staff accounts & access</small></span><i>↗</i></a>
 }
 </div></section>

@@ -1,0 +1,25 @@
+@model IReadOnlyList<ReliableAcademy.Models.Subject>
+@{
+    ViewData["Title"] = "Subjects";
+    var search = ViewBag.Search as string;
+    var standard = ViewBag.Standard as ReliableAcademy.Models.StudentStandard?;
+    var includeInactive = (bool)(ViewBag.IncludeInactive ?? false);
+}
+<div class="ra-page-heading"><div><div class="ra-eyebrow">ACADEMIC SETUP <span>•</span> CURRICULUM</div><h1>Subjects</h1><p>Maintain the subjects taught across standards 8th to 12th.</p></div>@if (User.IsInRole("Admin")) { <a class="ra-primary-button" href="#add-subject">＋ Add subject</a> }</div>
+@if (TempData["Success"] is string success) { <div class="ra-alert-success">@success</div> }
+@if (TempData["Error"] is string error) { <div class="ra-alert-error">@error</div> }
+<section class="ra-panel ra-student-toolbar"><form method="get" class="ra-filter-form">
+<div class="ra-search-field"><label>Search subjects</label><input name="search" value="@search" placeholder="Enter subject name" /></div>
+<div class="ra-filter-field"><label>Standard</label><select name="standard"><option value="">All standards</option>@foreach (var item in Enum.GetValues<ReliableAcademy.Models.StudentStandard>()) { <option value="@item" selected="@(standard == item)">@((int)item)th</option> }</select></div>
+<label class="ra-check-filter"><input type="checkbox" name="includeInactive" value="true" checked="@includeInactive" /> Include archived</label><button class="ra-secondary-button" type="submit">Apply filters</button><a class="ra-text-link" asp-action="Subjects">Clear</a>
+</form></section>
+@if (User.IsInRole("Admin"))
+{
+<section class="ra-panel ra-form-panel" id="add-subject" style="margin-bottom:14px"><div class="ra-panel-heading"><div><span>NEW CURRICULUM ITEM</span><h3>Add a subject</h3></div></div>
+<form asp-action="CreateSubject" method="post" class="ra-filter-form"><div class="ra-search-field"><label>Subject name</label><input name="name" maxlength="100" required placeholder="e.g. Mathematics" /></div><div class="ra-filter-field"><label>Standard</label><select name="standard" required>@foreach (var item in Enum.GetValues<ReliableAcademy.Models.StudentStandard>()) { <option value="@item">@((int)item)th</option> }</select></div><button class="ra-primary-button" type="submit">Save subject</button></form></section>
+}
+<section class="ra-panel ra-table-panel"><div class="ra-panel-heading"><div><span>SUBJECT DIRECTORY</span><h3>@Model.Count subjects</h3></div></div><div class="table-responsive"><table class="ra-data-table">
+<thead><tr><th>SUBJECT</th><th>STANDARD</th><th>STATUS</th>@if (User.IsInRole("Admin")) { <th>ACTION</th> }</tr></thead><tbody>
+@foreach (var item in Model) { <tr><td><b class="ra-student-name">@item.Name</b></td><td><span class="ra-standard-pill">@((int)item.Standard)th</span></td><td><span class="ra-status-pill @(item.IsActive ? "is-active" : "is-inactive")">@(item.IsActive ? "Active" : "Archived")</span></td>@if (User.IsInRole("Admin")) { <td><form asp-action="ToggleSubject" method="post"><input type="hidden" name="id" value="@item.Id" /><button class="ra-link-button ra-row-action" type="submit">@(item.IsActive ? "Archive" : "Restore")</button></form></td> }</tr> }
+@if (Model.Count == 0) { <tr><td colspan="4" class="text-center p-4">No subjects match your filters.</td></tr> }
+</tbody></table></div></section>

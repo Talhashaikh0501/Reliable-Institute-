@@ -14,6 +14,9 @@ public class DashboardController(ApplicationDbContext db) : Controller
     {
         var today = DateOnly.FromDateTime(DateTime.Today);
         var monthStart = new DateTime(today.Year, today.Month, 1);
+        var announcements = db.Announcements.Where(x => x.IsPublished && (x.ExpiresAtUtc == null || x.ExpiresAtUtc > DateTime.UtcNow));
+        if (!User.IsInRole("Admin"))
+            announcements = announcements.Where(x => x.Audience == AnnouncementAudience.Everyone || x.Audience == AnnouncementAudience.Teachers);
         var model = new DashboardViewModel
         {
             TotalStudents = await db.Students.CountAsync(x => x.IsActive),
@@ -21,7 +24,7 @@ public class DashboardController(ApplicationDbContext db) : Controller
             PresentToday = await db.AttendanceRecords.CountAsync(x => x.AttendanceDate == today && x.Status == AttendanceStatus.Present),
             AbsentToday = await db.AttendanceRecords.CountAsync(x => x.AttendanceDate == today && x.Status == AttendanceStatus.Absent),
             FeesCollectedThisMonth = User.IsInRole("Admin") ? await db.FeePayments.Where(x => x.PaidAtUtc >= monthStart).SumAsync(x => (decimal?)x.Amount) ?? 0 : 0,
-            RecentAnnouncements = await db.Announcements.Where(x => x.IsPublished && (x.ExpiresAtUtc == null || x.ExpiresAtUtc > DateTime.UtcNow)).OrderByDescending(x => x.PublishedAtUtc).Take(5).ToListAsync()
+            RecentAnnouncements = await announcements.OrderByDescending(x => x.PublishedAtUtc).Take(5).ToListAsync()
         };
         return View(model);
     }

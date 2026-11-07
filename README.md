@@ -3,57 +3,42 @@
 A commercial-quality coaching institute management system for Reliable Coaching Classes, Roshan Gate, Aurangabad.
 
 ## Technology
-
-- ASP.NET Core MVC / C# (.NET 9 during initial development)
-- Entity Framework Core
-- SQL Server / LocalDB
+- ASP.NET Core MVC / C# on .NET 9
+- Entity Framework Core 9 and SQL Server
 - ASP.NET Core Identity with Admin and Teacher roles
-- Bootstrap, Razor Views, CSS and JavaScript
-
-> .NET 9 reaches end of support on 10 November 2026. Upgrade to a supported LTS release before production deployment.
+- Razor Views, Bootstrap and custom responsive CSS
 
 ## Academic scope
+The institute teaches board-curriculum standards 8th, 9th, 10th, 11th and 12th. Individual student dashboards are a later phase and must be restricted to students in standards 10th, 11th and 12th. Students in 8th and 9th do not receive individual dashboards.
 
-The institute teaches 8th, 9th, 10th, 11th and 12th standards (board curriculum only). Individual student dashboards are planned only for 10th, 11th and 12th standards, as a later phase.
+## Implemented modules
+- Identity authentication foundation, Admin / Teacher roles and optional bootstrap Admin seeding.
+- Admin-only teacher account creation and access suspension / restoration.
+- Student admissions, searchable directory, profiles, edit, archive and reactivation. Teachers can view student records; Admin manages changes.
+- Class and batch creation, schedules, archive / restore, student counts and standard-matched student assignment.
+- Daily attendance register by batch and date, Present / Absent / Late / Leave, optional notes and audit attribution. Admin and Teachers can manage attendance.
+- Fee plans with discounts, outstanding balances, partial / full payments, serializable payment recording and printable receipts. Admin-only.
+- Subject directory by standard, with archive / restore.
+- Exam scheduling and result entry, with validation against maximum marks and eligible students.
+- Institute announcements with audience targeting and publish / unpublish controls. Teacher dashboards only receive announcements intended for Everyone or Teachers.
+- Role-aware management dashboard; financial figures are hidden from Teachers.
 
-## Current implementation
+## Database safety
+The application uses the RCI_ prefix for every table it owns, including ASP.NET Identity tables and the EF migration history table (RCI_EFMigrationsHistory). This isolates the application from unrelated tables in the shared SQL Server database. Never remove the prefix or run destructive database scripts against unprefixed tables.
 
-- Identity authentication foundation and Admin / Teacher roles
-- Admin-only teacher account creation and access suspension / restoration
-- Student admissions, directory search and standard filtering
-- Student profiles, edit, archive and reactivation (Admin write access; Teachers can view)
-- Class and batch creation, schedules, archive / restore and student counts (Admin manages; Teachers can view)
-- Batch assignment from active batches matching the selected standard
-- Daily attendance register by batch and date, including Present / Absent / Late / Leave, optional notes and audit attribution (Admin and Teachers)
-- Fee plans with discounts, outstanding balance calculations, partial / full payments, serializable payment recording and printable receipts (Admin only)
-- Student profile summary for recorded fees and attendance; financial figures are hidden from Teachers
-
-## Run locally
-
-1. Install Visual Studio 2022 (17.14 recommended), the ASP.NET and web development workload, .NET 9 SDK and SQL Server LocalDB.
-2. Open `ReliableAcademy.sln`.
-3. Restore NuGet packages.
-4. Open **Tools → NuGet Package Manager → Package Manager Console**. The repository includes a design-time DbContext factory so EF migrations can be generated without running the app's startup role seeding.
-5. Set the default project to `ReliableAcademy` and run:
-
-   ```powershell
-   Add-Migration AddInstituteEntities
-   Update-Database
-   ```
-
-   The checked-in initial migration creates the ASP.NET Core Identity tables. The current institute entities are already in the EF model; the command above generates their first database migration from the model.
-
-6. Configure a local Admin account using User Secrets (never commit credentials):
-
+## Local development
+1. Open ReliableAcademy.sln in Visual Studio 2022 and restore NuGet packages.
+2. Configure ConnectionStrings:DefaultConnection in User Secrets. Never commit connection credentials.
+3. Optionally configure the first Admin account in User Secrets:
    ```powershell
    dotnet user-secrets set "BootstrapAdmin:Email" "your-admin-email@example.com"
-   dotnet user-secrets set "BootstrapAdmin:Password" "Use-A-Strong-Unique-Password"
+   dotnet user-secrets set "BootstrapAdmin:Password" "A-Strong-Unique-Password"
    ```
-
-7. Run the project with HTTPS.
-
-The Admin seed is optional and runs only when both settings are present. It creates the account if needed and assigns the Admin role. Teacher accounts and staff administration will be added in a later module.
+4. Run the application. The startup initializer creates the Admin and Teacher roles. If both bootstrap settings are present, it creates the Admin account and assigns the Admin role.
+5. For schema changes, review the generated migration and SQL script before applying it to the shared database.
 
 ## Git workflow
+All development is committed directly to main. Do not create or use other branches.
 
-All project development is committed directly to the `main` branch. Do not create or use other branches.
+## Production readiness
+.NET 9 reaches end of support on 10 November 2026. Upgrade to a supported LTS release and verify the hosting environment before production deployment.

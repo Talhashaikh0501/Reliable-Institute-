@@ -1,0 +1,25 @@
+@model IReadOnlyList<ReliableAcademy.Models.Announcement>
+@{ ViewData["Title"] = "Announcements"; }
+<div class="ra-page-heading"><div><div class="ra-eyebrow">INSTITUTE COMMUNICATION <span>•</span> UPDATES</div><h1>Announcements</h1><p>Share important updates with teachers and the institute community.</p></div></div>
+@if (TempData["Success"] is string success) { <div class="ra-alert-success">@success</div> }
+@if (TempData["Error"] is string error) { <div class="ra-alert-error">@error</div> }
+@if (User.IsInRole("Admin"))
+{
+<section class="ra-panel ra-form-panel" style="margin-bottom:14px"><div class="ra-panel-heading"><div><span>NEW MESSAGE</span><h3>Publish an announcement</h3></div></div>
+<form asp-action="CreateAnnouncement" method="post"><div class="ra-form-grid">
+<div class="ra-field"><label>Title</label><input name="title" maxlength="160" required /></div>
+<div class="ra-field"><label>Audience</label><select name="audience"><option value="0">Everyone</option><option value="1">Teachers</option><option value="2">Students</option></select></div>
+<div class="ra-field ra-field-wide"><label>Message</label><textarea name="message" rows="4" maxlength="3000" required></textarea></div>
+<div class="ra-field"><label>Expiry (optional)</label><input type="datetime-local" name="expiresAtUtc" /><small>Leave blank for no expiry. The entered time is interpreted as UTC.</small></div>
+</div><div class="ra-form-actions"><button class="ra-primary-button" type="submit">Publish announcement</button></div></form></section>
+}
+<section class="ra-panel ra-table-panel"><div class="ra-panel-heading"><div><span>INSTITUTE BULLETIN</span><h3>@Model.Count announcements</h3></div></div><div class="p-3">
+@foreach (var item in Model)
+{
+<article class="ra-announcement"><div class="d-flex justify-content-between align-items-start gap-3"><b>@item.Title</b><span class="ra-status-pill @(item.IsPublished ? "is-active" : "is-inactive")">@(item.IsPublished ? "Published" : "Unpublished")</span></div>
+<p style="white-space:pre-wrap">@item.Message</p><small>@item.Audience · @item.PublishedAtUtc.ToLocalTime().ToString("dd MMM yyyy, hh:mm tt")@(item.ExpiresAtUtc.HasValue ? " · Expires " + item.ExpiresAtUtc.Value.ToLocalTime().ToString("dd MMM yyyy") : "")</small>
+@if (User.IsInRole("Admin")) { <form asp-action="ToggleAnnouncement" method="post" class="mt-2"><input type="hidden" name="id" value="@item.Id" /><button class="ra-link-button ra-row-action" type="submit">@(item.IsPublished ? "Unpublish" : "Publish")</button></form> }
+</article>
+}
+@if (Model.Count == 0) { <div class="ra-empty"><span>✦</span><b>No announcements yet</b><p>New institute updates will appear here.</p></div> }
+</div></section>

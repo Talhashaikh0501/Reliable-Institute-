@@ -1,0 +1,22 @@
+@model IReadOnlyList<ReliableAcademy.Models.Exam>
+@{ ViewData["Title"] = "Exams & results"; }
+<div class="ra-page-heading"><div><div class="ra-eyebrow">ASSESSMENT CENTRE <span>•</span> ACADEMICS</div><h1>Exams & results</h1><p>Schedule assessments and record student performance.</p></div></div>
+@if (TempData["Success"] is string success) { <div class="ra-alert-success">@success</div> }
+@if (TempData["Error"] is string error) { <div class="ra-alert-error">@error</div> }
+@if (User.IsInRole("Admin"))
+{
+<section class="ra-panel ra-form-panel" style="margin-bottom:14px"><div class="ra-panel-heading"><div><span>ASSESSMENT PLANNER</span><h3>Schedule an exam</h3></div></div>
+<form asp-action="CreateExam" method="post"><div class="ra-form-grid">
+<div class="ra-field"><label>Exam name</label><input name="name" maxlength="120" required placeholder="e.g. Unit Test 1" /></div>
+<div class="ra-field"><label>Subject</label><select name="subjectId" asp-items="ViewBag.Subjects" required><option value="">Select subject</option></select></div>
+<div class="ra-field"><label>Batch (optional)</label><select name="batchId" asp-items="ViewBag.Batches"><option value="">All batches in this standard</option></select></div>
+<div class="ra-field"><label>Exam date</label><input type="date" name="examDate" required /></div>
+<div class="ra-field"><label>Maximum marks</label><input type="number" name="maximumMarks" min="1" max="1000" step="0.01" required /></div>
+<div class="ra-field"><label>Passing marks</label><input type="number" name="passingMarks" min="0" max="1000" step="0.01" required /></div>
+</div><div class="ra-form-actions"><button class="ra-primary-button" type="submit">Schedule exam</button></div></form></section>
+}
+<section class="ra-panel ra-table-panel"><div class="ra-panel-heading"><div><span>ASSESSMENT CALENDAR</span><h3>@Model.Count exams</h3></div></div><div class="table-responsive"><table class="ra-data-table">
+<thead><tr><th>EXAM</th><th>SUBJECT</th><th>DATE</th><th>MAX MARKS</th><th>RESULTS</th><th></th></tr></thead><tbody>
+@foreach (var exam in Model) { <tr><td><b class="ra-student-name">@exam.Name</b><small class="ra-table-sub">@(exam.Batch?.Name ?? "All batches")</small></td><td>@exam.Subject.Name <small class="ra-table-sub">@((int)exam.Subject.Standard)th standard</small></td><td>@exam.ExamDate.ToString("dd MMM yyyy")</td><td>@exam.MaximumMarks.ToString("0.##") <small class="ra-table-sub">Pass: @exam.PassingMarks.ToString("0.##")</small></td><td>@exam.Results.Count entered</td><td><a class="ra-row-action" asp-action="Results" asp-route-id="@exam.Id">Manage results <span>↗</span></a></td></tr> }
+@if (Model.Count == 0) { <tr><td colspan="6" class="text-center p-4">No exams have been scheduled yet.</td></tr> }
+</tbody></table></div></section>

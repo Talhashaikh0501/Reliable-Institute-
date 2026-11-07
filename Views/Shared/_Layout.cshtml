@@ -1,28 +1,47 @@
 @{
     var isAdminArea = ViewContext.RouteData.Values["area"]?.ToString() == "Admin";
+    var currentController = ViewContext.RouteData.Values["controller"]?.ToString() ?? "";
+    string Active(string controller) => currentController.Equals(controller, StringComparison.OrdinalIgnoreCase) ? " active" : "";
 }
 <!DOCTYPE html>
-<html lang="en"><head>
+<html lang="en">
+<head>
 <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="theme-color" content="#101d35" />
 <title>@ViewData["Title"] · Reliable Academy</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" /><link rel="stylesheet" href="~/css/site.css" asp-append-version="true" /><link rel="stylesheet" href="~/ReliableAcademy.styles.css" asp-append-version="true" />
-</head><body class="@(isAdminArea ? "ra-app-body" : "ra-public-body")">
-@if (isAdminArea) {
+</head>
+<body class="@(isAdminArea ? "ra-app-body" : "ra-public-body")">
+@if (isAdminArea)
+{
 <aside class="ra-sidebar">
 <a class="ra-brand" asp-area="Admin" asp-controller="Dashboard" asp-action="Index"><span class="ra-brand-mark">R<span>.</span></span><span><b>RELIABLE</b><small>ACADEMY MANAGEMENT</small></span></a>
-<div class="ra-nav-label">WORKSPACE</div><a class="ra-nav-link active" asp-area="Admin" asp-controller="Dashboard" asp-action="Index"><span>▦</span> Overview</a>
+<div class="ra-nav-label">WORKSPACE</div>
+<a class="ra-nav-link@Active("Dashboard")" asp-area="Admin" asp-controller="Dashboard" asp-action="Index"><span>▦</span> Overview</a>
 <div class="ra-nav-label ra-nav-label-spaced">INSTITUTE</div>
-<a class="ra-nav-link" asp-area="Admin" asp-controller="Students" asp-action="Index"><span>♙</span> Students</a>
-<a class="ra-nav-link" asp-area="Admin" asp-controller="Batches" asp-action="Index"><span>▤</span> Classes & batches</a>
-<a class="ra-nav-link" asp-area="Admin" asp-controller="Attendance" asp-action="Index"><span>✓</span> Attendance</a>
-@if (User.IsInRole("Admin")) { <a class="ra-nav-link" asp-area="Admin" asp-controller="Staff" asp-action="Index"><span>♟</span> Teachers</a> }<a class="ra-nav-link ra-nav-muted" href="#" aria-disabled="true"><span>▤</span> Classes & batches <em>SOON</em></a>@if (User.IsInRole("Admin")) { <a class="ra-nav-link" asp-area="Admin" asp-controller="Fees" asp-action="Index"><span>₹</span> Fees & payments</a> }<a class="ra-nav-link ra-nav-muted" href="#" aria-disabled="true"><span>✓</span> Attendance <em>SOON</em></a><a class="ra-nav-link ra-nav-muted" href="#" aria-disabled="true"><span>▧</span> Exams & results <em>SOON</em></a>
-<div class="ra-sidebar-bottom"><div class="ra-sidebar-help"><span>✦</span><b>Made for Reliable.</b><small>Your institute, thoughtfully organised.</small></div><div class="ra-user"><span class="ra-avatar">@((User.Identity?.Name ?? "A").Substring(0, 1).ToUpperInvariant())</span><span><b>@User.Identity?.Name</b><small>Signed in</small></span><partial name="_LoginPartial" /></div></div>
-</aside><div class="ra-main-shell"><header class="ra-topbar"><div><span class="ra-topbar-mobile-brand">RELIABLE <i>ACADEMY</i></span><span class="ra-breadcrumb">Workspace <b>/</b> @ViewData["Title"]</span></div><div class="ra-topbar-right"><span class="ra-secure-label"><span></span> SECURE WORKSPACE</span><span class="ra-topbar-divider"></span><span class="ra-topbar-user">@User.Identity?.Name</span></div></header><main class="ra-main-content">@RenderBody()</main></div>
-} else {
+<a class="ra-nav-link@Active("Students")" asp-area="Admin" asp-controller="Students" asp-action="Index"><span>♙</span> Students</a>
+<a class="ra-nav-link@Active("Batches")" asp-area="Admin" asp-controller="Batches" asp-action="Index"><span>▤</span> Classes & batches</a>
+<a class="ra-nav-link@Active("Attendance")" asp-area="Admin" asp-controller="Attendance" asp-action="Index"><span>✓</span> Attendance</a>
+<a class="ra-nav-link@Active("Academics")" asp-area="Admin" asp-controller="Academics" asp-action="Subjects"><span>∑</span> Subjects</a>
+<a class="ra-nav-link@Active("Academics")" asp-area="Admin" asp-controller="Academics" asp-action="Exams"><span>▧</span> Exams & results</a>
+<a class="ra-nav-link@Active("Academics")" asp-area="Admin" asp-controller="Academics" asp-action="Announcements"><span>✦</span> Announcements</a>
+@if (User.IsInRole("Admin"))
+{
+<div class="ra-nav-label ra-nav-label-spaced">ADMINISTRATION</div>
+<a class="ra-nav-link@Active("Fees")" asp-area="Admin" asp-controller="Fees" asp-action="Index"><span>₹</span> Fees & payments</a>
+<a class="ra-nav-link@Active("Staff")" asp-area="Admin" asp-controller="Staff" asp-action="Index"><span>♟</span> Teachers</a>
+}
+<div class="ra-sidebar-bottom"><div class="ra-sidebar-help"><span>✦</span><b>Made for Reliable.</b><small>Your institute, thoughtfully organised.</small></div>
+<div class="ra-user"><span class="ra-avatar">@((User.Identity?.Name ?? "A").Substring(0, 1).ToUpperInvariant())</span><span><b>@User.Identity?.Name</b><small>Signed in</small></span><partial name="_LoginPartial" /></div></div>
+</aside>
+<div class="ra-main-shell"><header class="ra-topbar"><div><span class="ra-topbar-mobile-brand">RELIABLE <i>ACADEMY</i></span><span class="ra-breadcrumb">Workspace <b>/</b> @ViewData["Title"]</span></div><div class="ra-topbar-right"><span class="ra-secure-label"><span></span> SECURE WORKSPACE</span><span class="ra-topbar-divider"></span><span class="ra-topbar-user">@User.Identity?.Name</span></div></header><main class="ra-main-content">@RenderBody()</main></div>
+}
+else
+{
 <header class="ra-public-header"><a class="ra-public-brand" asp-controller="Home" asp-action="Index"><span class="ra-brand-mark">R<span>.</span></span><span><b>RELIABLE</b><small>COACHING CLASSES</small></span></a><div class="ra-public-location">ROSHAN GATE <span>·</span> AURANGABAD</div><partial name="_LoginPartial" /></header><main>@RenderBody()</main>
 }
 <script src="~/lib/jquery/dist/jquery.min.js"></script><script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script><script src="~/js/site.js" asp-append-version="true"></script>
 @await RenderSectionAsync("Scripts", required: false)
-</body></html>
+</body>
+</html>

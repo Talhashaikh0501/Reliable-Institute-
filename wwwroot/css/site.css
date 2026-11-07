@@ -179,3 +179,87 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
     .ra-home-programme{min-height:195px}
     .ra-home-bottom{margin:0 20px 35px;padding:24px;align-items:flex-start;flex-direction:column}
 }
+
+
+/* Public homepage — institute introduction, not a sales landing page */
+.ra-public-header{padding-left:max(6vw,24px);padding-right:max(6vw,24px)}
+.ra-public-header .navbar-nav{display:flex;align-items:center;gap:8px;margin:0}
+.ra-public-header .navbar-nav .nav-link{font:700 10px var(--ra-font);color:#52627a!important;padding:10px 14px;border:1px solid #e5eaf1;border-radius:8px}
+.ra-public-header .navbar-nav .nav-link:hover{background:#f5f7fc;color:#263b5b!important}
+.ra-home-hero-v2{min-height:560px;padding-top:82px;padding-bottom:76px;background:radial-gradient(ellipse at 82% 42%,#e9edff 0,transparent 38%),linear-gradient(115deg,#fff 0%,#f8f9fc 70%,#f2f4fb 100%)}
+.ra-home-hero-v2 .ra-home-hero-copy>p{max-width:540px}
+.ra-home-hero-v2 .ra-home-hero h1{max-width:650px}
+.ra-home-hero-v2 .ra-home-actions .ra-primary-button{background:#536fe5;border-color:#536fe5}
+.ra-home-hero-v2 .ra-home-actions .ra-primary-button:hover{background:#405bd0;border-color:#405bd0}
+.ra-home-hero-art-v2{min-height:360px}
+.ra-home-hero-art-v2 .ra-home-art-card-main{width:285px;height:210px}
+.ra-home-hero-art-v2 .ra-home-art-card-main>b{font-size:8px;letter-spacing:1.3px}
+.ra-home-hero-art-v2 .ra-home-art-card-main>small{text-align:center;padding:0 12px}
+.ra-home-about,.ra-home-learning,.ra-home-values{padding:72px max(7vw,28px)}
+.ra-home-section-label{display:flex;align-items:center;justify-content:space-between;gap:15px;color:#8995a8;font-size:8px;font-weight:800;letter-spacing:1.7px}
+.ra-home-section-label span{color:#c0a06a;font-size:8px;letter-spacing:1px}
+.ra-home-about{background:#fff}
+.ra-home-about-grid{display:grid;grid-template-columns:.85fr 1.15fr;gap:60px;align-items:start;margin-top:34px}
+.ra-home-about-grid h2,.ra-home-learning-heading h2,.ra-home-values>h2,.ra-home-location h2{font:800 clamp(30px,3.6vw,43px)/1.14 var(--ra-display);letter-spacing:-1.8px;color:#1b2a44;margin:0}
+.ra-home-about-grid>div{max-width:610px}
+.ra-home-about-grid p{font-size:11px;line-height:2;color:#818da0;margin:0 0 13px}
+.ra-home-about-grid .ra-home-about-lead{font-size:15px;line-height:1.8;color:#40516b;font-weight:600}
+.ra-home-learning{background:#f6f7fb}
+.ra-home-learning-heading{display:grid;grid-template-columns:1fr .8fr;gap:45px;align-items:end;margin:32px 0 25px}
+.ra-home-learning-heading>p{font-size:11px;line-height:1.9;color:#818da0;margin:0 0 3px;max-width:430px}
+.ra-home-programmes-v2{padding:0;grid-template-columns:repeat(2,minmax(0,1fr));max-width:900px}
+.ra-home-programmes-v2 .ra-home-programme{min-height:240px;padding:28px}
+.ra-home-programmes-v2 .ra-home-programme p{font-size:11px;max-width:390px}
+.ra-home-values{background:#fff}
+.ra-home-values>h2{margin:29px 0 32px}
+.ra-home-values>h2 em,.ra-home-location h2 em{font-style:normal;color:#536fe5}
+.ra-home-value-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.ra-home-value-grid article{border:1px solid #e9edf4;border-radius:12px;padding:22px 22px 24px;background:#fff}
+.ra-home-value-grid article>span{font:800 10px var(--ra-display);color:#c69b50}
+.ra-home-value-grid h3{font:800 14px var(--ra-display);color:#273852;margin:20px 0 8px}
+.ra-home-value-grid p{font-size:10px;line-height:1.8;color:#8792a3;margin:0;max-width:260px}
+.ra-home-location{display:grid;grid-template-columns:1fr .8fr;gap:45px;align-items:center;padding:68px max(7vw,28px);background:#f5f6fa}
+.ra-home-location h2{margin:26px 0 15px}
+.ra-home-location-copy>p{font-size:11px;line-height:1.9;color:#818da0;max-width:400px}
+.ra-home-address{border-left:2px solid #d7b36d;padding:2px 0 2px 15px;margin:24px 0}
+.ra-home-address span,.ra-home-address b{display:block}
+.ra-home-address span{font-size:8px;font-weight:800;letter-spacing:1.5px;color:#9aa4b2;margin-bottom:8px}
+.ra-home-address b{font-size:10px;line-height:1.9;color:#34445c}
+.ra-home-location .ra-primary-button{background:#536fe5;border-color:#536fe5;min-height:42px;padding:0 17px}
+.ra-home-location-art{min-height:290px;position:relative;display:grid;place-items:center;overflow:hidden;border-radius:15px;background:linear-gradient(145deg,#1b2d4b,#293f65)}
+.ra-home-map-ring{position:absolute;width:230px;aspect-ratio:1;border:1px solid #ffffff25;border-radius:50%;box-shadow:0 0 0 28px #ffffff09,0 0 0 58px #ffffff06}
+.ra-home-map-mark{z-index:1;font:800 100px var(--ra-display);letter-spacing:-12px;color:#fff}
+.ra-home-map-mark span{color:#e4b85e}
+.ra-home-location-art>span{position:absolute;bottom:24px;left:25px;font-size:8px;line-height:1.8;letter-spacing:1.8px;color:#c1cada;font-weight:800}
+.ra-home-footer{min-height:90px;padding:20px max(6vw,24px);display:flex;align-items:center;gap:24px;background:#fff;border-top:1px solid #e9edf4}
+.ra-home-footer .ra-public-brand{margin:0 auto 0 0}
+.ra-home-footer>span{font-size:9px;color:#929dad}
+.ra-home-footer>a:not(.ra-public-brand){font-size:9px;font-weight:700;color:#5a6b84}
+.ra-home-footer>a:not(.ra-public-brand) span{color:#c69b50;margin-left:4px}
+.ra-home-footer>small{font-size:8px;color:#a0a9b6;white-space:nowrap}
+@media(max-width:850px){
+ .ra-home-about-grid{gap:30px}
+ .ra-home-learning-heading{gap:25px}
+ .ra-home-location{gap:25px}
+}
+@media(max-width:620px){
+ .ra-public-header{padding:0 16px}
+ .ra-public-header .navbar-nav .nav-link{font-size:9px;padding:8px 10px}
+ .ra-home-hero-v2{padding-top:48px;padding-bottom:35px}
+ .ra-home-hero-art-v2{min-height:250px}
+ .ra-home-hero-art-v2 .ra-home-art-card-main{width:220px;height:160px}
+ .ra-home-about,.ra-home-learning,.ra-home-values{padding:45px 20px}
+ .ra-home-about-grid,.ra-home-learning-heading,.ra-home-location{grid-template-columns:1fr;gap:16px}
+ .ra-home-about-grid{margin-top:23px}
+ .ra-home-learning-heading{margin:23px 0}
+ .ra-home-programmes-v2{grid-template-columns:1fr}
+ .ra-home-programmes-v2 .ra-home-programme{min-height:210px}
+ .ra-home-value-grid{grid-template-columns:1fr}
+ .ra-home-value-grid article{padding:19px}
+ .ra-home-location{padding:45px 20px}
+ .ra-home-location-art{min-height:220px}
+ .ra-home-footer{padding:20px;flex-wrap:wrap;gap:12px}
+ .ra-home-footer .ra-public-brand{width:100%}
+ .ra-home-footer>span{width:100%}
+ .ra-home-footer>small{margin-left:auto}
+}

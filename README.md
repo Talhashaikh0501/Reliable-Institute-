@@ -21,6 +21,7 @@ The institute teaches board-curriculum standards 8th, 9th, 10th, 11th and 12th. 
 - Subject directory by standard, with archive / restore.
 - Exam scheduling and result entry, with validation against maximum marks and eligible students.
 - Institute announcements with audience targeting and publish / unpublish controls. Teacher dashboards only receive announcements intended for Everyone or Teachers.
+- Attendance reporting by date range, Admin-only fee collection and outstanding balance summaries, and CSV export of fee transactions.
 - Role-aware management dashboard; financial figures are hidden from Teachers.
 
 ## Database safety

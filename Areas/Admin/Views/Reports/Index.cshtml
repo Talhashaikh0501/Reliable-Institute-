@@ -1,0 +1,41 @@
+@model ReliableAcademy.Areas.Admin.Controllers.ReportsViewModel
+@{
+    ViewData["Title"] = "Reports";
+}
+<div class="ra-page-heading"><div><div class="ra-eyebrow">INSTITUTE INSIGHTS <span>•</span> REPORTING</div><h1>Reports</h1><p>Review attendance activity and fee performance for a selected period.</p></div>
+@if (User.IsInRole("Admin")) { <a class="ra-secondary-button" asp-action="ExportFees" asp-route-from="@Model.From" asp-route-to="@Model.To">↓ Export fee CSV</a> }</div>
+<section class="ra-panel ra-student-toolbar"><form method="get" class="ra-filter-form">
+<div class="ra-filter-field"><label>From</label><input class="form-control form-control-sm" type="date" name="from" value="@Model.From.ToString("yyyy-MM-dd")" /></div>
+<div class="ra-filter-field"><label>To</label><input class="form-control form-control-sm" type="date" name="to" value="@Model.To.ToString("yyyy-MM-dd")" /></div>
+<button class="ra-primary-button" type="submit">Run report</button>
+</form></section>
+<div class="ra-section-heading"><div><span>ATTENDANCE OVERVIEW</span><h3>@Model.From.ToString("dd MMM yyyy") — @Model.To.ToString("dd MMM yyyy")</h3></div></div>
+<section class="ra-stat-grid">
+<article class="ra-stat-card"><div class="ra-stat-top"><span class="ra-stat-icon ra-icon-green">✓</span><span class="ra-stat-caption">PRESENT</span></div><strong>@Model.AttendanceCount(ReliableAcademy.Models.AttendanceStatus.Present)</strong><span class="ra-stat-foot">Attendance entries</span></article>
+<article class="ra-stat-card"><div class="ra-stat-top"><span class="ra-stat-icon ra-icon-amber">!</span><span class="ra-stat-caption">ABSENT</span></div><strong>@Model.AttendanceCount(ReliableAcademy.Models.AttendanceStatus.Absent)</strong><span class="ra-stat-foot">Attendance entries</span></article>
+<article class="ra-stat-card"><div class="ra-stat-top"><span class="ra-stat-icon ra-icon-violet">◷</span><span class="ra-stat-caption">LATE</span></div><strong>@Model.AttendanceCount(ReliableAcademy.Models.AttendanceStatus.Late)</strong><span class="ra-stat-foot">Attendance entries</span></article>
+<article class="ra-stat-card"><div class="ra-stat-top"><span class="ra-stat-icon ra-icon-blue">↗</span><span class="ra-stat-caption">LEAVE</span></div><strong>@Model.AttendanceCount(ReliableAcademy.Models.AttendanceStatus.Leave)</strong><span class="ra-stat-foot">Attendance entries</span></article>
+</section>
+<section class="ra-panel ra-table-panel" style="margin-top:16px"><div class="ra-panel-heading"><div><span>DAILY BREAKDOWN</span><h3>@Model.DailyAttendance.Count recorded days</h3></div></div><div class="table-responsive"><table class="ra-data-table">
+<thead><tr><th>DATE</th><th>TOTAL</th><th>PRESENT</th><th>ABSENT</th><th>LATE</th><th>LEAVE</th></tr></thead><tbody>
+@foreach (var day in Model.DailyAttendance) { <tr><td>@day.Date.ToString("dd MMM yyyy")</td><td>@day.Total</td><td>@day.Present</td><td>@day.Absent</td><td>@day.Late</td><td>@day.Leave</td></tr> }
+@if (Model.DailyAttendance.Count == 0) { <tr><td colspan="6" class="text-center p-4">No attendance records were found for this period.</td></tr> }
+</tbody></table></div></section>
+@if (User.IsInRole("Admin"))
+{
+<div class="ra-section-heading"><div><span>FINANCIAL OVERVIEW</span><h3>Fee collection</h3></div></div>
+<section class="ra-stat-grid ra-stat-grid-teacher">
+<article class="ra-stat-card"><div class="ra-stat-top"><span class="ra-stat-icon ra-icon-amber">₹</span><span class="ra-stat-caption">COLLECTED</span></div><strong>₹@Model.FeesCollected.ToString("N2")</strong><span class="ra-stat-foot">Within selected period</span></article>
+<article class="ra-stat-card"><div class="ra-stat-top"><span class="ra-stat-icon ra-icon-blue">▤</span><span class="ra-stat-caption">PAYMENTS</span></div><strong>@Model.PaymentCount</strong><span class="ra-stat-foot">Successful records</span></article>
+</section>
+<div class="ra-content-grid">
+<section class="ra-panel ra-table-panel"><div class="ra-panel-heading"><div><span>COLLECTION MIX</span><h3>By payment method</h3></div></div><div class="table-responsive"><table class="ra-data-table"><thead><tr><th>METHOD</th><th>PAYMENTS</th><th>AMOUNT</th></tr></thead><tbody>
+@foreach (var item in Model.PaymentMethods) { <tr><td>@item.Method</td><td>@item.Count</td><td>₹@item.Amount.ToString("N2")</td></tr> }
+@if (Model.PaymentMethods.Count == 0) { <tr><td colspan="3" class="text-center p-3">No payments in this period.</td></tr> }
+</tbody></table></div></section>
+<section class="ra-panel ra-table-panel"><div class="ra-panel-heading"><div><span>OUTSTANDING FEES</span><h3>Top 25 balances</h3></div></div><div class="table-responsive"><table class="ra-data-table"><thead><tr><th>STUDENT</th><th>DUE DATE</th><th>BALANCE</th></tr></thead><tbody>
+@foreach (var item in Model.Defaulters) { <tr><td><b class="ra-student-name">@item.StudentName</b><small class="ra-table-sub">@item.AdmissionNumber</small></td><td>@item.DueDate.ToString("dd MMM yyyy")</td><td class="ra-balance-value">₹@item.Balance.ToString("N2")</td></tr> }
+@if (Model.Defaulters.Count == 0) { <tr><td colspan="3" class="text-center p-3">No outstanding fee balances.</td></tr> }
+</tbody></table></div></section>
+</div>
+}

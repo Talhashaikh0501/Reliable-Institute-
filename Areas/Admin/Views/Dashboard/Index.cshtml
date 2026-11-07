@@ -1,0 +1,34 @@
+@model ReliableAcademy.Areas.Admin.Controllers.DashboardViewModel
+@{
+    ViewData["Title"] = "Overview";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="ra-dashboard">
+    <div class="ra-page-heading">
+        <div><div class="ra-eyebrow">RELIABLE COACHING CLASSES <span>•</span> ROSHAN GATE</div><h1>Good day, @User.Identity?.Name?.Split('@')[0] 👋</h1><p>Here is what's happening at your institute today.</p></div>
+        <div class="ra-date"><span class="ra-live-dot"></span> @DateTime.Now.ToString("dddd, dd MMMM yyyy")</div>
+    </div>
+    <section class="ra-welcome"><div><span class="ra-welcome-label">INSTITUTE OVERVIEW</span><h2>Everything in one place.</h2><p>Manage students, track daily activity and stay on top of institute operations.</p></div><div class="ra-welcome-mark">R<span>.</span></div></section>
+    <div class="ra-section-heading"><div><span>AT A GLANCE</span><h3>Today's snapshot</h3></div></div>
+    <section class="ra-stat-grid">
+        <article class="ra-stat-card"><div class="ra-stat-top"><span class="ra-stat-icon ra-icon-blue">♙</span><span class="ra-stat-caption">ENROLMENT</span></div><strong>@Model.TotalStudents.ToString("N0")</strong><span class="ra-stat-foot">Active students</span></article>
+        <article class="ra-stat-card"><div class="ra-stat-top"><span class="ra-stat-icon ra-icon-violet">▦</span><span class="ra-stat-caption">CLASSROOMS</span></div><strong>@Model.ActiveBatches.ToString("N0")</strong><span class="ra-stat-foot">Active batches</span></article>
+        <article class="ra-stat-card"><div class="ra-stat-top"><span class="ra-stat-icon ra-icon-green">✓</span><span class="ra-stat-caption">ATTENDANCE</span></div><strong>@Model.PresentToday.ToString("N0")</strong><span class="ra-stat-foot">Present today · <b class="ra-positive">@Model.AbsentToday absent</b></span></article>
+        <article class="ra-stat-card"><div class="ra-stat-top"><span class="ra-stat-icon ra-icon-amber">₹</span><span class="ra-stat-caption">FEE COLLECTION</span></div><strong>₹@Model.FeesCollectedThisMonth.ToString("N0")</strong><span class="ra-stat-foot">Collected this month</span></article>
+    </section>
+    <div class="ra-content-grid">
+        <section class="ra-panel"><div class="ra-panel-heading"><div><span>QUICK ACCESS</span><h3>Manage your institute</h3></div><span class="ra-panel-note">Your workspace</span></div>
+            <div class="ra-shortcuts">
+                <a class="ra-shortcut" href="#" aria-disabled="true"><span class="ra-shortcut-icon ra-icon-blue">♙</span><span><b>Students</b><small>Admissions & records</small></span><i>↗</i></a>
+                <a class="ra-shortcut" href="#" aria-disabled="true"><span class="ra-shortcut-icon ra-icon-violet">▦</span><span><b>Classes & batches</b><small>Organise classrooms</small></span><i>↗</i></a>
+                <a class="ra-shortcut" href="#" aria-disabled="true"><span class="ra-shortcut-icon ra-icon-amber">₹</span><span><b>Fee management</b><small>Payments & receipts</small></span><i>↗</i></a>
+                <a class="ra-shortcut" href="#" aria-disabled="true"><span class="ra-shortcut-icon ra-icon-green">✓</span><span><b>Attendance</b><small>Daily student presence</small></span><i>↗</i></a>
+            </div>
+        </section>
+        <section class="ra-panel"><div class="ra-panel-heading"><div><span>STAY INFORMED</span><h3>Latest announcements</h3></div></div>
+            @if (Model.RecentAnnouncements.Count == 0) { <div class="ra-empty"><span>✦</span><b>It's quiet for now</b><p>Published institute announcements will appear here.</p></div> }
+            else { foreach (var item in Model.RecentAnnouncements) { <article class="ra-announcement"><b>@item.Title</b><p>@item.Message</p><small>@item.PublishedAtUtc.ToLocalTime().ToString("dd MMM, hh:mm tt")</small></article> } }
+        </section>
+    </div>
+    <div class="ra-footer-note"><span>RELIABLE</span> MANAGEMENT SUITE <i>•</i> Built for better learning operations</div>
+</div>

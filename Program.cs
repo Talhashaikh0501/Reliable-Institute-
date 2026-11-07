@@ -46,4 +46,5 @@ app.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
 app.MapRazorPages();
 
 await DbInitializer.SeedRolesAsync(app.Services);
+await DbInitializer.SeedAdminAsync(app.Services, builder.Configuration);
 app.Run();

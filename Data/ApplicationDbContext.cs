@@ -20,6 +20,26 @@ public class ApplicationDbContext : IdentityDbContext
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
+
+        // Keep every table owned by this application isolated on the shared SQL database.
+        // This includes ASP.NET Core Identity tables as well as coaching-management tables.
+        builder.Entity<IdentityUser>().ToTable("RCI_AspNetUsers");
+        builder.Entity<IdentityRole>().ToTable("RCI_AspNetRoles");
+        builder.Entity<IdentityUserClaim<string>>().ToTable("RCI_AspNetUserClaims");
+        builder.Entity<IdentityUserLogin<string>>().ToTable("RCI_AspNetUserLogins");
+        builder.Entity<IdentityUserRole<string>>().ToTable("RCI_AspNetUserRoles");
+        builder.Entity<IdentityUserToken<string>>().ToTable("RCI_AspNetUserTokens");
+        builder.Entity<IdentityRoleClaim<string>>().ToTable("RCI_AspNetRoleClaims");
+
+        builder.Entity<Student>().ToTable("RCI_Students");
+        builder.Entity<TeachingBatch>().ToTable("RCI_TeachingBatches");
+        builder.Entity<Subject>().ToTable("RCI_Subjects");
+        builder.Entity<AttendanceRecord>().ToTable("RCI_AttendanceRecords");
+        builder.Entity<FeePlan>().ToTable("RCI_FeePlans");
+        builder.Entity<FeePayment>().ToTable("RCI_FeePayments");
+        builder.Entity<Exam>().ToTable("RCI_Exams");
+        builder.Entity<ExamResult>().ToTable("RCI_ExamResults");
+        builder.Entity<Announcement>().ToTable("RCI_Announcements");
         builder.Entity<Student>(e =>
         {
             e.HasIndex(x => x.AdmissionNumber).IsUnique();

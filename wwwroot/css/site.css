@@ -629,3 +629,25 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
  .rci-home *, .rci-home *:before,.rci-home *:after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}
  .rci-home.rci-motion-ready .rci-reveal{opacity:1;transform:none}
 }
+
+
+/* Public header sign-in dropdown */
+.rci-signin-menu{position:relative;z-index:20;margin-left:10px}
+.rci-signin-menu>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:14px;padding:13px 19px;border-radius:9px;background:#172e50;color:#fff;font:700 12px var(--ra-font);letter-spacing:.2px;box-shadow:0 7px 18px #172e5020;transition:background .2s,transform .2s}
+.rci-signin-menu>summary::-webkit-details-marker{display:none}
+.rci-signin-menu>summary:hover{background:#244775;transform:translateY(-1px)}
+.rci-signin-menu>summary span{font-size:16px;color:#b9cbf2;transition:transform .2s}
+.rci-signin-menu[open]>summary span{transform:rotate(180deg)}
+.rci-signin-options{position:absolute;right:0;top:calc(100% + 12px);width:270px;padding:8px;background:#fff;border:1px solid #e7ebf2;border-radius:13px;box-shadow:0 18px 48px #101e3626;animation:rci-menu-in .18s ease-out;transform-origin:top right}
+.rci-signin-options:before{content:"";position:absolute;right:20px;top:-6px;width:11px;height:11px;background:#fff;border-left:1px solid #e7ebf2;border-top:1px solid #e7ebf2;transform:rotate(45deg)}
+.rci-signin-options a{position:relative;display:flex;align-items:center;gap:11px;padding:12px 10px;border-radius:8px;color:#172e50;text-decoration:none;transition:background .18s}
+.rci-signin-options a:hover,.rci-signin-options a:focus-visible{background:#f3f6fc;outline:none}
+.rci-signin-option-icon{width:35px;height:35px;display:grid;place-items:center;border-radius:9px;background:#edf2ff;color:#315fbd;font:800 14px var(--ra-display)}
+.rci-signin-options a>span:nth-child(2){flex:1}
+.rci-signin-options b,.rci-signin-options small{display:block}
+.rci-signin-options b{font:700 12px var(--ra-display)}
+.rci-signin-options small{margin-top:3px;color:#8290a4;font:500 10px var(--ra-font)}
+.rci-signin-options i{font-style:normal;color:#8190a5}
+@keyframes rci-menu-in{from{opacity:0;transform:translateY(-5px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
+@media(max-width:650px){.rci-signin-menu{margin-left:0}.rci-signin-menu>summary{padding:11px 13px;gap:8px;font-size:11px}.rci-signin-options{width:245px}}
+@media(prefers-reduced-motion:reduce){.rci-signin-options{animation:none}.rci-signin-menu>summary,.rci-signin-menu>summary span,.rci-signin-options a{transition:none}}

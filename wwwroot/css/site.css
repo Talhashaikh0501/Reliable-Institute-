@@ -954,3 +954,77 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
     .ra-nav-link,.ra-nav-link>span,.ra-stat-card,.ra-panel,.ra-admin-card,.ra-admin-metric,.ra-shortcut,.ra-admin-action-grid>a,.rci-login-input-wrap,.rci-login-submit{transition:none!important}
     .ra-nav-link:hover,.ra-stat-card:hover,.ra-admin-card:hover{transform:none}
 }
+
+/* Workspace visual refresh: accessible navigation, readable type and mobile-first layouts */
+:root{--ra-font:'Inter',sans-serif;--ra-display:'Plus Jakarta Sans',sans-serif;--ra-paper:#f5f7fa;--ra-line:#e6eaf0;--ra-ink:#18263d}
+html{font-size:16px}body{font-size:15px;line-height:1.55}
+.ra-sidebar{width:270px;background:#fff;color:#26364d;border-right:1px solid #e7ebf1;box-shadow:8px 0 28px rgba(25,42,67,.035);padding:25px 17px 18px}
+.ra-brand{color:#172943;margin:0 7px 38px}.ra-brand small{color:#8491a3}
+.ra-nav-label{font-size:11px;letter-spacing:1.35px;color:#9aa5b4;padding:0 12px 10px}.ra-nav-label-spaced{margin-top:25px}
+.ra-nav-link{position:relative;gap:14px;padding:12px 13px;margin:3px 0;border-radius:9px;color:#58677d;font-size:14px;font-weight:600;transition:background .2s ease,color .2s ease,transform .2s ease}
+.ra-nav-link>span{width:20px;font-size:18px;color:#8794a6;transition:color .2s ease}
+.ra-nav-link:hover{background:#f3f6fa;color:#1c304e;transform:translateX(2px)}.ra-nav-link:hover>span{color:#b1843e}
+.ra-nav-link.active{background:#eef2f8;color:#172b49;box-shadow:inset 3px 0 #c99b50}.ra-nav-link.active>span{color:#a87d39}
+.ra-sidebar-help{background:#f7f8fa;border:1px solid #e9edf2;color:#33445d;padding:15px}.ra-sidebar-help b{font-size:12px;color:#26364d}.ra-sidebar-help small{font-size:11px;color:#7d899a}
+.ra-user{border-top:1px solid #e9edf2}.ra-user b{font-size:12px;color:#35445a}.ra-user small{font-size:11px;color:#8994a4}.ra-user button{color:#69788d}
+.ra-main-shell{margin-left:270px}.ra-topbar{height:72px;padding:0 38px}.ra-breadcrumb{font-size:13px}.ra-secure-label{font-size:10px}.ra-topbar-user{font-size:12px}
+.ra-main-content{padding:36px 40px 30px}.ra-page-heading{gap:18px;align-items:center}
+.ra-page-heading h1{font-size:clamp(28px,2.4vw,36px);letter-spacing:-1.25px}.ra-page-heading p{font-size:14px;line-height:1.6}
+.ra-eyebrow,.ra-section-heading>div>span,.ra-panel-heading>div>span{font-size:10px;letter-spacing:1.5px}
+.ra-primary-button,.ra-secondary-button{min-height:44px;padding:0 18px;font-size:13px;border-radius:9px}
+.ra-alert-success,.ra-alert-error{font-size:13px;padding:13px 16px}.ra-section-heading h3,.ra-panel-heading h3{font-size:18px}
+.ra-panel{border-radius:13px}.ra-panel-heading{margin-bottom:20px}.ra-panel-note{font-size:12px}
+.ra-stat-card{padding:20px;min-height:140px}.ra-stat-caption{font-size:10px;letter-spacing:1.1px}.ra-stat-card>strong{font-size:30px}.ra-stat-foot{font-size:12px}
+.ra-data-table th{font-size:10px;padding:14px 17px;letter-spacing:.9px}.ra-data-table td{font-size:13px;padding:15px 17px}
+.ra-student-name{font-size:13px}.ra-table-sub{font-size:11px}.ra-mono{font-size:12px}
+.ra-standard-pill,.ra-status-pill{font-size:11px;padding:5px 9px}.ra-row-action{font-size:12px}
+.ra-search-field label,.ra-filter-field label{font-size:12px;margin-bottom:7px}
+.ra-search-field input,.ra-filter-field select{height:43px;padding:0 13px;font-size:13px;border-radius:8px}
+.ra-check-filter{font-size:13px;min-height:43px}.ra-text-link{font-size:13px}
+.ra-form-panel{padding:30px}.ra-form-section-heading>span{width:34px;height:34px;font-size:12px}
+.ra-form-section-heading b{font-size:15px}.ra-form-section-heading small{font-size:12px}.ra-form-grid{gap:20px 22px}
+.ra-field label{font-size:13px;margin-bottom:8px}.ra-field input,.ra-field select,.ra-field textarea{font-size:14px;padding:11px 13px;border-radius:8px}
+.ra-field input,.ra-field select{height:46px}.ra-field>span{font-size:12px}.ra-field>small{font-size:11px}
+.ra-profile-main h2{font-size:21px}.ra-profile-main p{font-size:12px}.ra-detail-list dt{font-size:12px}.ra-detail-list dd{font-size:13px}
+.ra-page-heading,.ra-panel,.ra-admin-card,.ra-stat-card{min-width:0}
+.ra-admin-hero h2{font-size:clamp(25px,2.5vw,34px)}.ra-admin-hero p{font-size:14px}
+.ra-admin-section-head h3,.ra-admin-card-head h3{font-size:19px}.ra-admin-metric strong{font-size:31px}
+.ra-admin-metric small,.ra-admin-card-head a,.ra-admin-list-row,.ra-admin-announcement p{font-size:13px}
+.ra-metric-label{font-size:11px}.ra-admin-action-grid b{font-size:13px}.ra-admin-action-grid small{font-size:11px}
+.ra-topbar-leading{display:flex;align-items:center;gap:13px;min-width:0}
+.ra-topbar-menu,.ra-sidebar-close{display:none}.ra-sidebar-top{display:flex;align-items:center;justify-content:space-between}.ra-sidebar-backdrop{display:none}
+@media(max-width:1100px){.ra-sidebar{width:250px}.ra-main-shell{margin-left:250px}.ra-main-content{padding:30px 26px}.ra-topbar{padding:0 26px}}
+@media(max-width:900px){
+.ra-sidebar{position:fixed;inset:0 auto 0 0;width:min(310px,86vw);height:100dvh;padding:22px 17px 18px;display:flex;overflow-y:auto;transform:translateX(-105%);transition:transform .28s cubic-bezier(.2,.75,.25,1);z-index:1050;box-shadow:18px 0 50px rgba(16,29,53,.16)}
+.ra-nav-open .ra-sidebar{transform:translateX(0)}.ra-sidebar-top{margin-bottom:30px}.ra-brand{margin:0}
+.ra-sidebar-close{display:grid;place-items:center;width:38px;height:38px;border:1px solid #e8edf3;border-radius:10px;background:#fff;color:#536278;font-size:25px;line-height:1}
+.ra-nav-label,.ra-nav-link,.ra-sidebar-bottom{display:flex}.ra-nav-label{display:block}.ra-sidebar-bottom{display:block;margin-top:auto;padding-top:28px}
+.ra-sidebar-backdrop{position:fixed;inset:0;background:rgba(14,25,43,.42);backdrop-filter:blur(2px);z-index:1040;opacity:0;pointer-events:none;display:block;transition:opacity .25s ease}
+.ra-nav-open .ra-sidebar-backdrop{opacity:1;pointer-events:auto}.ra-topbar-menu{display:grid;place-items:center;width:42px;height:42px;border:1px solid #e5eaf0;background:#fff;color:#263a58;border-radius:10px;font-size:20px;cursor:pointer}
+.ra-main-shell{margin-left:0}.ra-topbar{height:68px;padding:0 24px}.ra-topbar-mobile-brand{display:none}.ra-breadcrumb{font-size:13px}.ra-topbar-right{display:flex}.ra-main-content{padding:30px 24px}
+}
+@media(max-width:640px){
+body{font-size:14px}.ra-topbar{height:62px;padding:0 16px}.ra-breadcrumb{font-size:12px}.ra-topbar-right{display:none}
+.ra-main-content{padding:24px 15px 28px}.ra-page-heading{display:flex;align-items:flex-start;flex-direction:column;gap:14px;margin-bottom:20px}
+.ra-page-heading h1{font-size:28px;margin:7px 0 5px}.ra-page-heading p{font-size:13px}
+.ra-heading-actions{width:100%;flex-wrap:wrap}.ra-heading-actions .ra-primary-button{width:100%}
+.ra-stat-grid,.ra-admin-metrics{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.ra-stat-card{padding:15px;min-height:125px}.ra-stat-card>strong,.ra-admin-metric strong{font-size:24px}
+.ra-content-grid,.ra-admin-main-grid,.ra-admin-lower-grid{grid-template-columns:1fr;gap:13px}
+.ra-admin-hero{padding:24px 20px;min-height:0}.ra-admin-hero-art{display:none}
+.ra-admin-hero h2{font-size:25px;line-height:1.2}.ra-admin-hero p{font-size:13px}
+.ra-admin-section-head{align-items:flex-start;gap:8px}.ra-admin-section-head h3,.ra-admin-card-head h3{font-size:17px}
+.ra-admin-card{padding:17px}.ra-admin-card-head{gap:12px;align-items:flex-start}.ra-admin-card-head a{font-size:11px;text-align:right}
+.ra-admin-action-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.ra-admin-list-row{gap:9px}.ra-admin-list-row time{font-size:10px}
+.ra-student-toolbar{padding:15px}.ra-filter-form{align-items:stretch;flex-direction:column;gap:12px}
+.ra-search-field,.ra-filter-field{width:100%;min-width:0}.ra-check-filter{height:auto}
+.ra-filter-form>.ra-primary-button,.ra-filter-form>.ra-secondary-button{width:100%}
+.ra-table-panel{padding-top:16px}.ra-table-panel>.ra-panel-heading{padding:0 15px}.ra-panel-note{font-size:11px;text-align:right}
+.ra-data-table th{font-size:9px;padding:12px}.ra-data-table td{font-size:12px;padding:13px 12px}
+.ra-form-panel{padding:20px 16px}.ra-form-grid{grid-template-columns:1fr;gap:16px}.ra-field-wide{grid-column:auto}
+.ra-form-actions{flex-direction:column-reverse;align-items:stretch}.ra-form-actions>*{width:100%;min-height:44px}
+.ra-profile-summary{padding:15px;align-items:flex-start}.ra-detail-list>div{grid-template-columns:112px minmax(0,1fr)}
+.ra-shortcuts{grid-template-columns:1fr}.ra-attendance-heading{padding:0 15px}.ra-attendance-actions{padding:16px}
+.ra-footer-note{text-align:center;font-size:9px}
+}
+@media(prefers-reduced-motion:reduce){.ra-sidebar,.ra-sidebar-backdrop,.ra-nav-link,.ra-primary-button,.ra-secondary-button{transition:none!important}}

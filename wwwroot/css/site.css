@@ -1234,3 +1234,43 @@ html{scroll-behavior:smooth}::selection{background:#e9d5a7;color:#172338}
  .rci-signin-menu>summary span{font-size:12px!important}
 }
 @media(prefers-reduced-motion:reduce){.ra-public-nav a,.ra-public-menu-toggle,.rci-signin-menu>summary{transition:none!important}}
+
+
+/* Signed-in public header actions and workspace sidebar account controls */
+.rci-auth-actions{display:flex;align-items:center;gap:9px;flex:none;margin-left:3px}
+.rci-workspace-action,.rci-logout-action,.rci-staff-login-action{display:inline-flex;align-items:center;justify-content:center;gap:9px;min-height:42px;border-radius:10px;font:700 11px var(--ra-font);text-decoration:none!important;white-space:nowrap;transition:background .18s,border-color .18s,color .18s,transform .18s}
+.rci-workspace-action{padding:0 13px;background:#172a45;color:#fff!important;border:1px solid #172a45;box-shadow:0 4px 12px #172a4510}
+.rci-workspace-action:hover{background:#294260;border-color:#294260;color:#fff!important;transform:translateY(-1px)}
+.rci-workspace-action-icon{display:grid;place-items:center;width:23px;height:23px;border-radius:7px;background:#ffffff14;color:#e3bd70;font-size:13px}
+.rci-workspace-action-arrow{font-size:13px;color:#e3bd70}
+.rci-logout-form{margin:0}
+.rci-logout-action{padding:0 12px;background:transparent;border:1px solid #e3e8ef;color:#6d7a8e;cursor:pointer}
+.rci-logout-action>span:first-child{font-size:15px;color:#9aa5b4}
+.rci-logout-action:hover{background:#fff4f2;border-color:#f0d7d3;color:#a24c45}
+.rci-staff-login-action{padding:0 15px;background:#172a45;color:#fff!important;border:1px solid #172a45}
+.rci-staff-login-action:hover{background:#294260;color:#fff!important}
+.rci-staff-login-action span{font-size:14px;color:#e3bd70}
+.ra-user .rci-auth-actions{display:flex;flex-direction:column;align-items:stretch;gap:6px;min-width:76px;margin-left:auto}
+.ra-user .rci-workspace-action{display:none}
+.ra-user .rci-logout-action{min-height:30px;padding:0 8px;gap:5px;border-color:#30415a;background:#1b2c47;color:#bac5d4;font-size:9px;border-radius:8px}
+.ra-user .rci-logout-action>span:first-child{font-size:12px;color:#e3bd70}
+.ra-user .rci-logout-action:hover{background:#283b57;border-color:#536581;color:#fff}
+.ra-user .rci-logout-action>span:last-child{display:inline}
+.rci-login-field>label,.rci-login-label-row>label{cursor:pointer}
+.rci-login-input-wrap input#Input_Email,.rci-login-input-wrap input#Input_Password{min-width:0;width:100%}
+@media(max-width:900px){
+ .ra-public-header>.rci-auth-actions{gap:6px}
+ .ra-public-header .rci-workspace-action{min-height:39px;padding:0 10px;font-size:10px}
+ .ra-public-header .rci-workspace-action-icon{width:21px;height:21px}
+ .ra-public-header .rci-logout-action{min-height:39px;padding:0 10px;font-size:10px}
+ .ra-public-header .rci-logout-action>span:first-child{font-size:13px}
+}
+@media(max-width:600px){
+ .ra-public-header>.rci-auth-actions{gap:5px}
+ .ra-public-header .rci-workspace-action{min-height:36px;padding:0 8px;gap:5px;font-size:9px;border-radius:9px}
+ .ra-public-header .rci-workspace-action-icon{display:none}
+ .ra-public-header .rci-workspace-action-arrow{font-size:11px}
+ .ra-public-header .rci-logout-action{min-height:36px;padding:0 8px;gap:5px;font-size:9px;border-radius:9px}
+ .ra-public-header .rci-logout-action>span:first-child{font-size:12px}
+}
+@media(prefers-reduced-motion:reduce){.rci-workspace-action,.rci-logout-action,.rci-staff-login-action{transition:none!important}}

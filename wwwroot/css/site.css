@@ -1999,3 +1999,30 @@ html{scroll-behavior:smooth}::selection{background:#e9d5a7;color:#172338}
   .rci-next-button{transition:none!important}
   .rci-next-button:hover{transform:none!important}
 }
+
+
+/* Restore the original gentle, staggered scroll-reveal interaction on the redesigned homepage. */
+.rci-next.rci-motion-ready .rci-reveal{
+  opacity:0;
+  transform:translate3d(0,24px,0);
+  transition:
+    opacity .72s cubic-bezier(.2,.7,.2,1),
+    transform .78s cubic-bezier(.2,.75,.25,1);
+  will-change:opacity,transform;
+}
+.rci-next.rci-motion-ready .rci-reveal.rci-visible{
+  opacity:1;
+  transform:translate3d(0,0,0);
+  will-change:auto;
+}
+.rci-next.rci-motion-ready .rci-reveal-delay-1{transition-delay:.12s}
+.rci-next.rci-motion-ready .rci-reveal-delay-2{transition-delay:.24s}
+@media(prefers-reduced-motion:reduce){
+  .rci-next.rci-motion-ready .rci-reveal,
+  .rci-next.rci-motion-ready .rci-reveal.rci-visible{
+    opacity:1!important;
+    transform:none!important;
+    transition:none!important;
+    will-change:auto!important;
+  }
+}

@@ -20,9 +20,6 @@ public sealed class StudentFormViewModel
     [Display(Name = "Academic year")]
     public string AcademicYear { get; set; } = "";
 
-    [StringLength(80)]
-    public string? Division { get; set; }
-
     [Phone, StringLength(20)]
     [Display(Name = "Student phone")]
     public string? PhoneNumber { get; set; }

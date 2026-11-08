@@ -1554,3 +1554,100 @@ html{scroll-behavior:smooth}::selection{background:#e9d5a7;color:#172338}
   outline-offset:2px!important;
 }
 
+
+
+/* Public homepage typography correction: keep headings, improve reading comfort. */
+.rci-home .rci-hero-lead{
+    font-size:17px;
+    line-height:1.8;
+}
+.rci-home .rci-intro-lead{
+    font-size:19px;
+    line-height:1.7;
+}
+.rci-home .rci-intro-copy>p:not(.rci-intro-lead){
+    font-size:16px;
+    line-height:1.85;
+}
+.rci-home .rci-inline-link,
+.rci-home .rci-link-light{
+    font-size:14px;
+}
+.rci-home .rci-button{
+    font-size:13px;
+}
+.rci-home .rci-programme-heading p,
+.rci-home .rci-approach-heading p{
+    font-size:16px;
+    line-height:1.8;
+}
+.rci-home .rci-programme-card p{
+    font-size:15px;
+    line-height:1.8;
+}
+.rci-home .rci-principles p{
+    font-size:15px;
+    line-height:1.85;
+}
+.rci-home .rci-history>div:nth-child(2)>p{
+    font-size:15px;
+    line-height:1.85;
+}
+.rci-home .rci-history>div:nth-child(2)>a{
+    font-size:14px;
+    line-height:1.6;
+}
+.rci-home .rci-visit-copy>p{
+    font-size:16px;
+    line-height:1.85;
+}
+.rci-home .rci-address b{
+    font-size:14px;
+    line-height:1.85;
+}
+.rci-home .rci-footer-note{
+    font-size:13px;
+}
+@media(max-width:900px){
+    .rci-home .rci-hero-lead{font-size:16px}
+    .rci-home .rci-intro-copy>p:not(.rci-intro-lead),
+    .rci-home .rci-history>div:nth-child(2)>p{font-size:15px}
+}
+@media(max-width:640px){
+    .rci-home .rci-hero-lead{
+        font-size:15px;
+        line-height:1.8;
+    }
+    .rci-home .rci-intro-lead{
+        font-size:17px;
+        line-height:1.7;
+    }
+    .rci-home .rci-intro-copy>p:not(.rci-intro-lead),
+    .rci-home .rci-programme-heading p,
+    .rci-home .rci-approach-heading p,
+    .rci-home .rci-principles p,
+    .rci-home .rci-history>div:nth-child(2)>p,
+    .rci-home .rci-visit-copy>p{
+        font-size:14px;
+        line-height:1.8;
+    }
+    .rci-home .rci-programme-card p{
+        font-size:14px;
+        line-height:1.8;
+    }
+    .rci-home .rci-inline-link,
+    .rci-home .rci-link-light,
+    .rci-home .rci-history>div:nth-child(2)>a{
+        font-size:13px;
+    }
+    .rci-home .rci-button{
+        font-size:12px;
+    }
+    .rci-home .rci-address b{
+        font-size:13px;
+        line-height:1.8;
+    }
+    .rci-home .rci-footer-note{
+        font-size:12px;
+    }
+}

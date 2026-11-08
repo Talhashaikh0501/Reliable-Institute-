@@ -2,6 +2,22 @@
 // for details on configuring this project to bundle and minify static web assets.
 
 document.addEventListener("DOMContentLoaded", function () {
+    const sidebar = document.getElementById("ra-sidebar");
+    const menuButtons = document.querySelectorAll(".ra-topbar-menu");
+    const closeButtons = document.querySelectorAll("[data-sidebar-close]");
+    const setSidebarOpen = (open) => {
+        document.body.classList.toggle("ra-nav-open", open);
+        menuButtons.forEach(button => button.setAttribute("aria-expanded", String(open)));
+    };
+    menuButtons.forEach(button => button.addEventListener("click", () => setSidebarOpen(true)));
+    closeButtons.forEach(button => button.addEventListener("click", () => setSidebarOpen(false)));
+    sidebar?.querySelectorAll("a").forEach(link => link.addEventListener("click", () => setSidebarOpen(false)));
+    document.addEventListener("keydown", event => {
+        if (event.key === "Escape") setSidebarOpen(false);
+    });
+    window.addEventListener("resize", () => {
+        if (window.innerWidth > 900) setSidebarOpen(false);
+    });
     const home = document.querySelector(".rci-home");
     if (!home || !("IntersectionObserver" in window)) return;
 

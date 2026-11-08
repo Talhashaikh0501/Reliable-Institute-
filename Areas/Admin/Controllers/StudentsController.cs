@@ -71,7 +71,6 @@ public sealed class StudentsController(ApplicationDbContext db) : Controller
             FullName = model.FullName.Trim(),
             Standard = model.Standard,
             AcademicYear = model.AcademicYear.Trim(),
-            Division = Clean(model.Division),
             PhoneNumber = Clean(model.PhoneNumber),
             Email = Clean(model.Email),
             GuardianName = Clean(model.GuardianName),
@@ -103,7 +102,6 @@ public sealed class StudentsController(ApplicationDbContext db) : Controller
             FullName = student.FullName,
             Standard = student.Standard,
             AcademicYear = student.AcademicYear,
-            Division = student.Division,
             PhoneNumber = student.PhoneNumber,
             Email = student.Email,
             GuardianName = student.GuardianName,
@@ -138,7 +136,6 @@ public sealed class StudentsController(ApplicationDbContext db) : Controller
         student.FullName = model.FullName.Trim();
         student.Standard = model.Standard;
         student.AcademicYear = model.AcademicYear.Trim();
-        student.Division = Clean(model.Division);
         student.PhoneNumber = Clean(model.PhoneNumber);
         student.Email = Clean(model.Email);
         student.GuardianName = Clean(model.GuardianName);

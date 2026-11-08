@@ -81,9 +81,50 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     const home = document.querySelector(".rci-home");
-    if (home && "IntersectionObserver" in window) {
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    if (home && "IntersectionObserver" in window && !reduceMotion) {
         const revealTargets = home.querySelectorAll(
-            ".rci-intro-grid, .rci-programme-heading, .rci-programme-card, .rci-approach-heading, .rci-principles article, .rci-history > div, .rci-visit-copy, .rci-visit-art"
+            [
+                // Original homepage selectors retained for compatibility.
+                ".rci-intro-grid",
+                ".rci-programme-heading",
+                ".rci-programme-card",
+                ".rci-approach-heading",
+                ".rci-principles article",
+                ".rci-history > div",
+                ".rci-visit-copy",
+                ".rci-visit-art",
+
+                // New photo-led homepage: reveal each meaningful piece as it enters view.
+                ".rci-next-proof-intro",
+                ".rci-next-proof-item",
+                ".rci-next-intro-copy > h2",
+                ".rci-next-intro-copy > p",
+                ".rci-next-intro-copy > a",
+                ".rci-next-intro-visual",
+                ".rci-next-programmes-inner > .rci-next-section-kicker",
+                ".rci-next-programmes-heading",
+                ".rci-next-programme-card",
+                ".rci-next-programmes-foot",
+                ".rci-next-method > .rci-next-section-kicker",
+                ".rci-next-method-photo",
+                ".rci-next-method-copy > h2",
+                ".rci-next-method-copy > p",
+                ".rci-next-method-steps article",
+                ".rci-next-results-copy > *",
+                ".rci-next-topper-wall-head",
+                ".rci-next-topper-card",
+                ".rci-next-topper-foot",
+                ".rci-next-gallery-heading",
+                ".rci-next-gallery-grid figure",
+                ".rci-next-stock-note",
+                ".rci-next-visit-copy > *",
+                ".rci-next-address-card",
+                ".rci-next-footer-main > *",
+                ".rci-next-footer-bottom",
+                ".rci-next-credits"
+            ].join(", ")
         );
 
         revealTargets.forEach((element, index) => {

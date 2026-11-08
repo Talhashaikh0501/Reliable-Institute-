@@ -6,7 +6,6 @@
         <div class="ra-field"><label asp-for="AdmissionNumber"></label><input asp-for="AdmissionNumber" placeholder="e.g. RIC-2026-001" /><span asp-validation-for="AdmissionNumber"></span></div>
         <div class="ra-field"><label asp-for="Standard"></label><select asp-for="Standard"><option value="8">8th Standard</option><option value="9">9th Standard</option><option value="10">10th Standard</option><option value="11">11th Standard</option><option value="12">12th Standard</option></select><span asp-validation-for="Standard"></span></div>
         <div class="ra-field"><label asp-for="AcademicYear"></label><input asp-for="AcademicYear" placeholder="2026-2027" /><span asp-validation-for="AcademicYear"></span></div>
-        <div class="ra-field"><label asp-for="Division"></label><input asp-for="Division" placeholder="e.g. A" /><span asp-validation-for="Division"></span></div>
         <div class="ra-field"><label asp-for="BatchId"></label><select asp-for="BatchId" asp-items="ViewBag.Batches"><option value="">No batch assigned</option></select><span asp-validation-for="BatchId"></span><small>Batches are filtered by the selected standard.</small></div>
         <div class="ra-field"><label asp-for="AdmissionDate"></label><input asp-for="AdmissionDate" type="date" /><span asp-validation-for="AdmissionDate"></span></div>
         <div class="ra-field"><label asp-for="DateOfBirth"></label><input asp-for="DateOfBirth" type="date" /><span asp-validation-for="DateOfBirth"></span></div>

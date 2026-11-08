@@ -710,3 +710,97 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 @media(max-width:900px){.rci-login-page{grid-template-columns:minmax(290px,.8fr) minmax(400px,1.2fr)}.rci-login-showcase{padding:34px}.rci-login-form-side{padding:45px 35px 22px}.rci-login-message h1{font-size:40px}}
 @media(max-width:650px){.ra-public-header{display:none}.rci-login-page{display:block;min-height:100vh}.rci-login-showcase{display:none}.rci-login-form-side{min-height:100vh;padding:30px 24px 20px}.rci-login-mobile-brand{display:flex;margin-bottom:55px;color:#172943}.rci-login-mobile-brand small{color:#8793a5}.rci-login-form-wrap{max-width:430px}.rci-login-form-heading{margin-bottom:29px}.rci-login-footer{padding-top:28px}}
 @media(prefers-reduced-motion:reduce){.rci-login-input-wrap,.rci-login-submit{transition:none}.rci-login-submit:hover{transform:none}}
+
+
+/* Login page readability and responsive polish */
+.rci-login-page{
+    font-family:'Inter',sans-serif;
+    color:#17243b;
+}
+.rci-login-showcase{
+    min-height: min(820px, calc(100vh - 76px));
+    padding:clamp(38px,5.2vw,78px);
+}
+.rci-login-message h1{
+    font-family:'Plus Jakarta Sans',sans-serif;
+    font-size:clamp(42px,4.15vw,62px);
+    line-height:1.1;
+    letter-spacing:-2.4px;
+}
+.rci-login-kicker,.rci-login-overline{
+    font-size:11px;
+    letter-spacing:1.7px;
+}
+.rci-login-message>p{
+    font-size:16px;
+    line-height:1.8;
+    max-width:410px;
+}
+.rci-login-mini-stat{padding:15px 0;gap:16px}
+.rci-login-mini-stat span{font-size:11px}
+.rci-login-mini-stat b{font-size:13px}
+.rci-login-copyright{font-size:10px;letter-spacing:1.2px}
+.rci-login-form-side{
+    padding:clamp(42px,5vw,76px) clamp(36px,6.4vw,104px) 26px;
+}
+.rci-login-form-wrap{max-width:460px}
+.rci-login-form-heading{margin-bottom:36px}
+.rci-login-form-heading h2{
+    font-family:'Plus Jakarta Sans',sans-serif;
+    font-size:clamp(36px,3.1vw,46px);
+    letter-spacing:-1.8px;
+}
+.rci-login-form-heading p{font-size:15px;line-height:1.75}
+.rci-login-form{gap:23px}
+.rci-login-field label{
+    font-size:14px;
+    margin-bottom:9px;
+}
+.rci-login-input-wrap{height:56px;border-radius:10px}
+.rci-login-input-icon{width:48px;font-size:18px}
+.rci-login-input-wrap input{
+    font-family:'Inter',sans-serif;
+    font-size:15px;
+    padding-right:14px;
+}
+.rci-login-input-wrap input::placeholder{font-size:14px}
+.rci-password-toggle{font-size:12px;padding:10px 15px}
+.rci-login-remember{font-size:13px;gap:10px}
+.rci-login-remember input{width:16px;height:16px}
+.rci-login-submit{
+    min-height:56px;
+    height:56px;
+    padding:0 20px 0 22px;
+    font-family:'Inter',sans-serif;
+    font-size:15px;
+    border-radius:10px;
+}
+.rci-login-submit i{font-size:19px}
+.rci-login-security{padding:16px;margin-top:27px;gap:13px}
+.rci-login-security>span{font-size:20px}
+.rci-login-security b{font-size:13px}
+.rci-login-security small{font-size:12px;line-height:1.65}
+.rci-login-back{margin-top:27px}
+.rci-login-back a{font-size:12px}
+.rci-login-footer{font-size:11px;padding-top:25px}
+.rci-login-error{padding:14px 16px;margin:-12px 0 22px}
+.rci-login-error>span{width:22px;height:22px;font-size:13px}
+.rci-login-error b{font-size:13px}
+.rci-login-error small{font-size:12px}
+.rci-login-validation,.rci-login-field-error{font-size:11px}
+@media(max-width:900px){
+    .rci-login-showcase{padding:34px 28px}
+    .rci-login-message h1{font-size:clamp(38px,4.5vw,48px)}
+    .rci-login-message>p{font-size:14px}
+    .rci-login-form-side{padding:42px 30px 22px}
+}
+@media(max-width:650px){
+    .rci-login-form-side{padding:28px 24px 22px}
+    .rci-login-mobile-brand{margin-bottom:46px}
+    .rci-login-form-heading h2{font-size:38px}
+    .rci-login-form-heading p{font-size:14px}
+    .rci-login-footer{font-size:10px}
+}
+@media(prefers-reduced-motion:reduce){
+    .rci-login-page *{scroll-behavior:auto!important}
+}

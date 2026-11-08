@@ -42,3 +42,30 @@ document.addEventListener("DOMContentLoaded", function () {
 
     revealTargets.forEach(element => observer.observe(element));
 });
+
+
+    const publicMenu = document.querySelector(".ra-public-menu-toggle");
+    const publicNav = document.getElementById("ra-public-nav");
+    if (publicMenu && publicNav) {
+        publicMenu.addEventListener("click", function () {
+            const isOpen = document.body.classList.toggle("ra-public-nav-open");
+            publicMenu.setAttribute("aria-expanded", String(isOpen));
+            publicMenu.setAttribute("aria-label", isOpen ? "Close website navigation" : "Open website navigation");
+            publicMenu.textContent = isOpen ? "×" : "☰";
+        });
+        publicNav.querySelectorAll("a").forEach(function (link) {
+            link.addEventListener("click", function () {
+                document.body.classList.remove("ra-public-nav-open");
+                publicMenu.setAttribute("aria-expanded", "false");
+                publicMenu.setAttribute("aria-label", "Open website navigation");
+                publicMenu.textContent = "☰";
+            });
+        });
+        document.addEventListener("keydown", function (event) {
+            if (event.key === "Escape") {
+                document.body.classList.remove("ra-public-nav-open");
+                publicMenu.setAttribute("aria-expanded", "false");
+                publicMenu.textContent = "☰";
+            }
+        });
+    }

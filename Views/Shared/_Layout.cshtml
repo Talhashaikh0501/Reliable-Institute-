@@ -3,70 +3,187 @@
     var isWorkspaceArea = currentArea == "Admin" || currentArea == "Teacher";
     var currentController = ViewContext.RouteData.Values["controller"]?.ToString() ?? "";
     var currentAction = ViewContext.RouteData.Values["action"]?.ToString() ?? "";
-    var dashboardActiveClass = currentController.Equals("Dashboard", StringComparison.OrdinalIgnoreCase) ? " active" : "";
-    var studentsActiveClass = currentController.Equals("Students", StringComparison.OrdinalIgnoreCase) ? " active" : "";
-    var batchesActiveClass = currentController.Equals("Batches", StringComparison.OrdinalIgnoreCase) ? " active" : "";
-    var attendanceActiveClass = currentController.Equals("Attendance", StringComparison.OrdinalIgnoreCase) ? " active" : "";
-    var subjectsActiveClass = currentController.Equals("Academics", StringComparison.OrdinalIgnoreCase) && currentAction.Equals("Subjects", StringComparison.OrdinalIgnoreCase) ? " active" : "";
-    var examsActiveClass = currentController.Equals("Academics", StringComparison.OrdinalIgnoreCase) && currentAction.Equals("Exams", StringComparison.OrdinalIgnoreCase) ? " active" : "";
-    var announcementsActiveClass = currentController.Equals("Academics", StringComparison.OrdinalIgnoreCase) && currentAction.Equals("Announcements", StringComparison.OrdinalIgnoreCase) ? " active" : "";
-    var reportsActiveClass = currentController.Equals("Reports", StringComparison.OrdinalIgnoreCase) ? " active" : "";
-    var feesActiveClass = currentController.Equals("Fees", StringComparison.OrdinalIgnoreCase) ? " active" : "";
-    var staffActiveClass = currentController.Equals("Staff", StringComparison.OrdinalIgnoreCase) ? " active" : "";
+    var dashboardIsActive = currentController.Equals("Dashboard", StringComparison.OrdinalIgnoreCase);
+    var studentsIsActive = currentController.Equals("Students", StringComparison.OrdinalIgnoreCase);
+    var batchesIsActive = currentController.Equals("Batches", StringComparison.OrdinalIgnoreCase);
+    var attendanceIsActive = currentController.Equals("Attendance", StringComparison.OrdinalIgnoreCase);
+    var subjectsIsActive = currentController.Equals("Academics", StringComparison.OrdinalIgnoreCase) && currentAction.Equals("Subjects", StringComparison.OrdinalIgnoreCase);
+    var examsIsActive = currentController.Equals("Academics", StringComparison.OrdinalIgnoreCase) && (currentAction.Equals("Exams", StringComparison.OrdinalIgnoreCase) || currentAction.Equals("Results", StringComparison.OrdinalIgnoreCase));
+    var announcementsIsActive = currentController.Equals("Academics", StringComparison.OrdinalIgnoreCase) && currentAction.Equals("Announcements", StringComparison.OrdinalIgnoreCase);
+    var reportsIsActive = currentController.Equals("Reports", StringComparison.OrdinalIgnoreCase);
+    var feesIsActive = currentController.Equals("Fees", StringComparison.OrdinalIgnoreCase);
+    var staffIsActive = currentController.Equals("Staff", StringComparison.OrdinalIgnoreCase);
+    var isAdmin = User.IsInRole("Admin");
     var workspaceArea = User.IsInRole("Teacher") ? "Teacher" : "Admin";
+    var workspaceName = currentArea == "Teacher" ? "Teaching workspace" : "Admin workspace";
+    var accountName = User.Identity?.Name ?? "Workspace user";
+    var accountInitial = string.IsNullOrWhiteSpace(accountName) ? "U" : accountName.Trim().Substring(0, 1).ToUpperInvariant();
+    var pageTitle = ViewData["Title"]?.ToString() ?? "Workspace";
 }
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="theme-color" content="#111d32" />
-<meta name="description" content="Reliable Coaching Classes — focused academics and thoughtful institute management in Roshan Gate, Aurangabad." />
-<title>@ViewData["Title"] · Reliable Academy</title>
-<link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" /><link rel="stylesheet" href="~/css/site.css" asp-append-version="true" /><link rel="stylesheet" href="~/ReliableAcademy.styles.css" asp-append-version="true" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f7f8f6" />
+    <meta name="description" content="Reliable Coaching Classes — focused academics and thoughtful institute management in Roshan Gate, Aurangabad." />
+    <title>@pageTitle · Reliable Academy</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/ReliableAcademy.styles.css" asp-append-version="true" />
+    @if (isWorkspaceArea)
+    {
+        <link rel="stylesheet" href="~/css/admin-workspace.css" asp-append-version="true" />
+    }
 </head>
-<body class="@(isWorkspaceArea ? "ra-app-body" : "ra-public-body")">
+<body class="@(isWorkspaceArea ? "ra-app-body ra-workspace-body" : "ra-public-body")">
 @if (isWorkspaceArea)
 {
-<div class="ra-sidebar-backdrop" data-sidebar-close></div>
-<aside class="ra-sidebar" id="ra-sidebar" aria-label="Workspace navigation">
-<div class="ra-sidebar-top"><a class="ra-brand" asp-area="@workspaceArea" asp-controller="Dashboard" asp-action="Index"><span class="ra-brand-mark">R<span>.</span></span><span><b>RELIABLE</b><small>ACADEMY · WORKSPACE</small></span></a><button class="ra-sidebar-close" type="button" aria-label="Close navigation" data-sidebar-close>×</button></div>
-<div class="ra-workspace-switch"><span class="ra-workspace-switch-dot"></span><span><b>@(currentArea == "Admin" ? "Administrator" : "Teacher") workspace</b><small>Reliable Coaching Classes</small></span></div>
-<div class="ra-nav-label">YOUR WORKSPACE</div>
-<a class="ra-nav-link@dashboardActiveClass" aria-current="@(currentController.Equals("Dashboard", StringComparison.OrdinalIgnoreCase) ? "page" : null)" asp-area="@workspaceArea" asp-controller="Dashboard" asp-action="Index"><span class="ra-nav-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/></svg></span><span>@(User.IsInRole("Teacher") ? "Teaching desk" : "Overview")</span></a>
-<div class="ra-nav-label ra-nav-label-spaced">INSTITUTE</div>
-<a class="ra-nav-link@studentsActiveClass" asp-area="Admin" asp-controller="Students" asp-action="Index"><span class="ra-nav-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="4"/><path d="M2 21v-2a7 7 0 0 1 14 0v2zM16 4a4 4 0 0 1 0 8m2 3a6 6 0 0 1 4 6"/></svg></span><span>Students</span></a>
-<a class="ra-nav-link@batchesActiveClass" asp-area="Admin" asp-controller="Batches" asp-action="Index"><span class="ra-nav-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="8" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/><rect x="13" y="13" width="8" height="8" rx="1.5"/></svg></span><span>Classes &amp; batches</span></a>
-<a class="ra-nav-link@attendanceActiveClass" asp-area="Admin" asp-controller="Attendance" asp-action="Index"><span class="ra-nav-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6"/><path d="M21 12a9 9 0 1 1-5.2-8.2"/></svg></span><span>Attendance</span></a>
-<a class="ra-nav-link@subjectsActiveClass" asp-area="Admin" asp-controller="Academics" asp-action="Subjects"><span class="ra-nav-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 4H6l8 8-8 8h12"/></svg></span><span>Subjects</span></a>
-<a class="ra-nav-link@examsActiveClass" asp-area="Admin" asp-controller="Academics" asp-action="Exams"><span class="ra-nav-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg></span><span>Exams &amp; results</span></a>
-<a class="ra-nav-link@announcementsActiveClass" asp-area="Admin" asp-controller="Academics" asp-action="Announcements"><span class="ra-nav-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2v20M2 12h20M4.9 4.9l14.2 14.2m0-14.2L4.9 19.1"/></svg></span><span>Announcements</span></a>
-<a class="ra-nav-link@reportsActiveClass" asp-area="Admin" asp-controller="Reports" asp-action="Index"><span class="ra-nav-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3v18h18M7 15l4-4 3 3 6-7"/></svg></span><span>Reports &amp; insights</span></a>
-@if (User.IsInRole("Admin")) {
-<div class="ra-nav-label ra-nav-label-spaced">ADMINISTRATION</div>
-<a class="ra-nav-link@feesActiveClass" asp-area="Admin" asp-controller="Fees" asp-action="Index"><span class="ra-nav-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h14M5 8h14M5 4c7 0 9 2 9 5s-2 5-9 5l9 6"/></svg></span><span>Fees &amp; payments</span></a>
-<a class="ra-nav-link@staffActiveClass" asp-area="Admin" asp-controller="Staff" asp-action="Index"><span class="ra-nav-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="6" r="3"/><path d="M6 20a6 6 0 0 1 12 0zM8 14h8"/></svg></span><span>Teachers &amp; staff</span></a>
-}
-<div class="ra-sidebar-bottom"><div class="ra-sidebar-help"><span>✦</span><b>Built around your institute.</b><small>Less admin. More meaningful progress.</small></div>
-<div class="ra-user"><span class="ra-avatar">@((User.Identity?.Name ?? "A").Substring(0, 1).ToUpperInvariant())</span><span><b>@User.Identity?.Name</b><small>@(currentArea == "Admin" ? "Administrator" : "Teacher") · Signed in</small></span><partial name="_LoginPartial" /></div></div>
-</aside>
-<div class="ra-main-shell"><header class="ra-topbar"><div class="ra-topbar-leading"><button class="ra-topbar-menu" type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="ra-sidebar"><span aria-hidden="true">☰</span></button><span class="ra-breadcrumb"><span>Workspace</span><b>/</b> @ViewData["Title"]</span></div><div class="ra-topbar-right"><span class="ra-secure-label"><span></span> PRIVATE WORKSPACE</span><span class="ra-topbar-divider"></span><span class="ra-topbar-user">@User.Identity?.Name</span></div></header><main class="ra-main-content">@RenderBody()</main></div>
+    <button class="ra-workspace-backdrop" type="button" aria-label="Close navigation" data-workspace-close tabindex="-1"></button>
+    <aside class="ra-workspace-sidebar" id="ra-workspace-sidebar" aria-label="Workspace navigation" aria-hidden="false">
+        <div class="ra-workspace-sidebar-top">
+            <a class="ra-workspace-brand" asp-area="@workspaceArea" asp-controller="Dashboard" asp-action="Index" aria-label="Reliable Academy home">
+                <span class="ra-workspace-brand-mark" aria-hidden="true">R<span>.</span></span>
+                <span class="ra-workspace-brand-copy"><b>RELIABLE</b><small>ACADEMY</small></span>
+            </a>
+            <button class="ra-workspace-close" type="button" aria-label="Close navigation" data-workspace-close>
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18" /></svg>
+            </button>
+        </div>
+
+        <div class="ra-workspace-switch">
+            <span class="ra-workspace-switch-mark" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M4 19V9l8-5 8 5v10M8 19v-6h8v6M2 19h20" /></svg>
+            </span>
+            <span><b>@(isAdmin ? "Administrator" : "Teacher")</b><small>@workspaceName</small></span>
+            <span class="ra-workspace-switch-chevron" aria-hidden="true">⌄</span>
+        </div>
+
+        <nav class="ra-workspace-navigation" aria-label="Primary">
+            <div class="ra-workspace-nav-group">
+                <div class="ra-workspace-nav-label">WORKSPACE</div>
+                <a class="ra-workspace-nav-link@(dashboardIsActive ? " is-active" : "")"
+                   aria-current="@(dashboardIsActive ? "page" : null)"
+                   asp-area="@workspaceArea" asp-controller="Dashboard" asp-action="Index">
+                    <span class="ra-workspace-nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="5" rx="1.5"/><rect x="13" y="10" width="8" height="11" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/></svg></span>
+                    <span class="ra-workspace-nav-text">@(isAdmin ? "Overview" : "Teaching desk")</span>
+                </a>
+            </div>
+
+            <div class="ra-workspace-nav-group">
+                <div class="ra-workspace-nav-label">ACADEMIC OPERATIONS</div>
+                <a class="ra-workspace-nav-link@(studentsIsActive ? " is-active" : "")" aria-current="@(studentsIsActive ? "page" : null)" asp-area="Admin" asp-controller="Students" asp-action="Index">
+                    <span class="ra-workspace-nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0M16 5.5a3.5 3.5 0 0 1 0 6.8M17 14.5a5.5 5.5 0 0 1 4.5 5.5"/></svg></span>
+                    <span class="ra-workspace-nav-text">Students</span>
+                </a>
+                <a class="ra-workspace-nav-link@(batchesIsActive ? " is-active" : "")" aria-current="@(batchesIsActive ? "page" : null)" asp-area="Admin" asp-controller="Batches" asp-action="Index">
+                    <span class="ra-workspace-nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="8" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/><rect x="13" y="13" width="8" height="8" rx="1.5"/></svg></span>
+                    <span class="ra-workspace-nav-text">Classes &amp; batches</span>
+                </a>
+                <a class="ra-workspace-nav-link@(attendanceIsActive ? " is-active" : "")" aria-current="@(attendanceIsActive ? "page" : null)" asp-area="Admin" asp-controller="Attendance" asp-action="Index">
+                    <span class="ra-workspace-nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m5 12 4.2 4.2L19 6.5"/><circle cx="12" cy="12" r="9"/></svg></span>
+                    <span class="ra-workspace-nav-text">Attendance</span>
+                </a>
+                <a class="ra-workspace-nav-link@(subjectsIsActive ? " is-active" : "")" aria-current="@(subjectsIsActive ? "page" : null)" asp-area="Admin" asp-controller="Academics" asp-action="Subjects">
+                    <span class="ra-workspace-nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 4h14M5 4l8 8-8 8h14"/><path d="M13 12h6"/></svg></span>
+                    <span class="ra-workspace-nav-text">Subjects</span>
+                </a>
+                <a class="ra-workspace-nav-link@(examsIsActive ? " is-active" : "")" aria-current="@(examsIsActive ? "page" : null)" asp-area="Admin" asp-controller="Academics" asp-action="Exams">
+                    <span class="ra-workspace-nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg></span>
+                    <span class="ra-workspace-nav-text">Exams &amp; results</span>
+                </a>
+                <a class="ra-workspace-nav-link@(announcementsIsActive ? " is-active" : "")" aria-current="@(announcementsIsActive ? "page" : null)" asp-area="Admin" asp-controller="Academics" asp-action="Announcements">
+                    <span class="ra-workspace-nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 14V9l13-5v15L4 14Z"/><path d="M7 15l2 5h4l-2-4M20 9v5"/></svg></span>
+                    <span class="ra-workspace-nav-text">Announcements</span>
+                </a>
+                <a class="ra-workspace-nav-link@(reportsIsActive ? " is-active" : "")" aria-current="@(reportsIsActive ? "page" : null)" asp-area="Admin" asp-controller="Reports" asp-action="Index">
+                    <span class="ra-workspace-nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 19V5M4 19h17"/><path d="m7 15 4-4 3 3 6-7"/></svg></span>
+                    <span class="ra-workspace-nav-text">Reports &amp; insights</span>
+                </a>
+            </div>
+
+            @if (isAdmin)
+            {
+                <div class="ra-workspace-nav-group">
+                    <div class="ra-workspace-nav-label">FINANCE &amp; PEOPLE</div>
+                    <a class="ra-workspace-nav-link@(feesIsActive ? " is-active" : "")" aria-current="@(feesIsActive ? "page" : null)" asp-area="Admin" asp-controller="Fees" asp-action="Index">
+                        <span class="ra-workspace-nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18M7 15h4"/></svg></span>
+                        <span class="ra-workspace-nav-text">Fees &amp; payments</span>
+                    </a>
+                    <a class="ra-workspace-nav-link@(staffIsActive ? " is-active" : "")" aria-current="@(staffIsActive ? "page" : null)" asp-area="Admin" asp-controller="Staff" asp-action="Index">
+                        <span class="ra-workspace-nav-icon" aria-hidden="true"><circle cx="9" cy="8" r="3.2"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0M17 8h5M19.5 5.5v5"/></svg></span>
+                        <span class="ra-workspace-nav-text">Teachers &amp; staff</span>
+                    </a>
+                </div>
+            }
+        </nav>
+
+        <div class="ra-workspace-sidebar-bottom">
+            <div class="ra-workspace-sidebar-note">
+                <span class="ra-workspace-sidebar-note-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3v18M3 12h18"/></svg></span>
+                <span><b>Made for your institute</b><small>Keep daily operations in one place.</small></span>
+            </div>
+            <div class="ra-workspace-account">
+                <span class="ra-workspace-account-avatar" aria-hidden="true">@accountInitial</span>
+                <span class="ra-workspace-account-copy"><b>@accountName</b><small>@(isAdmin ? "Administrator" : "Teacher")</small></span>
+                <partial name="_LoginPartial" />
+            </div>
+        </div>
+    </aside>
+
+    <div class="ra-workspace-main-shell">
+        <header class="ra-workspace-topbar">
+            <div class="ra-workspace-topbar-leading">
+                <button class="ra-workspace-menu-toggle" type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="ra-workspace-sidebar" data-workspace-menu>
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+                </button>
+                <div class="ra-workspace-heading-context">
+                    <span class="ra-workspace-topbar-overline">RELIABLE ACADEMY</span>
+                    <div class="ra-workspace-breadcrumb"><span>@workspaceName</span><i aria-hidden="true">/</i><b>@pageTitle</b></div>
+                </div>
+            </div>
+            <div class="ra-workspace-topbar-right">
+                <span class="ra-workspace-session"><i aria-hidden="true"></i> Signed in</span>
+                <span class="ra-workspace-topbar-divider"></span>
+                <span class="ra-workspace-topbar-user">@accountName</span>
+                <span class="ra-workspace-topbar-avatar" aria-hidden="true">@accountInitial</span>
+            </div>
+        </header>
+        <main class="ra-workspace-content" id="main-content" tabindex="-1">
+            @RenderBody()
+        </main>
+    </div>
 }
 else
 {
-<header class="ra-public-header">
-<a class="ra-public-brand" asp-controller="Home" asp-action="Index"><span class="ra-brand-mark">R<span>.</span></span><span><b>RELIABLE</b><small>COACHING CLASSES</small></span></a>
-<button class="ra-public-menu-toggle" type="button" aria-label="Open website navigation" aria-expanded="false" aria-controls="ra-public-nav">☰</button><nav class="ra-public-nav" id="ra-public-nav" aria-label="Main navigation"><a href="/#approach">Our approach</a><a href="/#programmes">Academics</a><a href="/#visit">Find us</a></nav>
-<div class="ra-public-location">ROSHAN GATE <span>·</span> AURANGABAD</div>
-@if (User.Identity?.IsAuthenticated == true) { <partial name="_LoginPartial" /> }
-else {
-<details class="rci-signin-menu"><summary>Workspace sign in <span aria-hidden="true">↗</span></summary><div class="rci-signin-options">
-<a asp-area="Identity" asp-page="/Account/Login" asp-route-returnUrl="/Admin/Dashboard"><span class="rci-signin-option-icon">A</span><span><b>Admin sign in</b><small>Institute management</small></span><i>↗</i></a>
-<a asp-area="Identity" asp-page="/Account/Login" asp-route-returnUrl="/Teacher/Dashboard"><span class="rci-signin-option-icon">T</span><span><b>Teacher sign in</b><small>Teaching workspace</small></span><i>↗</i></a>
-</div></details>
+    <header class="ra-public-header">
+        <a class="ra-public-brand" asp-controller="Home" asp-action="Index"><span class="ra-brand-mark">R<span>.</span></span><span><b>RELIABLE</b><small>COACHING CLASSES</small></span></a>
+        <button class="ra-public-menu-toggle" type="button" aria-label="Open website navigation" aria-expanded="false" aria-controls="ra-public-nav">☰</button>
+        <nav class="ra-public-nav" id="ra-public-nav" aria-label="Main navigation"><a href="/#approach">Our approach</a><a href="/#programmes">Academics</a><a href="/#visit">Find us</a></nav>
+        <div class="ra-public-location">ROSHAN GATE <span>·</span> AURANGABAD</div>
+        @if (User.Identity?.IsAuthenticated == true)
+        {
+            <partial name="_LoginPartial" />
+        }
+        else
+        {
+            <details class="rci-signin-menu">
+                <summary>Workspace sign in <span aria-hidden="true">↗</span></summary>
+                <div class="rci-signin-options">
+                    <a asp-area="Identity" asp-page="/Account/Login" asp-route-returnUrl="/Admin/Dashboard"><span class="rci-signin-option-icon">A</span><span><b>Admin sign in</b><small>Institute management</small></span><i>↗</i></a>
+                    <a asp-area="Identity" asp-page="/Account/Login" asp-route-returnUrl="/Teacher/Dashboard"><span class="rci-signin-option-icon">T</span><span><b>Teacher sign in</b><small>Teaching workspace</small></span><i>↗</i></a>
+                </div>
+            </details>
+        }
+    </header>
+    <main>@RenderBody()</main>
 }
-</header><main>@RenderBody()</main>
-}
-<script src="~/lib/jquery/dist/jquery.min.js"></script><script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script><script src="~/js/site.js" asp-append-version="true"></script>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/js/site.js" asp-append-version="true"></script>
 @await RenderSectionAsync("Scripts", required: false)
-</body></html>
+</body>
+</html>

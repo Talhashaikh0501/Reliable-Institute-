@@ -38,9 +38,9 @@ public sealed class LoginModel(SignInManager<IdentityUser> signInManager, UserMa
             {
                 var roles = await userManager.GetRolesAsync(user);
                 if (roles.Contains("Admin"))
-                    return LocalRedirect(Url.IsLocalUrl(ReturnUrl) && ReturnUrl != "/" ? ReturnUrl! : "/Admin/Dashboard");
+                    return LocalRedirect(Url.IsLocalUrl(ReturnUrl) && ReturnUrl!.StartsWith("/Admin/", StringComparison.OrdinalIgnoreCase) ? ReturnUrl : "/Admin/Dashboard");
                 if (roles.Contains("Teacher"))
-                    return LocalRedirect(Url.IsLocalUrl(ReturnUrl) && ReturnUrl != "/" ? ReturnUrl! : "/Teacher/Dashboard");
+                    return LocalRedirect(Url.IsLocalUrl(ReturnUrl) && ReturnUrl!.StartsWith("/Teacher/", StringComparison.OrdinalIgnoreCase) ? ReturnUrl : "/Teacher/Dashboard");
             }
 
             await signInManager.SignOutAsync();

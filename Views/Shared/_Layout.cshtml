@@ -2,7 +2,8 @@
     var currentArea = ViewContext.RouteData.Values["area"]?.ToString() ?? "";
     var isWorkspaceArea = currentArea == "Admin" || currentArea == "Teacher";
     var currentController = ViewContext.RouteData.Values["controller"]?.ToString() ?? "";
-    var currentAction = ViewContext.RouteData.Values["action"]?.ToString() ?? "";\n    string Active(string controller, string? action = null) => currentController.Equals(controller, StringComparison.OrdinalIgnoreCase) && (action == null || currentAction.Equals(action, StringComparison.OrdinalIgnoreCase)) ? " active" : "";
+    var currentAction = ViewContext.RouteData.Values["action"]?.ToString() ?? "";
+    string Active(string controller, string? action = null) => currentController.Equals(controller, StringComparison.OrdinalIgnoreCase) && (action == null || currentAction.Equals(action, StringComparison.OrdinalIgnoreCase)) ? " active" : "";
     var workspaceArea = User.IsInRole("Teacher") ? "Teacher" : "Admin";
 }
 <!DOCTYPE html>

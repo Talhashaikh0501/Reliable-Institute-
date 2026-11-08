@@ -1,150 +1,210 @@
 @model ReliableAcademy.Areas.Admin.Controllers.AdminDashboardViewModel
 @{
-    ViewData["Title"] = "Admin overview";
+    ViewData["Title"] = "Overview";
     Layout = "~/Views/Shared/_Layout.cshtml";
     var attendanceMissing = Math.Max(0, Model.AttendanceExpected - Model.AttendanceMarkedToday);
+    var greetingName = User.Identity?.Name ?? "Administrator";
+    var atIndex = greetingName.IndexOf('@');
+    if (atIndex > 0) { greetingName = greetingName[..atIndex]; }
 }
-<div class="ra-dashboard ra-admin-dashboard">
-    <div class="ra-page-heading">
-        <div>
-            <div class="ra-eyebrow">ADMINISTRATOR CONSOLE <span>•</span> RELIABLE COACHING CLASSES</div>
-            <h1>Good day, @User.Identity?.Name?.Split('@')[0] 👋</h1>
-            <p>Your institute at a glance. Monitor the important work and take action from one place.</p>
+<div class="ra-overview">
+    <header class="ra-overview-header">
+        <div class="ra-overview-heading">
+            <div class="ra-overview-kicker"><i></i> INSTITUTE OVERVIEW</div>
+            <h1>Good day, @greetingName</h1>
+            <p>A clear view of the work happening across your institute. Here is what needs your attention today.</p>
         </div>
-        <div class="ra-heading-actions">
-            <span class="ra-date"><span class="ra-live-dot"></span> @DateTime.Now.ToString("dddd, dd MMMM yyyy")</span>
-            <a class="ra-primary-button" asp-area="Admin" asp-controller="Students" asp-action="Create">＋ New admission</a>
+        <div class="ra-overview-header-actions">
+            <span class="ra-overview-date">@DateTime.Now.ToString("dddd, dd MMM yyyy")</span>
+            <a class="ra-overview-button" asp-area="Admin" asp-controller="Students" asp-action="Create">＋ New admission</a>
         </div>
-    </div>
+    </header>
 
-    <section class="ra-admin-hero">
-        <div class="ra-admin-hero-copy">
-            <span class="ra-welcome-label">INSTITUTE CONTROL CENTRE</span>
-            <h2>Everything that keeps learning moving.</h2>
-            <p>Admissions, academics, attendance and collections — all connected in one workspace.</p>
-            <div class="ra-admin-hero-actions">
-                <a class="ra-primary-button" asp-area="Admin" asp-controller="Attendance" asp-action="Index">Take attendance <span>↗</span></a>
-                <a class="ra-hero-link" asp-area="Admin" asp-controller="Fees" asp-action="Index">View fee accounts <span>→</span></a>
+    <section class="ra-overview-hero">
+        <div class="ra-overview-hero-copy">
+            <span class="ra-overview-hero-kicker">RELIABLE ACADEMY · ADMINISTRATOR WORKSPACE</span>
+            <h2>Keep the institute moving forward.</h2>
+            <p>Bring admissions, classroom operations, attendance and fee collection together in one calm, organised workspace.</p>
+            <div class="ra-overview-hero-actions">
+                <a class="ra-overview-hero-primary" asp-area="Admin" asp-controller="Attendance" asp-action="Index">Take attendance <span aria-hidden="true">↗</span></a>
+                <a class="ra-overview-hero-link" asp-area="Admin" asp-controller="Reports" asp-action="Index">Explore institute reports <span aria-hidden="true">→</span></a>
             </div>
         </div>
-        <div class="ra-admin-hero-art" aria-hidden="true"><span class="ra-hero-orbit ra-orbit-one"></span><span class="ra-hero-orbit ra-orbit-two"></span><span class="ra-hero-core">RC<span>.</span></span><span class="ra-hero-spark">✦</span></div>
+        <div class="ra-overview-attendance">
+            <div class="ra-overview-gauge" style="--progress:@Model.AttendanceCompletion" role="img" aria-label="Attendance completion @Model.AttendanceCompletion percent">
+                <strong>@Model.AttendanceCompletion%</strong>
+            </div>
+            <div class="ra-overview-attendance-copy">
+                <small>ATTENDANCE TODAY</small>
+                <b>@Model.AttendanceMarkedToday / @Model.AttendanceExpected</b>
+                <span>@attendanceMissing students remaining</span>
+            </div>
+        </div>
     </section>
 
-    <div class="ra-admin-section-head"><div><span>INSTITUTE HEALTH</span><h3>Today's snapshot</h3></div><span class="ra-section-meta">Live figures from your records</span></div>
-    <section class="ra-admin-metrics">
-        <a class="ra-admin-metric" asp-area="Admin" asp-controller="Students" asp-action="Index">
-            <span class="ra-metric-icon ra-icon-blue">♙</span><span class="ra-metric-label">ACTIVE STUDENTS</span>
-            <strong>@Model.ActiveStudents.ToString("N0")</strong><small><b>+@Model.NewAdmissionsThisMonth</b> admissions this month</small>
+    <section class="ra-overview-metrics" aria-label="Institute summary">
+        <a class="ra-overview-metric" asp-area="Admin" asp-controller="Students" asp-action="Index">
+            <div class="ra-overview-metric-top">
+                <span class="ra-overview-metric-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0M16 5.5a3.5 3.5 0 0 1 0 6.8M17 14.5a5.5 5.5 0 0 1 4.5 5.5"/></svg></span>
+                <span class="ra-overview-metric-label">ACTIVE STUDENTS</span>
+            </div>
+            <strong>@Model.ActiveStudents.ToString("N0")</strong>
+            <small><b>+@Model.NewAdmissionsThisMonth</b> new this month</small>
         </a>
-        <a class="ra-admin-metric" asp-area="Admin" asp-controller="Batches" asp-action="Index">
-            <span class="ra-metric-icon ra-icon-violet">▦</span><span class="ra-metric-label">ACTIVE BATCHES</span>
-            <strong>@Model.ActiveBatches.ToString("N0")</strong><small>@Model.StudentsWithoutBatch students without a batch</small>
+        <a class="ra-overview-metric" asp-area="Admin" asp-controller="Batches" asp-action="Index">
+            <div class="ra-overview-metric-top">
+                <span class="ra-overview-metric-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="8" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/><rect x="13" y="13" width="8" height="8" rx="1.5"/></svg></span>
+                <span class="ra-overview-metric-label">ACTIVE BATCHES</span>
+            </div>
+            <strong>@Model.ActiveBatches.ToString("N0")</strong>
+            <small>@Model.StudentsWithoutBatch students without a batch</small>
         </a>
-        <a class="ra-admin-metric" asp-area="Admin" asp-controller="Fees" asp-action="Index">
-            <span class="ra-metric-icon ra-icon-green">₹</span><span class="ra-metric-label">COLLECTED THIS MONTH</span>
-            <strong>₹@Model.FeesCollectedThisMonth.ToString("N0")</strong><small>Recorded fee payments</small>
+        <a class="ra-overview-metric" asp-area="Admin" asp-controller="Fees" asp-action="Index">
+            <div class="ra-overview-metric-top">
+                <span class="ra-overview-metric-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 2v20M17 6.5C17 4.6 14.9 3 12 3S7 4.4 7 6.5 9 10 12 10s5 1.5 5 3.5-2.1 4-5 4-5-1.6-5-3.5"/></svg></span>
+                <span class="ra-overview-metric-label">COLLECTED THIS MONTH</span>
+            </div>
+            <strong>₹@Model.FeesCollectedThisMonth.ToString("N0")</strong>
+            <small>Recorded fee payments</small>
         </a>
-        <a class="ra-admin-metric" asp-area="Admin" asp-controller="Fees" asp-action="Index" asp-route-outstandingOnly="true">
-            <span class="ra-metric-icon ra-icon-amber">◷</span><span class="ra-metric-label">TOTAL OUTSTANDING</span>
-            <strong>₹@Model.TotalFeeOutstanding.ToString("N0")</strong><small><b class="ra-overdue-text">₹@Model.OverdueFees.ToString("N0") overdue</b> · @Model.OverduePlans plans</small>
+        <a class="ra-overview-metric" asp-area="Admin" asp-controller="Fees" asp-action="Index" asp-route-outstandingOnly="true">
+            <div class="ra-overview-metric-top">
+                <span class="ra-overview-metric-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
+                <span class="ra-overview-metric-label">TOTAL OUTSTANDING</span>
+            </div>
+            <strong>₹@Model.TotalFeeOutstanding.ToString("N0")</strong>
+            <small><b class="is-overdue">₹@Model.OverdueFees.ToString("N0") overdue</b> · @Model.OverduePlans plans</small>
         </a>
     </section>
 
-    <div class="ra-admin-main-grid">
-        <section class="ra-admin-card ra-attendance-card">
-            <div class="ra-admin-card-head"><div><span>DAILY OPERATIONS</span><h3>Attendance overview</h3></div><a asp-area="Admin" asp-controller="Attendance" asp-action="Index">Open attendance ↗</a></div>
-            <div class="ra-attendance-summary"><div class="ra-attendance-ring" style="--attendance-progress:@Model.AttendanceCompletion"><div><strong>@Model.AttendanceCompletion%</strong><small>marked</small></div></div>
-                <div class="ra-attendance-numbers"><div><i class="ra-dot ra-dot-present"></i><span>Present</span><b>@Model.PresentToday</b></div><div><i class="ra-dot ra-dot-absent"></i><span>Absent</span><b>@Model.AbsentToday</b></div><div><i class="ra-dot ra-dot-late"></i><span>Late</span><b>@Model.LateToday</b></div><div><i class="ra-dot ra-dot-leave"></i><span>Leave</span><b>@Model.LeaveToday</b></div></div>
+    <div class="ra-overview-grid">
+        <section class="ra-overview-card">
+            <div class="ra-overview-card-header">
+                <div><span class="ra-overview-card-kicker">DAILY OPERATIONS</span><h3>Attendance overview</h3></div>
+                <a asp-area="Admin" asp-controller="Attendance" asp-action="Index">Open register ↗</a>
             </div>
-            <div class="ra-attendance-foot"><span>@Model.AttendanceMarkedToday of @Model.AttendanceExpected active students have a record today</span><b>@attendanceMissing pending</b></div>
+            <div class="ra-overview-attendance-summary">
+                <div class="ra-overview-attendance-ring" style="--progress:@Model.AttendanceCompletion">
+                    <div><strong>@Model.AttendanceCompletion%</strong><small>completed</small></div>
+                </div>
+                <div class="ra-overview-attendance-numbers">
+                    <div><i></i><span>Present</span><b>@Model.PresentToday</b></div>
+                    <div><i class="is-absent"></i><span>Absent</span><b>@Model.AbsentToday</b></div>
+                    <div><i class="is-late"></i><span>Late</span><b>@Model.LateToday</b></div>
+                    <div><i class="is-leave"></i><span>Leave</span><b>@Model.LeaveToday</b></div>
+                </div>
+            </div>
+            <div class="ra-overview-card-foot"><span>@Model.AttendanceMarkedToday of @Model.AttendanceExpected active students recorded</span><b>@attendanceMissing pending</b></div>
         </section>
-        <section class="ra-admin-card ra-quick-card">
-            <div class="ra-admin-card-head"><div><span>QUICK ACTIONS</span><h3>Run your institute</h3></div></div>
-            <div class="ra-admin-action-grid">
-                <a asp-area="Admin" asp-controller="Students" asp-action="Create"><i class="ra-icon-blue">＋</i><b>New admission</b><small>Register a student</small></a>
-                <a asp-area="Admin" asp-controller="Fees" asp-action="Create"><i class="ra-icon-amber">₹</i><b>Create fee plan</b><small>Set fees & due date</small></a>
-                <a asp-area="Admin" asp-controller="Batches" asp-action="Create"><i class="ra-icon-violet">▦</i><b>New batch</b><small>Organise a class</small></a>
-                <a asp-area="Admin" asp-controller="Staff" asp-action="Create"><i class="ra-icon-green">♟</i><b>Add teacher</b><small>Create staff access</small></a>
-                <a asp-area="Admin" asp-controller="Academics" asp-action="Exams"><i class="ra-icon-blue">▧</i><b>Schedule exam</b><small>Plan an assessment</small></a>
-                <a asp-area="Admin" asp-controller="Academics" asp-action="Announcements"><i class="ra-icon-violet">✦</i><b>Publish update</b><small>Inform your institute</small></a>
+
+        <section class="ra-overview-card">
+            <div class="ra-overview-card-header">
+                <div><span class="ra-overview-card-kicker">QUICK ACTIONS</span><h3>Common tasks</h3></div>
+            </div>
+            <div class="ra-overview-quick-actions">
+                <a class="ra-overview-quick-action" asp-area="Admin" asp-controller="Students" asp-action="Create"><i>＋</i><b>New admission</b><small>Register a student</small></a>
+                <a class="ra-overview-quick-action" asp-area="Admin" asp-controller="Fees" asp-action="Create"><i>₹</i><b>Fee plan</b><small>Set fees and due date</small></a>
+                <a class="ra-overview-quick-action" asp-area="Admin" asp-controller="Batches" asp-action="Create"><i>▦</i><b>New batch</b><small>Organise a class</small></a>
+                <a class="ra-overview-quick-action" asp-area="Admin" asp-controller="Staff" asp-action="Create"><i>＋</i><b>Add teacher</b><small>Create staff access</small></a>
+                <a class="ra-overview-quick-action" asp-area="Admin" asp-controller="Academics" asp-action="Exams"><i>▤</i><b>Schedule exam</b><small>Plan an assessment</small></a>
+                <a class="ra-overview-quick-action" asp-area="Admin" asp-controller="Academics" asp-action="Announcements"><i>✳</i><b>Publish update</b><small>Share institute news</small></a>
             </div>
         </section>
     </div>
 
-    <div class="ra-admin-lower-grid">
-        <section class="ra-admin-card">
-            <div class="ra-admin-card-head"><div><span>RECENT ACTIVITY</span><h3>Latest admissions</h3></div><a asp-area="Admin" asp-controller="Students" asp-action="Index">All students ↗</a></div>
-            @if (Model.RecentAdmissions.Count == 0) { <div class="ra-admin-empty">No active student admissions yet.</div> }
+    <div class="ra-overview-lower-grid">
+        <section class="ra-overview-card">
+            <div class="ra-overview-card-header">
+                <div><span class="ra-overview-card-kicker">RECENT ACTIVITY</span><h3>Latest admissions</h3></div>
+                <a asp-area="Admin" asp-controller="Students" asp-action="Index">All students ↗</a>
+            </div>
+            @if (Model.RecentAdmissions.Count == 0)
+            {
+                <div class="ra-saas-empty"><b>No active student admissions yet</b><p>New student records will appear here.</p></div>
+            }
             else
             {
-                <div class="ra-admin-list">
-                @foreach (var student in Model.RecentAdmissions)
-                {
-                    <a class="ra-admin-list-row" asp-area="Admin" asp-controller="Students" asp-action="Details" asp-route-id="@student.Id">
-                        <span class="ra-list-avatar">@student.Name.Substring(0,1).ToUpperInvariant()</span>
-                        <span class="ra-list-primary"><b>@student.Name</b><small>@student.AdmissionNumber · Standard @((int)student.Standard)</small></span>
-                        <time>@student.AdmissionDate.ToString("dd MMM yyyy")</time><i>↗</i>
-                    </a>
-                }
+                <div class="ra-overview-list">
+                    @foreach (var student in Model.RecentAdmissions)
+                    {
+                        <a class="ra-overview-list-row" asp-area="Admin" asp-controller="Students" asp-action="Details" asp-route-id="@student.Id">
+                            <span class="ra-overview-list-avatar">@(string.IsNullOrWhiteSpace(student.Name) ? "?" : student.Name[..1].ToUpperInvariant())</span>
+                            <span class="ra-overview-list-primary"><b>@student.Name</b><small>@student.AdmissionNumber · Standard @((int)student.Standard)</small></span>
+                            <time class="ra-overview-list-meta">@student.AdmissionDate.ToString("dd MMM yyyy")</time>
+                        </a>
+                    }
                 </div>
             }
         </section>
-        <section class="ra-admin-card">
-            <div class="ra-admin-card-head"><div><span>REVENUE ACTIVITY</span><h3>Recent payments</h3></div><a asp-area="Admin" asp-controller="Fees" asp-action="Index">Fee accounts ↗</a></div>
-            @if (Model.RecentPayments.Count == 0) { <div class="ra-admin-empty">No fee payments have been recorded yet.</div> }
+        <section class="ra-overview-card">
+            <div class="ra-overview-card-header">
+                <div><span class="ra-overview-card-kicker">REVENUE ACTIVITY</span><h3>Recent payments</h3></div>
+                <a asp-area="Admin" asp-controller="Fees" asp-action="Index">Fee accounts ↗</a>
+            </div>
+            @if (Model.RecentPayments.Count == 0)
+            {
+                <div class="ra-saas-empty"><b>No payments recorded yet</b><p>Recent collections will appear here.</p></div>
+            }
             else
             {
-                <div class="ra-admin-list">
-                @foreach (var payment in Model.RecentPayments)
-                {
-                    <a class="ra-admin-list-row" asp-area="Admin" asp-controller="Fees" asp-action="Receipt" asp-route-id="@payment.Id">
-                        <span class="ra-payment-symbol">₹</span>
-                        <span class="ra-list-primary"><b>@payment.StudentName</b><small>@payment.ReceiptNumber · @payment.PaymentMethod</small></span>
-                        <span class="ra-payment-amount">₹@payment.Amount.ToString("N0")</span>
-                    </a>
-                }
+                <div class="ra-overview-list">
+                    @foreach (var payment in Model.RecentPayments)
+                    {
+                        <a class="ra-overview-list-row" asp-area="Admin" asp-controller="Fees" asp-action="Receipt" asp-route-id="@payment.Id">
+                            <span class="ra-overview-payment-mark">₹</span>
+                            <span class="ra-overview-list-primary"><b>@payment.StudentName</b><small>@payment.ReceiptNumber · @payment.PaymentMethod</small></span>
+                            <span class="ra-overview-list-amount">₹@payment.Amount.ToString("N0")</span>
+                        </a>
+                    }
                 </div>
             }
         </section>
     </div>
 
-    <div class="ra-admin-lower-grid">
-        <section class="ra-admin-card">
-            <div class="ra-admin-card-head"><div><span>ACADEMIC PLANNER</span><h3>Upcoming examinations</h3></div><a asp-area="Admin" asp-controller="Academics" asp-action="Exams">Manage exams ↗</a></div>
-            @if (Model.UpcomingExams.Count == 0) { <div class="ra-admin-empty">No upcoming exams scheduled.</div> }
+    <div class="ra-overview-lower-grid">
+        <section class="ra-overview-card">
+            <div class="ra-overview-card-header">
+                <div><span class="ra-overview-card-kicker">ACADEMIC PLANNER</span><h3>Upcoming examinations</h3></div>
+                <a asp-area="Admin" asp-controller="Academics" asp-action="Exams">Manage exams ↗</a>
+            </div>
+            @if (Model.UpcomingExams.Count == 0)
+            {
+                <div class="ra-saas-empty"><b>No upcoming exams scheduled</b><p>Scheduled assessments will appear here.</p></div>
+            }
             else
             {
                 @foreach (var exam in Model.UpcomingExams)
                 {
-                    <div class="ra-exam-row"><span class="ra-exam-date"><b>@exam.ExamDate.ToString("dd")</b><small>@exam.ExamDate.ToString("MMM")</small></span><span class="ra-list-primary"><b>@exam.Name</b><small>Standard @((int)exam.Subject.Standard) · @exam.Subject.Name · @(exam.Batch?.Name ?? "All batches")</small></span><span class="ra-exam-marks">@exam.MaximumMarks.ToString("0.##") marks</span></div>
+                    <div class="ra-overview-exam-row">
+                        <span class="ra-overview-exam-date"><b>@exam.ExamDate.ToString("dd")</b><small>@exam.ExamDate.ToString("MMM")</small></span>
+                        <span class="ra-overview-exam-copy"><b>@exam.Name</b><small>Standard @((int)exam.Subject.Standard) · @exam.Subject.Name · @(exam.Batch?.Name ?? "All batches")</small></span>
+                        <span class="ra-overview-exam-marks">@exam.MaximumMarks.ToString("0.##") marks</span>
+                    </div>
                 }
             }
         </section>
-        <section class="ra-admin-card">
-            <div class="ra-admin-card-head"><div><span>INSTITUTE COMMUNICATION</span><h3>Announcements</h3></div><a asp-area="Admin" asp-controller="Academics" asp-action="Announcements">Manage updates ↗</a></div>
-            @if (Model.RecentAnnouncements.Count == 0) { <div class="ra-admin-empty">No active announcements. Share an update with your institute.</div> }
+        <section class="ra-overview-card">
+            <div class="ra-overview-card-header">
+                <div><span class="ra-overview-card-kicker">INSTITUTE COMMUNICATION</span><h3>Announcements</h3></div>
+                <a asp-area="Admin" asp-controller="Academics" asp-action="Announcements">Manage updates ↗</a>
+            </div>
+            @if (Model.RecentAnnouncements.Count == 0)
+            {
+                <div class="ra-saas-empty"><b>No active announcements</b><p>Institute updates will appear here when published.</p></div>
+            }
             else
             {
                 @foreach (var item in Model.RecentAnnouncements)
                 {
-                    <article class="ra-admin-announcement"><div><b>@item.Title</b><span>@item.Audience</span></div><p>@item.Message</p><small>@item.PublishedAtUtc.ToLocalTime().ToString("dd MMM · hh:mm tt")</small></article>
+                    <article class="ra-overview-announcement">
+                        <div class="ra-overview-announcement-title"><b>@item.Title</b><span>@item.Audience</span></div>
+                        <p>@item.Message</p>
+                        <small>@item.PublishedAtUtc.ToLocalTime().ToString("dd MMM · hh:mm tt")</small>
+                    </article>
                 }
             }
         </section>
     </div>
 
-    <section class="ra-admin-card ra-module-strip">
-        <div class="ra-admin-card-head"><div><span>COMPLETE MANAGEMENT</span><h3>Every module, one click away</h3></div><a asp-area="Admin" asp-controller="Reports" asp-action="Index">View institute reports ↗</a></div>
-        <div class="ra-module-links">
-            <a asp-area="Admin" asp-controller="Students" asp-action="Index"><i>♙</i>Students</a>
-            <a asp-area="Admin" asp-controller="Batches" asp-action="Index"><i>▦</i>Batches</a>
-            <a asp-area="Admin" asp-controller="Attendance" asp-action="Index"><i>✓</i>Attendance</a>
-            <a asp-area="Admin" asp-controller="Fees" asp-action="Index"><i>₹</i>Fees & receipts</a>
-            <a asp-area="Admin" asp-controller="Staff" asp-action="Index"><i>♟</i>Teachers</a>
-            <a asp-area="Admin" asp-controller="Academics" asp-action="Subjects"><i>∑</i>Subjects</a>
-            <a asp-area="Admin" asp-controller="Academics" asp-action="Exams"><i>▧</i>Exams & results</a>
-            <a asp-area="Admin" asp-controller="Reports" asp-action="Index"><i>▥</i>Reports & exports</a>
-        </div>
-    </section>
-    <div class="ra-footer-note"><span>RELIABLE</span> ADMINISTRATOR CONSOLE <i>•</i> Your institute, in control</div>
+    <div class="ra-overview-footer"><span>RELIABLE ACADEMY</span> · ADMINISTRATOR WORKSPACE</div>
 </div>

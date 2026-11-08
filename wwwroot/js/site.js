@@ -46,26 +46,30 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const publicMenu = document.querySelector(".ra-public-menu-toggle");
     const publicNav = document.getElementById("ra-public-nav");
+    const closePublicMenu = () => {
+        document.body.classList.remove("ra-public-nav-open");
+        if (publicMenu) {
+            publicMenu.setAttribute("aria-expanded", "false");
+            publicMenu.setAttribute("aria-label", "Open website navigation");
+            publicMenu.textContent = "☰";
+        }
+    };
     if (publicMenu && publicNav) {
         publicMenu.addEventListener("click", function () {
-            const isOpen = document.body.classList.toggle("ra-public-nav-open");
+            const isOpen = !document.body.classList.contains("ra-public-nav-open");
+            document.body.classList.toggle("ra-public-nav-open", isOpen);
             publicMenu.setAttribute("aria-expanded", String(isOpen));
             publicMenu.setAttribute("aria-label", isOpen ? "Close website navigation" : "Open website navigation");
             publicMenu.textContent = isOpen ? "×" : "☰";
         });
-        publicNav.querySelectorAll("a").forEach(function (link) {
-            link.addEventListener("click", function () {
-                document.body.classList.remove("ra-public-nav-open");
-                publicMenu.setAttribute("aria-expanded", "false");
-                publicMenu.setAttribute("aria-label", "Open website navigation");
-                publicMenu.textContent = "☰";
-            });
+        publicNav.querySelectorAll("a").forEach(link => link.addEventListener("click", closePublicMenu));
+        document.addEventListener("click", event => {
+            if (!publicNav.contains(event.target) && !publicMenu.contains(event.target)) closePublicMenu();
         });
-        document.addEventListener("keydown", function (event) {
-            if (event.key === "Escape") {
-                document.body.classList.remove("ra-public-nav-open");
-                publicMenu.setAttribute("aria-expanded", "false");
-                publicMenu.textContent = "☰";
-            }
+        document.addEventListener("keydown", event => {
+            if (event.key === "Escape") closePublicMenu();
+        });
+        window.addEventListener("resize", () => {
+            if (window.innerWidth > 820) closePublicMenu();
         });
     }

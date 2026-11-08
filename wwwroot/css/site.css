@@ -804,3 +804,153 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 @media(prefers-reduced-motion:reduce){
     .rci-login-page *{scroll-behavior:auto!important}
 }
+
+
+/* Workspace + sign-in visual refinement */
+.ra-sidebar{
+    background:#fbfaf7;
+    color:#26364d;
+    border-right:1px solid #e9e6df;
+    box-shadow:8px 0 28px rgba(25,38,57,.035);
+    padding:27px 16px 18px;
+}
+.ra-brand{color:#1c2d46;margin-bottom:42px}
+.ra-brand small{color:#8b94a1}
+.ra-nav-label{
+    color:#92918b;
+    font-size:10px;
+    letter-spacing:1.45px;
+    font-weight:800;
+    padding:0 12px 11px;
+}
+.ra-nav-label-spaced{margin-top:25px}
+.ra-nav-link{
+    position:relative;
+    min-height:43px;
+    padding:10px 12px;
+    margin:3px 0;
+    gap:12px;
+    border:1px solid transparent;
+    border-radius:9px;
+    color:#586579;
+    font-size:13px;
+    font-weight:600;
+    letter-spacing:.05px;
+    background:transparent;
+    transition:color .22s ease,background .22s ease,border-color .22s ease,transform .22s ease,box-shadow .22s ease;
+}
+.ra-nav-link>span{
+    width:20px;
+    font-size:17px;
+    color:#8993a1;
+    transition:color .22s ease,transform .22s ease;
+}
+.ra-nav-link:hover,.ra-nav-muted:hover{
+    color:#1d304b;
+    background:#f1eee7;
+    border-color:#e8e2d7;
+    transform:translateX(3px);
+}
+.ra-nav-link:hover>span{color:#a77c3d;transform:scale(1.08)}
+.ra-nav-link.active{
+    color:#1c2d46;
+    background:#f2eadb;
+    border-color:#e8dcc6;
+    box-shadow:inset 3px 0 #c99a50;
+}
+.ra-nav-link.active>span{color:#a87936}
+.ra-nav-link em{font-size:9px;color:#9a8a70}
+.ra-sidebar-help{
+    background:#f3efe7;
+    border:1px solid #e8e0d2;
+    color:#34445b;
+}
+.ra-sidebar-help>span{color:#b28748}
+.ra-sidebar-help b{font-size:12px;color:#283950}
+.ra-sidebar-help small{font-size:11px;line-height:1.5;color:#7d8795}
+.ra-user{border-top-color:#e8e4dc}
+.ra-user b{font-size:11px;color:#293a52}
+.ra-user small{font-size:10px;color:#8992a0}
+.ra-user button{color:#657287}
+.ra-avatar{width:34px;height:34px;font-size:13px;background:#e9e1d3;color:#5b472b}
+.ra-main-shell{background:#f7f8fa}
+.ra-topbar{height:70px}
+.ra-breadcrumb{font-size:13px}
+.ra-secure-label{font-size:10px;letter-spacing:1.2px}
+.ra-topbar-user{font-size:12px}
+.ra-main-content{padding-top:40px}
+.ra-page-heading h1{font-size:clamp(27px,2.4vw,34px)}
+.ra-page-heading p{font-size:14px;line-height:1.65}
+.ra-eyebrow,.ra-section-heading>div>span,.ra-panel-heading>div>span{font-size:10px;letter-spacing:1.5px}
+.ra-section-heading h3,.ra-panel-heading h3{font-size:17px}
+.ra-stat-caption{font-size:9px}
+.ra-stat-foot{font-size:11px}
+.ra-stat-card>strong{font-size:28px}
+.ra-panel-note{font-size:11px}
+.ra-shortcut b{font-size:12px}
+.ra-shortcut small{font-size:10px}
+.ra-empty b{font-size:13px}
+.ra-empty p{font-size:11px}
+.ra-announcement b{font-size:12px}
+.ra-announcement p{font-size:11px;line-height:1.55}
+.ra-announcement small{font-size:10px}
+
+/* Larger, more comfortable sign-in typography */
+.rci-login-form-heading h2{font-size:clamp(40px,3.3vw,50px)}
+.rci-login-form-heading p{font-size:16px;line-height:1.75}
+.rci-login-overline,.rci-login-kicker{font-size:11px}
+.rci-login-field label{font-size:15px}
+.rci-login-input-wrap{height:60px}
+.rci-login-input-wrap input{font-size:16px}
+.rci-login-input-wrap input::placeholder{font-size:15px}
+.rci-password-toggle{font-size:13px}
+.rci-login-remember{font-size:14px}
+.rci-login-remember input{width:18px;height:18px}
+.rci-login-submit{height:60px;min-height:60px;font-size:16px}
+.rci-login-security b{font-size:14px}
+.rci-login-security small{font-size:13px;line-height:1.65}
+.rci-login-back a{font-size:13px}
+.rci-login-footer{font-size:12px}
+.rci-login-message h1{font-size:clamp(46px,4.5vw,64px)}
+.rci-login-message>p{font-size:17px;line-height:1.8}
+.rci-login-mini-stat b{font-size:14px}
+.rci-login-copyright{font-size:10px}
+
+/* Subtle, purposeful motion */
+@keyframes raPageEnter{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes raSoftReveal{from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:translateY(0)}}
+.ra-main-content{animation:raPageEnter .55s cubic-bezier(.2,.7,.2,1) both}
+.ra-sidebar .ra-brand{animation:raSoftReveal .45s ease both}
+.ra-sidebar .ra-nav-link{animation:raSoftReveal .42s ease both}
+.ra-sidebar .ra-nav-link:nth-of-type(1){animation-delay:.03s}
+.ra-sidebar .ra-nav-link:nth-of-type(2){animation-delay:.06s}
+.ra-sidebar .ra-nav-link:nth-of-type(3){animation-delay:.09s}
+.ra-sidebar .ra-nav-link:nth-of-type(4){animation-delay:.12s}
+.ra-sidebar .ra-nav-link:nth-of-type(5){animation-delay:.15s}
+.ra-sidebar .ra-nav-link:nth-of-type(6){animation-delay:.18s}
+.ra-sidebar .ra-nav-link:nth-of-type(7){animation-delay:.21s}
+.ra-sidebar .ra-nav-link:nth-of-type(8){animation-delay:.24s}
+.ra-stat-card,.ra-panel,.ra-admin-card,.ra-admin-metric,.ra-shortcut,.ra-admin-action-grid>a{
+    transition:transform .24s ease,border-color .24s ease,box-shadow .24s ease,background .24s ease;
+}
+.ra-stat-card:hover,.ra-admin-card:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(28,43,65,.055);border-color:#dfe4eb}
+.rci-login-form-wrap{animation:raPageEnter .65s cubic-bezier(.2,.7,.2,1) both}
+.rci-login-showcase-inner{animation:raSoftReveal .7s .08s ease both}
+.rci-login-field{transition:transform .2s ease}
+.rci-login-input-wrap:focus-within{transform:translateY(-1px)}
+.rci-login-submit:active{transform:translateY(0) scale(.99)}
+@media(max-width:1100px){
+    .ra-sidebar{width:230px}
+    .ra-main-shell{margin-left:230px}
+}
+@media(max-width:720px){
+    .ra-sidebar{background:#fbfaf7;border-bottom:1px solid #e9e6df}
+    .ra-main-shell{margin-left:0}
+    .ra-main-content{padding-top:25px}
+    .ra-page-heading p{font-size:13px}
+}
+@media(prefers-reduced-motion:reduce){
+    .ra-main-content,.ra-sidebar .ra-brand,.ra-sidebar .ra-nav-link,.rci-login-form-wrap,.rci-login-showcase-inner{animation:none!important}
+    .ra-nav-link,.ra-nav-link>span,.ra-stat-card,.ra-panel,.ra-admin-card,.ra-admin-metric,.ra-shortcut,.ra-admin-action-grid>a,.rci-login-input-wrap,.rci-login-submit{transition:none!important}
+    .ra-nav-link:hover,.ra-stat-card:hover,.ra-admin-card:hover{transform:none}
+}

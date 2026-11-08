@@ -73,3 +73,15 @@ document.addEventListener("DOMContentLoaded", function () {
             if (window.innerWidth > 820) closePublicMenu();
         });
     }
+
+    document.querySelectorAll("[data-password-toggle]").forEach(function (button) {
+        button.addEventListener("click", function () {
+            const input = document.getElementById(button.getAttribute("data-password-toggle"));
+            if (!input) return;
+            const reveal = input.type === "password";
+            input.type = reveal ? "text" : "password";
+            button.textContent = reveal ? "Hide" : "Show";
+            button.setAttribute("aria-label", reveal ? "Hide password" : "Show password");
+            button.setAttribute("aria-pressed", String(reveal));
+        });
+    });

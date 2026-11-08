@@ -1,13 +1,25 @@
 @using Microsoft.AspNetCore.Identity
 @inject SignInManager<IdentityUser> SignInManager
-<ul class="navbar-nav align-items-center">
+@{
+    var destinationArea = User.IsInRole("Teacher") ? "Teacher" : "Admin";
+}
 @if (SignInManager.IsSignedIn(User))
 {
-    <li class="nav-item"><a class="nav-link text-dark" asp-area="Admin" asp-controller="Dashboard" asp-action="Index">Workspace</a></li>
-    <li class="nav-item"><form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })" method="post"><button type="submit" class="nav-link btn btn-link text-dark">Logout</button></form></li>
+    <div class="rci-auth-actions">
+        <a class="rci-workspace-action" asp-area="@destinationArea" asp-controller="Dashboard" asp-action="Index">
+            <span class="rci-workspace-action-icon" aria-hidden="true">▦</span>
+            <span>Workspace</span>
+            <span class="rci-workspace-action-arrow" aria-hidden="true">↗</span>
+        </a>
+        <form class="rci-logout-form" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })" method="post">
+            <button type="submit" class="rci-logout-action">
+                <span aria-hidden="true">⇥</span>
+                <span>Sign out</span>
+            </button>
+        </form>
+    </div>
 }
 else
 {
-    <li class="nav-item"><a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Staff login</a></li>
+    <a class="rci-staff-login-action" asp-area="Identity" asp-page="/Account/Login">Staff sign in <span aria-hidden="true">↗</span></a>
 }
-</ul>

@@ -17,8 +17,9 @@
 <body class="@(isWorkspaceArea ? "ra-app-body" : "ra-public-body")">
 @if (isWorkspaceArea)
 {
-<aside class="ra-sidebar">
-<a class="ra-brand" asp-area="@(User.IsInRole("Teacher") ? "Teacher" : "Admin")" asp-controller="Dashboard" asp-action="Index"><span class="ra-brand-mark">R<span>.</span></span><span><b>RELIABLE</b><small>ACADEMY MANAGEMENT</small></span></a>
+<div class="ra-sidebar-backdrop" data-sidebar-close></div>
+<aside class="ra-sidebar" id="ra-sidebar" aria-label="Workspace navigation">
+<div class="ra-sidebar-top"><a class="ra-brand" asp-area="@(User.IsInRole("Teacher") ? "Teacher" : "Admin")" asp-controller="Dashboard" asp-action="Index"><span class="ra-brand-mark">R<span>.</span></span><span><b>RELIABLE</b><small>ACADEMY MANAGEMENT</small></span></a><button class="ra-sidebar-close" type="button" aria-label="Close navigation" data-sidebar-close>×</button></div>
 <div class="ra-nav-label">@(User.IsInRole("Admin") ? "ADMIN WORKSPACE" : "TEACHING WORKSPACE")</div>
 <a class="ra-nav-link@Active("Dashboard")" asp-area="@(User.IsInRole("Teacher") ? "Teacher" : "Admin")" asp-controller="Dashboard" asp-action="Index"><span>▦</span> @(User.IsInRole("Teacher") ? "Teaching desk" : "Overview")</a>
 <div class="ra-nav-label ra-nav-label-spaced">INSTITUTE</div>
@@ -38,7 +39,7 @@
 <div class="ra-sidebar-bottom"><div class="ra-sidebar-help"><span>✦</span><b>Made for Reliable.</b><small>Your institute, thoughtfully organised.</small></div>
 <div class="ra-user"><span class="ra-avatar">@((User.Identity?.Name ?? "A").Substring(0, 1).ToUpperInvariant())</span><span><b>@User.Identity?.Name</b><small>Signed in</small></span><partial name="_LoginPartial" /></div></div>
 </aside>
-<div class="ra-main-shell"><header class="ra-topbar"><div><span class="ra-topbar-mobile-brand">RELIABLE <i>ACADEMY</i></span><span class="ra-breadcrumb">Workspace <b>/</b> @ViewData["Title"]</span></div><div class="ra-topbar-right"><span class="ra-secure-label"><span></span> SECURE WORKSPACE</span><span class="ra-topbar-divider"></span><span class="ra-topbar-user">@User.Identity?.Name</span></div></header><main class="ra-main-content">@RenderBody()</main></div>
+<div class="ra-main-shell"><header class="ra-topbar"><div class="ra-topbar-leading"><button class="ra-topbar-menu" type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="ra-sidebar">☰</button><span class="ra-topbar-mobile-brand">RELIABLE <i>ACADEMY</i></span><span class="ra-breadcrumb">Workspace <b>/</b> @ViewData["Title"]</span></div></div><div class="ra-topbar-right"><span class="ra-secure-label"><span></span> SECURE WORKSPACE</span><span class="ra-topbar-divider"></span><span class="ra-topbar-user">@User.Identity?.Name</span></div></header><main class="ra-main-content">@RenderBody()</main></div>
 }
 else
 {

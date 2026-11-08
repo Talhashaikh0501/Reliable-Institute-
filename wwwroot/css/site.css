@@ -1274,3 +1274,195 @@ html{scroll-behavior:smooth}::selection{background:#e9d5a7;color:#172338}
  .ra-public-header .rci-logout-action>span:first-child{font-size:12px}
 }
 @media(prefers-reduced-motion:reduce){.rci-workspace-action,.rci-logout-action,.rci-staff-login-action{transition:none!important}}
+
+
+
+/* Reliable Academy workspace navigation — bordered SaaS sidebar refresh */
+.ra-app-body{
+  --ra-sidebar-bg:#ffffff;
+  --ra-sidebar-ink:#26364d;
+  --ra-sidebar-muted:#66758a;
+  --ra-sidebar-line:#e5eaf1;
+  --ra-sidebar-accent:#315b91;
+  background:#f4f6f9;
+}
+.ra-sidebar{
+  width:286px!important;
+  padding:23px 17px 18px!important;
+  background:var(--ra-sidebar-bg)!important;
+  background-image:none!important;
+  color:var(--ra-sidebar-ink)!important;
+  border-right:1px solid #e5eaf1!important;
+  box-shadow:8px 0 30px rgba(24,39,61,.035)!important;
+  overflow-x:hidden;
+  overflow-y:auto;
+  scrollbar-width:thin;
+  scrollbar-color:#d6dde7 transparent;
+}
+.ra-sidebar-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px}
+.ra-brand{margin:0 4px!important;gap:11px;color:#1e3049!important}
+.ra-brand-mark{width:42px;height:42px;border-radius:12px;background:#1e3554!important;color:#fff!important;box-shadow:none!important}
+.ra-brand-mark span{color:#e7c37f!important}
+.ra-brand b{font-size:13px;letter-spacing:2px;color:#1e3049}
+.ra-brand small{font-size:8px;letter-spacing:1.35px;color:#8995a5!important}
+.ra-workspace-switch{
+  display:flex;align-items:center;gap:11px;
+  padding:13px 12px;margin:0 0 22px;
+  border:1px solid #e4e9f0!important;border-radius:12px;
+  background:#f8fafc!important;
+}
+.ra-workspace-switch-dot{width:8px;height:8px;border-radius:50%;background:#39a77b;box-shadow:0 0 0 4px #39a77b17;flex:none}
+.ra-workspace-switch b{font-size:11px;color:#293b54!important}
+.ra-workspace-switch small{font-size:9px;color:#8995a5!important}
+.ra-nav-label{
+  display:block!important;
+  padding:0 8px 9px!important;
+  color:#98a3b2!important;
+  font-size:9px!important;
+  font-weight:800!important;
+  letter-spacing:1.35px!important;
+}
+.ra-nav-label-spaced{margin-top:20px!important}
+.ra-nav-link{
+  position:relative;
+  display:flex!important;align-items:center;gap:11px;
+  min-height:45px;
+  margin:0 0 7px!important;
+  padding:9px 11px!important;
+  border:1px solid #e6ebf2!important;
+  border-radius:10px!important;
+  background:#fff!important;
+  color:#58677c!important;
+  font-size:12px!important;
+  font-weight:650!important;
+  letter-spacing:0!important;
+  box-shadow:0 1px 2px rgba(24,39,61,.025);
+  transform:none!important;
+  transition:border-color .18s ease,background .18s ease,color .18s ease,box-shadow .18s ease;
+}
+.ra-nav-link>span.ra-nav-icon{
+  display:grid;place-items:center;
+  width:28px!important;height:28px;flex:0 0 28px;
+  border:1px solid #e8edf3;border-radius:8px;
+  background:#f7f9fc;
+  color:#72839a!important;
+  font-size:14px!important;
+  transition:background .18s ease,border-color .18s ease,color .18s ease;
+}
+.ra-nav-link .ra-nav-icon svg{
+  display:block;width:16px;height:16px;
+  fill:none;stroke:currentColor;stroke-width:1.7;
+  stroke-linecap:round;stroke-linejoin:round;
+}
+.ra-nav-link:hover,.ra-nav-link:focus-visible{
+  border-color:#cbd7e6!important;
+  background:#f8fafc!important;
+  color:#263d5b!important;
+  box-shadow:0 3px 9px rgba(35,57,85,.055);
+  outline:none;
+}
+.ra-nav-link:hover>span.ra-nav-icon,.ra-nav-link:focus-visible>span.ra-nav-icon{
+  border-color:#d5dfeb;background:#edf3fa;color:#365d8b!important;
+}
+.ra-nav-link.active,.ra-nav-link[aria-current="page"]{
+  border-color:#bfcfe2!important;
+  background:#edf3fa!important;
+  color:#203b5e!important;
+  box-shadow:inset 3px 0 #426b9c,0 2px 7px rgba(35,57,85,.045)!important;
+}
+.ra-nav-link.active>span.ra-nav-icon,.ra-nav-link[aria-current="page"]>span.ra-nav-icon{
+  border-color:#d4dfed;background:#fff;color:#315b91!important;
+}
+.ra-nav-link:focus-visible{outline:3px solid #b8cce4!important;outline-offset:2px}
+.ra-sidebar-bottom{margin-top:auto;padding-top:22px}
+.ra-sidebar-help{
+  padding:14px!important;margin-bottom:15px!important;
+  border:1px solid #e5eaf1!important;border-radius:11px!important;
+  background:#f8fafc!important;
+}
+.ra-sidebar-help>span{color:#a47b3d!important}
+.ra-sidebar-help b{font-size:11px!important;color:#34465e!important}
+.ra-sidebar-help small{font-size:10px!important;color:#7f8b9c!important;line-height:1.55}
+.ra-user{
+  display:flex;align-items:center;gap:9px;
+  padding:14px 2px 0!important;
+  border-top:1px solid #e8edf2!important;
+}
+.ra-avatar{width:35px!important;height:35px!important;border-radius:10px!important;background:#eaf0f7!important;color:#345477!important}
+.ra-user b{font-size:10px!important;color:#33465f!important}
+.ra-user small{font-size:9px!important;color:#8b96a5!important}
+.ra-user .rci-auth-actions{min-width:66px}
+.ra-user .rci-logout-action{border-color:#e2e8ef!important;background:#fff!important;color:#63738a!important}
+.ra-user .rci-logout-action:hover{border-color:#e8c9c5!important;background:#fff7f6!important;color:#a24c45!important}
+.ra-main-shell{margin-left:286px!important;min-width:0;background:#f4f6f9}
+.ra-topbar{padding-inline:clamp(20px,3vw,42px)!important}
+.ra-main-content{width:100%;max-width:1680px;margin-inline:auto;padding-inline:clamp(18px,3vw,42px)!important}
+.ra-topbar-menu{display:none}
+.ra-sidebar-close{display:none}
+.ra-sidebar-backdrop{display:none}
+@media(max-width:1100px) and (min-width:901px){
+  .ra-sidebar{width:260px!important}
+  .ra-main-shell{margin-left:260px!important}
+  .ra-main-content{padding-inline:24px!important}
+}
+@media(max-width:900px){
+  body.ra-nav-open{overflow:hidden}
+  .ra-sidebar{
+    position:fixed!important;inset:0 auto 0 0!important;
+    width:min(320px,88vw)!important;height:100dvh!important;
+    padding:19px 15px 18px!important;
+    display:flex!important;flex-direction:column!important;
+    transform:translateX(-105%)!important;
+    transition:transform .26s cubic-bezier(.2,.75,.25,1)!important;
+    z-index:1050!important;
+    box-shadow:18px 0 55px rgba(18,34,55,.16)!important;
+  }
+  .ra-nav-open .ra-sidebar{transform:translateX(0)!important}
+  .ra-sidebar-top{margin-bottom:19px}
+  .ra-sidebar-close{
+    display:grid!important;place-items:center;
+    width:36px;height:36px;flex:none;
+    border:1px solid #e2e8ef;border-radius:9px;
+    background:#fff;color:#53647a;
+    font-size:23px;line-height:1;cursor:pointer;
+  }
+  .ra-nav-label,.ra-nav-link,.ra-sidebar-bottom{display:block!important}
+  .ra-nav-link{display:flex!important}
+  .ra-sidebar-bottom{margin-top:auto;padding-top:16px}
+  .ra-sidebar-backdrop{
+    display:block!important;position:fixed!important;inset:0!important;
+    z-index:1040!important;background:rgba(17,29,48,.42)!important;
+    backdrop-filter:blur(3px);opacity:0;visibility:hidden;pointer-events:none;
+    transition:opacity .22s ease,visibility .22s ease;
+  }
+  .ra-nav-open .ra-sidebar-backdrop{opacity:1;visibility:visible;pointer-events:auto}
+  .ra-topbar-menu{
+    display:grid!important;place-items:center;flex:none;
+    width:40px;height:40px;padding:0;
+    border:1px solid #e1e7ef!important;border-radius:10px!important;
+    background:#fff!important;color:#405875!important;
+    font-size:18px;cursor:pointer;
+  }
+  .ra-topbar-menu:hover{background:#f5f8fc!important;border-color:#cbd7e5!important}
+  .ra-main-shell{margin-left:0!important}
+  .ra-topbar{height:66px!important;padding:0 20px!important}
+  .ra-topbar-leading{display:flex;align-items:center;gap:12px;min-width:0}
+  .ra-breadcrumb{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px!important}
+  .ra-topbar-right{display:none!important}
+  .ra-main-content{padding:26px 22px 30px!important}
+}
+@media(max-width:600px){
+  .ra-sidebar{width:min(310px,90vw)!important;padding:16px 13px 15px!important}
+  .ra-brand-mark{width:39px;height:39px}
+  .ra-workspace-switch{margin-bottom:18px;padding:11px}
+  .ra-nav-label-spaced{margin-top:15px!important}
+  .ra-nav-link{min-height:44px;margin-bottom:6px!important}
+  .ra-sidebar-help{padding:12px!important}
+  .ra-topbar{height:60px!important;padding:0 13px!important}
+  .ra-topbar-menu{width:38px;height:38px}
+  .ra-breadcrumb{font-size:11px!important}
+  .ra-main-content{padding:21px 14px 26px!important}
+}
+@media(prefers-reduced-motion:reduce){
+  .ra-sidebar,.ra-sidebar-backdrop,.ra-nav-link,.ra-nav-link>span.ra-nav-icon,.ra-topbar-menu{transition:none!important}
+}

@@ -39,7 +39,7 @@
 <div class="ra-sidebar-bottom"><div class="ra-sidebar-help"><span>✦</span><b>Made for Reliable.</b><small>Your institute, thoughtfully organised.</small></div>
 <div class="ra-user"><span class="ra-avatar">@((User.Identity?.Name ?? "A").Substring(0, 1).ToUpperInvariant())</span><span><b>@User.Identity?.Name</b><small>Signed in</small></span><partial name="_LoginPartial" /></div></div>
 </aside>
-<div class="ra-main-shell"><header class="ra-topbar"><div class="ra-topbar-leading"><button class="ra-topbar-menu" type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="ra-sidebar">☰</button><span class="ra-topbar-mobile-brand">RELIABLE <i>ACADEMY</i></span><span class="ra-breadcrumb">Workspace <b>/</b> @ViewData["Title"]</span></div></div><div class="ra-topbar-right"><span class="ra-secure-label"><span></span> SECURE WORKSPACE</span><span class="ra-topbar-divider"></span><span class="ra-topbar-user">@User.Identity?.Name</span></div></header><main class="ra-main-content">@RenderBody()</main></div>
+<div class="ra-main-shell"><header class="ra-topbar"><div class="ra-topbar-leading"><button class="ra-topbar-menu" type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="ra-sidebar">☰</button><span class="ra-topbar-mobile-brand">RELIABLE <i>ACADEMY</i></span><span class="ra-breadcrumb">Workspace <b>/</b> @ViewData["Title"]</span></div><div class="ra-topbar-right"><span class="ra-secure-label"><span></span> SECURE WORKSPACE</span><span class="ra-topbar-divider"></span><span class="ra-topbar-user">@User.Identity?.Name</span></div></header><main class="ra-main-content">@RenderBody()</main></div>
 }
 else
 {

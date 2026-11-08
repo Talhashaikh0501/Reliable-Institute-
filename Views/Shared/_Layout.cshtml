@@ -1,17 +1,18 @@
 @{
     var currentArea = ViewContext.RouteData.Values["area"]?.ToString() ?? "";
-    var isAdminArea = currentArea == "Admin";
-    var isWorkspaceArea = isAdminArea || currentArea == "Teacher";
+    var isWorkspaceArea = currentArea == "Admin" || currentArea == "Teacher";
     var currentController = ViewContext.RouteData.Values["controller"]?.ToString() ?? "";
     string Active(string controller) => currentController.Equals(controller, StringComparison.OrdinalIgnoreCase) ? " active" : "";
+    var workspaceArea = User.IsInRole("Teacher") ? "Teacher" : "Admin";
 }
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="theme-color" content="#101d35" />
+<meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="theme-color" content="#111d32" />
+<meta name="description" content="Reliable Coaching Classes — focused academics and thoughtful institute management in Roshan Gate, Aurangabad." />
 <title>@ViewData["Title"] · Reliable Academy</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" /><link rel="stylesheet" href="~/css/site.css" asp-append-version="true" /><link rel="stylesheet" href="~/ReliableAcademy.styles.css" asp-append-version="true" />
 </head>
 <body class="@(isWorkspaceArea ? "ra-app-body" : "ra-public-body")">
@@ -19,50 +20,43 @@
 {
 <div class="ra-sidebar-backdrop" data-sidebar-close></div>
 <aside class="ra-sidebar" id="ra-sidebar" aria-label="Workspace navigation">
-<div class="ra-sidebar-top"><a class="ra-brand" asp-area="@(User.IsInRole("Teacher") ? "Teacher" : "Admin")" asp-controller="Dashboard" asp-action="Index"><span class="ra-brand-mark">R<span>.</span></span><span><b>RELIABLE</b><small>ACADEMY MANAGEMENT</small></span></a><button class="ra-sidebar-close" type="button" aria-label="Close navigation" data-sidebar-close>×</button></div>
-<div class="ra-nav-label">@(User.IsInRole("Admin") ? "ADMIN WORKSPACE" : "TEACHING WORKSPACE")</div>
-<a class="ra-nav-link@Active("Dashboard")" asp-area="@(User.IsInRole("Teacher") ? "Teacher" : "Admin")" asp-controller="Dashboard" asp-action="Index"><span>▦</span> @(User.IsInRole("Teacher") ? "Teaching desk" : "Overview")</a>
+<div class="ra-sidebar-top"><a class="ra-brand" asp-area="@workspaceArea" asp-controller="Dashboard" asp-action="Index"><span class="ra-brand-mark">R<span>.</span></span><span><b>RELIABLE</b><small>ACADEMY · WORKSPACE</small></span></a><button class="ra-sidebar-close" type="button" aria-label="Close navigation" data-sidebar-close>×</button></div>
+<div class="ra-workspace-switch"><span class="ra-workspace-switch-dot"></span><span><b>@(currentArea == "Admin" ? "Administrator" : "Teacher") workspace</b><small>Reliable Coaching Classes</small></span></div>
+<div class="ra-nav-label">YOUR WORKSPACE</div>
+<a class="ra-nav-link@Active("Dashboard")" asp-area="@workspaceArea" asp-controller="Dashboard" asp-action="Index"><span class="ra-nav-icon">⌂</span><span>@(User.IsInRole("Teacher") ? "Teaching desk" : "Overview")</span></a>
 <div class="ra-nav-label ra-nav-label-spaced">INSTITUTE</div>
-<a class="ra-nav-link@Active("Students")" asp-area="Admin" asp-controller="Students" asp-action="Index"><span>♙</span> Students</a>
-<a class="ra-nav-link@Active("Batches")" asp-area="Admin" asp-controller="Batches" asp-action="Index"><span>▤</span> Classes & batches</a>
-<a class="ra-nav-link@Active("Attendance")" asp-area="Admin" asp-controller="Attendance" asp-action="Index"><span>✓</span> Attendance</a>
-<a class="ra-nav-link@Active("Academics")" asp-area="Admin" asp-controller="Academics" asp-action="Subjects"><span>∑</span> Subjects</a>
-<a class="ra-nav-link@Active("Academics")" asp-area="Admin" asp-controller="Academics" asp-action="Exams"><span>▧</span> Exams & results</a>
-<a class="ra-nav-link@Active("Academics")" asp-area="Admin" asp-controller="Academics" asp-action="Announcements"><span>✦</span> Announcements</a>
-<a class="ra-nav-link@Active("Reports")" asp-area="Admin" asp-controller="Reports" asp-action="Index"><span>▥</span> Reports</a>
-@if (User.IsInRole("Admin"))
-{
+<a class="ra-nav-link@Active("Students")" asp-area="Admin" asp-controller="Students" asp-action="Index"><span class="ra-nav-icon">♙</span><span>Students</span></a>
+<a class="ra-nav-link@Active("Batches")" asp-area="Admin" asp-controller="Batches" asp-action="Index"><span class="ra-nav-icon">▦</span><span>Classes &amp; batches</span></a>
+<a class="ra-nav-link@Active("Attendance")" asp-area="Admin" asp-controller="Attendance" asp-action="Index"><span class="ra-nav-icon">✓</span><span>Attendance</span></a>
+<a class="ra-nav-link@Active("Academics")" asp-area="Admin" asp-controller="Academics" asp-action="Subjects"><span class="ra-nav-icon">∑</span><span>Subjects</span></a>
+<a class="ra-nav-link@Active("Academics")" asp-area="Admin" asp-controller="Academics" asp-action="Exams"><span class="ra-nav-icon">▤</span><span>Exams &amp; results</span></a>
+<a class="ra-nav-link@Active("Academics")" asp-area="Admin" asp-controller="Academics" asp-action="Announcements"><span class="ra-nav-icon">✳</span><span>Announcements</span></a>
+<a class="ra-nav-link@Active("Reports")" asp-area="Admin" asp-controller="Reports" asp-action="Index"><span class="ra-nav-icon">⌁</span><span>Reports &amp; insights</span></a>
+@if (User.IsInRole("Admin")) {
 <div class="ra-nav-label ra-nav-label-spaced">ADMINISTRATION</div>
-<a class="ra-nav-link@Active("Fees")" asp-area="Admin" asp-controller="Fees" asp-action="Index"><span>₹</span> Fees & payments</a>
-<a class="ra-nav-link@Active("Staff")" asp-area="Admin" asp-controller="Staff" asp-action="Index"><span>♟</span> Teachers</a>
+<a class="ra-nav-link@Active("Fees")" asp-area="Admin" asp-controller="Fees" asp-action="Index"><span class="ra-nav-icon">₹</span><span>Fees &amp; payments</span></a>
+<a class="ra-nav-link@Active("Staff")" asp-area="Admin" asp-controller="Staff" asp-action="Index"><span class="ra-nav-icon">♟</span><span>Teachers &amp; staff</span></a>
 }
-<div class="ra-sidebar-bottom"><div class="ra-sidebar-help"><span>✦</span><b>Made for Reliable.</b><small>Your institute, thoughtfully organised.</small></div>
-<div class="ra-user"><span class="ra-avatar">@((User.Identity?.Name ?? "A").Substring(0, 1).ToUpperInvariant())</span><span><b>@User.Identity?.Name</b><small>Signed in</small></span><partial name="_LoginPartial" /></div></div>
+<div class="ra-sidebar-bottom"><div class="ra-sidebar-help"><span>✦</span><b>Built around your institute.</b><small>Less admin. More meaningful progress.</small></div>
+<div class="ra-user"><span class="ra-avatar">@((User.Identity?.Name ?? "A").Substring(0, 1).ToUpperInvariant())</span><span><b>@User.Identity?.Name</b><small>@(currentArea == "Admin" ? "Administrator" : "Teacher") · Signed in</small></span><partial name="_LoginPartial" /></div></div>
 </aside>
-<div class="ra-main-shell"><header class="ra-topbar"><div class="ra-topbar-leading"><button class="ra-topbar-menu" type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="ra-sidebar">☰</button><span class="ra-topbar-mobile-brand">RELIABLE <i>ACADEMY</i></span><span class="ra-breadcrumb">Workspace <b>/</b> @ViewData["Title"]</span></div><div class="ra-topbar-right"><span class="ra-secure-label"><span></span> SECURE WORKSPACE</span><span class="ra-topbar-divider"></span><span class="ra-topbar-user">@User.Identity?.Name</span></div></header><main class="ra-main-content">@RenderBody()</main></div>
+<div class="ra-main-shell"><header class="ra-topbar"><div class="ra-topbar-leading"><button class="ra-topbar-menu" type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="ra-sidebar">☰</button><span class="ra-breadcrumb"><span>Workspace</span><b>/</b> @ViewData["Title"]</span></div><div class="ra-topbar-right"><span class="ra-secure-label"><span></span> PRIVATE WORKSPACE</span><span class="ra-topbar-divider"></span><span class="ra-topbar-user">@User.Identity?.Name</span></div></header><main class="ra-main-content">@RenderBody()</main></div>
 }
 else
 {
 <header class="ra-public-header">
 <a class="ra-public-brand" asp-controller="Home" asp-action="Index"><span class="ra-brand-mark">R<span>.</span></span><span><b>RELIABLE</b><small>COACHING CLASSES</small></span></a>
+<nav class="ra-public-nav" aria-label="Main navigation"><a href="/#approach">Our approach</a><a href="/#programmes">Academics</a><a href="/#visit">Find us</a></nav>
 <div class="ra-public-location">ROSHAN GATE <span>·</span> AURANGABAD</div>
-@if (User.Identity?.IsAuthenticated == true)
-{
-    <partial name="_LoginPartial" />
-}
-else
-{
-    <details class="rci-signin-menu">
-        <summary>Sign In <span aria-hidden="true">⌄</span></summary>
-        <div class="rci-signin-options">
-            <a asp-area="Identity" asp-page="/Account/Login" asp-route-returnUrl="/Admin/Dashboard"><span class="rci-signin-option-icon">A</span><span><b>Admin Sign In</b><small>Institute management</small></span><i>↗</i></a>
-            <a asp-area="Identity" asp-page="/Account/Login" asp-route-returnUrl="/Teacher/Dashboard"><span class="rci-signin-option-icon">T</span><span><b>Teacher Sign In</b><small>Teaching workspace</small></span><i>↗</i></a>
-        </div>
-    </details>
+@if (User.Identity?.IsAuthenticated == true) { <partial name="_LoginPartial" /> }
+else {
+<details class="rci-signin-menu"><summary>Workspace sign in <span aria-hidden="true">↗</span></summary><div class="rci-signin-options">
+<a asp-area="Identity" asp-page="/Account/Login" asp-route-returnUrl="/Admin/Dashboard"><span class="rci-signin-option-icon">A</span><span><b>Admin sign in</b><small>Institute management</small></span><i>↗</i></a>
+<a asp-area="Identity" asp-page="/Account/Login" asp-route-returnUrl="/Teacher/Dashboard"><span class="rci-signin-option-icon">T</span><span><b>Teacher sign in</b><small>Teaching workspace</small></span><i>↗</i></a>
+</div></details>
 }
 </header><main>@RenderBody()</main>
 }
 <script src="~/lib/jquery/dist/jquery.min.js"></script><script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script><script src="~/js/site.js" asp-append-version="true"></script>
 @await RenderSectionAsync("Scripts", required: false)
-</body>
-</html>
+</body></html>

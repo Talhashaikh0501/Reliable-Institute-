@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace ReliableAcademy.Areas.Identity.Pages.Account;
+namespace ReliableAcademy.IdentityPages.Account;
 
 [AllowAnonymous]
 public sealed class LoginModel(SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager) : PageModel

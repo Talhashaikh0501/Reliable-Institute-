@@ -9,7 +9,7 @@ using ReliableAcademy.ViewModels;
 namespace ReliableAcademy.Areas.Admin.Controllers;
 
 [Area("Admin")]
-[Authorize(Roles = "Admin,Teacher")]
+[Authorize(Roles = "Admin")]
 public sealed class StudentsController(ApplicationDbContext db) : Controller
 {
     public async Task<IActionResult> Index(string? search, StudentStandard? standard, bool includeInactive = false)

@@ -292,8 +292,14 @@ public sealed class StudentsController(
         }
 
         var claimResult = await users.AddClaimAsync(account, studentClaim);
-        if (!claimResult.Succeeded)
+        var passwordClaimResult = claimResult.Succeeded
+            ? await users.AddClaimAsync(account, new Claim(StudentAccountAccess.MustChangePasswordClaim, "true"))
+            : IdentityResult.Failed();
+
+        if (!claimResult.Succeeded || !passwordClaimResult.Succeeded)
         {
+            if (claimResult.Succeeded)
+                await users.RemoveClaimAsync(account, studentClaim);
             await users.RemoveFromRoleAsync(account, "Student");
             await users.DeleteAsync(account);
             TempData["Error"] = "The student record could not be securely linked to the new account.";

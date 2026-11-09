@@ -18,6 +18,7 @@ public sealed class DashboardController(ApplicationDbContext db, UserManager<Ide
         var today = DateOnly.FromDateTime(DateTime.Today);
         var startDate = today.AddDays(-13);
         var assignedIds = await TeacherBatchAccess.GetAssignedBatchIdsAsync(users, User);
+        var assignedSubjectIds = await TeacherSubjectAccess.GetAssignedSubjectIdsAsync(users, User);
         var activeBatchIds = await db.TeachingBatches.AsNoTracking()
             .Where(x => x.IsActive && assignedIds.Contains(x.Id))
             .Select(x => x.Id)
@@ -68,7 +69,7 @@ public sealed class DashboardController(ApplicationDbContext db, UserManager<Ide
         var exams = await db.Exams.AsNoTracking()
             .Include(x => x.Subject).Include(x => x.Batch)
             .Include(x => x.Results).ThenInclude(x => x.Student)
-            .Where(x => x.ExamDate >= today &&
+            .Where(x => x.ExamDate >= today && assignedSubjectIds.Contains(x.SubjectId) &&
                 ((x.BatchId.HasValue && activeBatchIds.Contains(x.BatchId.Value)) ||
                  (!x.BatchId.HasValue && standards.Contains(x.Subject.Standard))))
             .OrderBy(x => x.ExamDate).Take(8).ToListAsync();

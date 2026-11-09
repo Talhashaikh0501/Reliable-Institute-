@@ -28,6 +28,7 @@ public sealed class AcademicsController(ApplicationDbContext db, UserManager<Ide
         model.BatchName = batch.Name;
 
         var exams = await db.Exams.AsNoTracking().Include(x => x.Subject).Include(x => x.Batch)
+            .Include(x => x.Results).ThenInclude(x => x.Student)
             .Where(x => x.BatchId == batch.Id ||
                 (!x.BatchId.HasValue && x.Subject.Standard == batch.Standard))
             .OrderByDescending(x => x.ExamDate).Take(300).ToListAsync();

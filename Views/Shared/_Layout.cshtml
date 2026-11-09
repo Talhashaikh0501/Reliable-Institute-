@@ -14,7 +14,7 @@
     var feesIsActive = currentController.Equals("Fees", StringComparison.OrdinalIgnoreCase);
     var staffIsActive = currentController.Equals("Staff", StringComparison.OrdinalIgnoreCase);
     var isAdmin = User.IsInRole("Admin");
-    var workspaceArea = User.IsInRole("Teacher") ? "Teacher" : "Admin";
+    var workspaceArea = isAdmin ? "Admin" : "Teacher";
     var workspaceName = currentArea == "Teacher" ? "Teaching workspace" : "Admin workspace";
     var accountName = User.Identity?.Name ?? "Workspace user";
     var accountInitial = string.IsNullOrWhiteSpace(accountName) ? "U" : accountName.Trim().Substring(0, 1).ToUpperInvariant();
@@ -73,6 +73,8 @@
                 </a>
             </div>
 
+            @if (isAdmin)
+            {
             <div class="ra-workspace-nav-group">
                 <div class="ra-workspace-nav-label">ACADEMIC OPERATIONS</div>
                 <a class="ra-workspace-nav-link@(studentsIsActive ? " is-active" : "")" aria-current="@(studentsIsActive ? "page" : null)" asp-area="Admin" asp-controller="Students" asp-action="Index">
@@ -104,6 +106,33 @@
                     <span class="ra-workspace-nav-text">Reports &amp; insights</span>
                 </a>
             </div>
+            }
+            else
+            {
+                <div class="ra-workspace-nav-group">
+                    <div class="ra-workspace-nav-label">TEACHING</div>
+                    <a class="ra-workspace-nav-link@(studentsIsActive ? " is-active" : "")" aria-current="@(studentsIsActive ? "page" : null)" asp-area="Teacher" asp-controller="Students" asp-action="Index">
+                        <span class="ra-workspace-nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0M16 5.5a3.5 3.5 0 0 1 0 6.8M17 14.5a5.5 5.5 0 0 1 4.5 5.5"/></svg></span>
+                        <span class="ra-workspace-nav-text">My students</span>
+                    </a>
+                    <a class="ra-workspace-nav-link@(attendanceIsActive ? " is-active" : "")" aria-current="@(attendanceIsActive ? "page" : null)" asp-area="Teacher" asp-controller="Attendance" asp-action="Index">
+                        <span class="ra-workspace-nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m5 12 4.2 4.2L19 6.5"/><circle cx="12" cy="12" r="9"/></svg></span>
+                        <span class="ra-workspace-nav-text">Attendance</span>
+                    </a>
+                    <a class="ra-workspace-nav-link@(examsIsActive ? " is-active" : "")" aria-current="@(examsIsActive ? "page" : null)" asp-area="Teacher" asp-controller="Academics" asp-action="Exams">
+                        <span class="ra-workspace-nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg></span>
+                        <span class="ra-workspace-nav-text">Exams &amp; results</span>
+                    </a>
+                    <a class="ra-workspace-nav-link@(subjectsIsActive ? " is-active" : "")" aria-current="@(subjectsIsActive ? "page" : null)" asp-area="Teacher" asp-controller="Academics" asp-action="Subjects">
+                        <span class="ra-workspace-nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 4h14M5 4l8 8-8 8h14"/><path d="M13 12h6"/></svg></span>
+                        <span class="ra-workspace-nav-text">My subjects</span>
+                    </a>
+                    <a class="ra-workspace-nav-link@(announcementsIsActive ? " is-active" : "")" aria-current="@(announcementsIsActive ? "page" : null)" asp-area="Teacher" asp-controller="Academics" asp-action="Announcements">
+                        <span class="ra-workspace-nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 14V9l13-5v15L4 14Z"/><path d="M7 15l2 5h4l-2-4M20 9v5"/></svg></span>
+                        <span class="ra-workspace-nav-text">Announcements</span>
+                    </a>
+                </div>
+            }
 
             @if (isAdmin)
             {

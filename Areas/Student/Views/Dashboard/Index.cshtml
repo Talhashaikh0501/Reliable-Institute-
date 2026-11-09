@@ -2,15 +2,17 @@
 @{
     ViewData["Title"] = "My learning";
     var student = Model.Student;
+    var firstName = student.FullName.Split(' ', StringSplitOptions.RemoveEmptyEntries).FirstOrDefault() ?? student.FullName;
 }
 <div class="ra-student-welcome">
     <div>
         <div class="ra-eyebrow">STUDENT PORTAL <span>•</span> @((int)student.Standard)TH STANDARD</div>
-        <h1>Welcome, @student.FullName.Split(' ', StringSplitOptions.RemoveEmptyEntries).FirstOrDefault()!</h1>
+        <h1>Welcome, @firstName!</h1>
         <p>Your learning, attendance, results and class updates — together in one place.</p>
     </div>
     <div class="ra-student-identity"><span class="ra-student-avatar">@student.FullName.Trim().Substring(0, 1).ToUpperInvariant()</span><span><b>@student.FullName</b><small>@student.AdmissionNumber · @(student.Batch?.Name ?? "Batch not assigned")</small></span></div>
 </div>
+@if (TempData["Success"] is string success) { <div class="ra-alert-success" role="status">@success</div> }
 
 <div class="ra-student-stat-grid">
     <article class="ra-panel ra-student-stat"><span>ATTENDANCE</span><strong>@Model.AttendanceRate%</strong><small>Based on the latest @Model.AttendanceCount records</small></article>

@@ -86,7 +86,7 @@ public sealed class StudentsController(
                 x.Standard == standard && x.AcademicYear == academicYear)
                 ?? batches.FirstOrDefault(x => x.Standard == standard);
 
-            db.Students.Add(new Student
+            db.Students.Add(new ReliableAcademy.Models.Student
             {
                 AdmissionNumber = admissionNumber,
                 FullName = DemoNames[index],
@@ -134,7 +134,7 @@ public sealed class StudentsController(
             return View(model);
         }
 
-        var student = new Student
+        var student = new ReliableAcademy.Models.Student
         {
             AdmissionNumber = admissionNumber,
             FullName = model.FullName.Trim(),

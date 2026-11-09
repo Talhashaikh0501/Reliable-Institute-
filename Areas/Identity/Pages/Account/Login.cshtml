@@ -19,7 +19,7 @@
             <div class="rci-login-showcase-bottom">
                 <div class="rci-login-mini-stat"><span>01</span><b>Admissions & students</b></div>
                 <div class="rci-login-mini-stat"><span>02</span><b>Attendance & academics</b></div>
-                <div class="rci-login-mini-stat"><span>03</span><b>Fees & reporting</b></div>
+                <div class="rci-login-mini-stat"><span>03</span><b>Learning & progress</b></div>
                 <div class="rci-login-copyright">RELIABLE COACHING CLASSES <span>·</span> ROSHAN GATE, AURANGABAD</div>
             </div>
         </div>
@@ -45,8 +45,8 @@
                 <input type="hidden" asp-for="ReturnUrl" />
                 <div asp-validation-summary="ModelOnly" class="rci-login-validation"></div>
                 <div class="rci-login-field">
-                    <label for="Input_Email">Email address</label>
-                    <div class="rci-login-input-wrap"><span class="rci-login-input-icon">✉</span><input asp-for="Input.Email" id="Input_Email" type="email" autocomplete="username" placeholder="you@reliableclasses.com" autofocus /><span asp-validation-for="Input.Email" class="rci-login-field-error"></span></div>
+                    <label asp-for="Input.LoginIdentifier">Email or student username</label>
+                    <div class="rci-login-input-wrap"><span class="rci-login-input-icon">✉</span><input asp-for="Input.LoginIdentifier" autocomplete="username" placeholder="Email or student.username" autofocus /><span asp-validation-for="Input.LoginIdentifier" class="rci-login-field-error"></span></div>
                 </div>
                 <div class="rci-login-field">
                     <div class="rci-login-label-row"><label for="Input_Password">Password</label></div>

@@ -1,0 +1,49 @@
+@model AttendanceViewModel
+@{
+    ViewData["Title"] = "Attendance";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="ra-page-heading"><div><div class="ra-eyebrow">TEACHING <span>•</span> DAILY REGISTER</div><h1>Attendance</h1><p>Record attendance only for students in your assigned batches.</p></div></div>
+@if (TempData["Success"] is string success) { <div class="ra-alert-success" role="status">@success</div> }
+<section class="ra-panel ra-student-toolbar">
+    <form method="get" asp-action="Index" class="ra-filter-form">
+        <div class="ra-filter-field"><label for="date">Attendance date</label><input id="date" name="date" type="date" value="@Model.AttendanceDate.ToString("yyyy-MM-dd")" /></div>
+        <div class="ra-filter-field ra-batch-filter"><label for="batchId">My batch</label><select id="batchId" name="batchId" asp-items="ViewBag.Batches"><option value="">Choose a batch</option></select></div>
+        <button class="ra-secondary-button" type="submit">Load register</button>
+    </form>
+</section>
+@if (Model.BatchId == 0)
+{
+    <section class="ra-panel ra-empty ra-attendance-empty"><span>✓</span><b>No assigned batch available</b><p>Ask an administrator to assign one or more batches to your teacher account.</p></section>
+}
+else
+{
+    <form asp-action="Save" method="post" class="ra-panel ra-table-panel">
+        <input asp-for="AttendanceDate" type="hidden" /><input asp-for="BatchId" type="hidden" />
+        <div class="ra-panel-heading ra-attendance-heading"><div><span>@Model.BatchName · @Model.AttendanceDate.ToString("dd MMM yyyy")</span><h3>Student register</h3></div><span class="ra-panel-note">@Model.Students.Count student(s)</span></div>
+        <div asp-validation-summary="ModelOnly" class="ra-validation-summary"></div>
+        @if (Model.Students.Count == 0)
+        {
+            <div class="ra-empty ra-student-empty"><span>♙</span><b>No active students in this batch</b><p>Ask the administrator to add students to this batch.</p></div>
+        }
+        else
+        {
+            <div class="table-responsive"><table class="ra-data-table ra-attendance-table">
+                <thead><tr><th>STUDENT</th><th>ADMISSION NO.</th><th>ATTENDANCE</th><th>NOTE (OPTIONAL)</th></tr></thead>
+                <tbody>
+                @for (var i = 0; i < Model.Students.Count; i++)
+                {
+                    <tr>
+                        <td><b class="ra-student-name">@Model.Students[i].FullName</b><input type="hidden" asp-for="Students[i].StudentId" /></td>
+                        <td><span class="ra-mono">@Model.Students[i].AdmissionNumber</span></td>
+                        <td><select asp-for="Students[i].Status" class="ra-attendance-select"><option value="">Not marked</option><option value="0">Present</option><option value="1">Absent</option><option value="2">Late</option><option value="3">Leave</option></select></td>
+                        <td><input asp-for="Students[i].Note" class="ra-attendance-note" placeholder="Optional note" /></td>
+                    </tr>
+                }
+                </tbody>
+            </table></div>
+            <div class="ra-form-actions ra-attendance-actions"><span class="ra-attendance-hint">Unmarked students keep their existing attendance unchanged.</span><button class="ra-primary-button" type="submit">Save attendance <span>→</span></button></div>
+        }
+    </form>
+}
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

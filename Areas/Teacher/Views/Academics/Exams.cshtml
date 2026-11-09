@@ -1,0 +1,25 @@
+@model TeacherExamListViewModel
+@{
+    ViewData["Title"] = "Exams & results";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="ra-page-heading"><div><div class="ra-eyebrow">TEACHING <span>•</span> ASSESSMENTS</div><h1>Exams & results</h1><p>Review assessments for your assigned batches and enter student marks.</p></div></div>
+<section class="ra-panel ra-student-toolbar">
+    <form method="get" asp-action="Exams" class="ra-filter-form">
+        <div class="ra-filter-field ra-batch-filter"><label for="batchId">Assigned batch</label><select id="batchId" name="batchId"><option value="">Choose a batch</option>@foreach (var batch in Model.Batches) { <option value="@batch.Id" selected="@(Model.BatchId == batch.Id)">@((int)batch.Standard)th · @batch.Name · @batch.AcademicYear</option> }</select></div>
+        <button class="ra-secondary-button" type="submit">Load exams</button>
+    </form>
+</section>
+<section class="ra-panel ra-table-panel">
+    <div class="ra-panel-heading"><div><span>@(string.IsNullOrWhiteSpace(Model.BatchName) ? "YOUR ASSESSMENTS" : Model.BatchName.ToUpperInvariant())</span><h3>Exam register</h3></div><span class="ra-panel-note">@Model.Exams.Count exam(s)</span></div>
+    @if (Model.Batches.Count == 0) { <div class="ra-empty"><span>▧</span><b>No batches assigned</b><p>Ask an administrator to assign your teaching batches.</p></div> }
+    else if (Model.Exams.Count == 0) { <div class="ra-empty"><span>▧</span><b>No exams for this batch</b><p>Scheduled exams matching this batch will appear here.</p></div> }
+    else {
+        <div class="table-responsive"><table class="ra-data-table">
+            <thead><tr><th>EXAM</th><th>SUBJECT</th><th>DATE</th><th>MAXIMUM MARKS</th><th>RESULTS ENTERED</th><th></th></tr></thead>
+            <tbody>@foreach (var exam in Model.Exams) {
+                <tr><td><b class="ra-student-name">@exam.Name</b></td><td>@exam.SubjectName</td><td>@exam.ExamDate.ToString("dd MMM yyyy")</td><td>@exam.MaximumMarks.ToString("0.##")</td><td>@exam.ResultsEntered</td><td><a class="ra-row-action" asp-action="Results" asp-route-id="@exam.Id" asp-route-batchId="@Model.BatchId">Enter marks ↗</a></td></tr>
+            }</tbody>
+        </table></div>
+    }
+</section>

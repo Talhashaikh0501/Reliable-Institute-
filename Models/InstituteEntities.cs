@@ -39,6 +39,7 @@ public class TeachingBatch
     public TimeOnly? EndTime { get; set; }
     public bool IsActive { get; set; } = true;
     public ICollection<Student> Students { get; set; } = new List<Student>();
+    public ICollection<Announcement> Announcements { get; set; } = new List<Announcement>();
 }
 public class Subject
 {
@@ -117,6 +118,11 @@ public class Announcement
     [Required, StringLength(160)] public string Title { get; set; } = "";
     [Required, StringLength(3000)] public string Message { get; set; } = "";
     public AnnouncementAudience Audience { get; set; } = AnnouncementAudience.Everyone;
+    // Null values preserve legacy institute-wide announcements. Teacher announcements always require a batch.
+    public int? BatchId { get; set; }
+    public TeachingBatch? Batch { get; set; }
+    public string? CreatedByUserId { get; set; }
+    public IdentityUser? CreatedBy { get; set; }
     public DateTime PublishedAtUtc { get; set; } = DateTime.UtcNow;
     public DateTime? ExpiresAtUtc { get; set; }
     public bool IsPublished { get; set; } = true;

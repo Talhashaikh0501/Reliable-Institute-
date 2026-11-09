@@ -1,0 +1,16 @@
+@model Announcement
+@{
+    ViewData["Title"] = "Edit announcement";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var batches = ViewBag.Batches as List<TeacherBatchOptionViewModel> ?? new();
+}
+<div class="ra-page-heading"><div><div class="ra-eyebrow">COMMUNICATION <span>•</span> EDIT</div><h1>Edit announcement</h1><p>Update the message and choose one of your assigned batches.</p></div><a class="ra-secondary-button" asp-action="Announcements">← Back to announcements</a></div>
+<section class="ra-panel">
+    <form asp-action="EditAnnouncement" method="post" class="ra-teacher-announcement-form">
+        <input type="hidden" name="id" value="@Model.Id" />
+        <label class="ra-filter-field"><span>Target batch</span><select name="batchId" required>@foreach (var batch in batches) { <option value="@batch.Id" selected="@(Model.BatchId == batch.Id)">@((int)batch.Standard)th · @batch.Name · @batch.AcademicYear</option> }</select></label>
+        <label class="ra-filter-field"><span>Announcement title</span><input name="title" maxlength="160" minlength="3" required value="@Model.Title" /></label>
+        <label class="ra-filter-field"><span>Message</span><textarea name="message" rows="5" maxlength="3000" minlength="3" required>@Model.Message</textarea></label>
+        <div class="ra-form-actions"><a class="ra-secondary-button" asp-action="Announcements">Cancel</a><button class="ra-primary-button" type="submit">Save changes <span>→</span></button></div>
+    </form>
+</section>

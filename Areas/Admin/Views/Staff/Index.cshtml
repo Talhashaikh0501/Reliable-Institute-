@@ -14,10 +14,10 @@
     @if (Model.Count == 0) { <div class="ra-empty ra-student-empty"><span>♙</span><b>No teacher accounts yet</b><p>Create an account for each teacher who needs to mark attendance.</p></div> }
     else {
         <div class="table-responsive"><table class="ra-data-table">
-            <thead><tr><th>TEACHER ACCOUNT</th><th>MOBILE</th><th>ASSIGNED BATCHES</th><th>ACCESS</th><th></th></tr></thead>
+            <thead><tr><th>TEACHER ACCOUNT</th><th>MOBILE</th><th>ASSIGNED BATCHES</th><th>ASSIGNED SUBJECTS</th><th>ACCESS</th><th></th></tr></thead>
             <tbody>@foreach (var teacher in Model) {
-                <tr><td><b class="ra-student-name">@teacher.Email</b></td><td>@(teacher.PhoneNumber ?? "—")</td><td><span class="ra-standard-pill">@teacher.AssignedBatchCount</span></td><td><span class="ra-status-pill @(teacher.IsLocked ? "is-inactive" : "is-active")">@(teacher.IsLocked ? "Suspended" : "Active")</span></td>
-                    <td><div class="ra-row-actions"><a class="ra-row-action" asp-action="Assignments" asp-route-id="@teacher.UserId">Manage batches</a><form asp-action="ToggleAccess" asp-route-id="@teacher.UserId" method="post"><button class="ra-row-action ra-link-button" type="submit">@(teacher.IsLocked ? "Restore access" : "Suspend access")</button></form></div></td></tr>
+                <tr><td><b class="ra-student-name">@teacher.Email</b></td><td>@(teacher.PhoneNumber ?? "—")</td><td><span class="ra-standard-pill">@teacher.AssignedBatchCount</span></td><td><span class="ra-standard-pill">@teacher.AssignedSubjectCount</span></td><td><span class="ra-status-pill @(teacher.IsLocked ? "is-inactive" : "is-active")">@(teacher.IsLocked ? "Suspended" : "Active")</span></td>
+                    <td><div class="ra-row-actions"><a class="ra-row-action" asp-action="Assignments" asp-route-id="@teacher.UserId">Manage batches</a><a class="ra-row-action" asp-action="Subjects" asp-route-id="@teacher.UserId">Manage subjects</a><form asp-action="ToggleAccess" asp-route-id="@teacher.UserId" method="post"><button class="ra-row-action ra-link-button" type="submit">@(teacher.IsLocked ? "Restore access" : "Suspend access")</button></form></div></td></tr>
             }</tbody>
         </table></div>
     }

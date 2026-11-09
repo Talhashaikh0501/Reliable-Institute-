@@ -231,6 +231,12 @@ namespace ReliableAcademy.Migrations
                     b.Property<int>("Audience")
                         .HasColumnType("int");
 
+                    b.Property<int?>("BatchId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CreatedByUserId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<DateTime?>("ExpiresAtUtc")
                         .HasColumnType("datetime2");
 
@@ -252,7 +258,28 @@ namespace ReliableAcademy.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("BatchId");
+
+                    b.HasIndex("CreatedByUserId");
+
                     b.ToTable("RCI_Announcements", (string)null);
+                });
+
+            modelBuilder.Entity("ReliableAcademy.Models.Announcement", b =>
+                {
+                    b.HasOne("ReliableAcademy.Models.TeachingBatch", "Batch")
+                        .WithMany("Announcements")
+                        .HasForeignKey("BatchId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "CreatedBy")
+                        .WithMany()
+                        .HasForeignKey("CreatedByUserId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("Batch");
+
+                    b.Navigation("CreatedBy");
                 });
 
             modelBuilder.Entity("ReliableAcademy.Models.AttendanceRecord", b =>
@@ -751,6 +778,8 @@ namespace ReliableAcademy.Migrations
 
             modelBuilder.Entity("ReliableAcademy.Models.TeachingBatch", b =>
                 {
+                    b.Navigation("Announcements");
+
                     b.Navigation("Students");
                 });
 #pragma warning restore 612, 618

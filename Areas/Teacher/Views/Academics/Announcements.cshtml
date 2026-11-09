@@ -2,10 +2,49 @@
 @{
     ViewData["Title"] = "Announcements";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var batches = ViewBag.Batches as List<TeacherBatchOptionViewModel> ?? new();
 }
-<div class="ra-page-heading"><div><div class="ra-eyebrow">INSTITUTE <span>•</span> UPDATES</div><h1>Announcements</h1><p>Published updates shared with all members or specifically with teachers.</p></div></div>
+<div class="ra-page-heading">
+    <div><div class="ra-eyebrow">TEACHING <span>•</span> COMMUNICATION</div><h1>Announcements</h1><p>Publish class updates for students in your assigned batches only.</p></div>
+</div>
+@if (TempData["Success"] is string success) { <div class="ra-alert-success" role="status">@success</div> }
+@if (TempData["Error"] is string error) { <div class="ra-alert-error" role="alert">@error</div> }
 <section class="ra-panel">
-    <div class="ra-panel-heading"><div><span>INSTITUTE UPDATES</span><h3>Latest announcements</h3></div><span class="ra-panel-note">@Model.Count update(s)</span></div>
-    @if (Model.Count == 0) { <div class="ra-empty"><span>✦</span><b>No announcements yet</b><p>New published updates will appear here.</p></div> }
-    else { @foreach (var item in Model) { <article class="ra-announcement"><b>@item.Title</b><p>@item.Message</p><small>@item.PublishedAtUtc.ToLocalTime().ToString("dd MMM yyyy · hh:mm tt")</small></article> } }
+    <div class="ra-panel-heading"><div><span>CLASS COMMUNICATION</span><h3>Create an announcement</h3></div><span class="ra-panel-note">Batch-only visibility</span></div>
+    @if (batches.Count == 0)
+    {
+        <div class="ra-empty"><span>✦</span><b>No batches assigned</b><p>Ask an administrator to assign a batch before publishing class announcements.</p></div>
+    }
+    else
+    {
+        <form asp-action="CreateAnnouncement" method="post" class="ra-teacher-announcement-form">
+            <label class="ra-filter-field"><span>Target batch</span><select name="batchId" required><option value="">Choose an assigned batch</option>@foreach (var batch in batches) { <option value="@batch.Id">@((int)batch.Standard)th · @batch.Name · @batch.AcademicYear</option> }</select></label>
+            <label class="ra-filter-field"><span>Announcement title</span><input name="title" maxlength="160" minlength="3" required placeholder="e.g. Mathematics test on Friday" /></label>
+            <label class="ra-filter-field"><span>Message for students</span><textarea name="message" rows="4" maxlength="3000" minlength="3" required placeholder="Write the details students need to know…"></textarea></label>
+            <div class="ra-form-actions"><span class="ra-panel-note">Only students belonging to the selected batch are the intended audience.</span><button class="ra-primary-button" type="submit">Publish to batch <span>→</span></button></div>
+        </form>
+    }
+</section>
+<section class="ra-panel">
+    <div class="ra-panel-heading"><div><span>YOUR CLASS UPDATES</span><h3>Announcements</h3></div><span class="ra-panel-note">@Model.Count item(s)</span></div>
+    @if (Model.Count == 0) { <div class="ra-empty"><span>✦</span><b>No announcements yet</b><p>Your published class updates will appear here.</p></div> }
+    else
+    {
+        @foreach (var item in Model)
+        {
+            <article class="ra-announcement">
+                <div class="ra-announcement-meta"><span class="ra-standard-pill">@(item.Batch?.Name ?? "Institute update")</span><span class="ra-status-pill @(item.IsPublished ? "is-active" : "is-inactive")">@(item.IsPublished ? "Published" : "Unpublished")</span></div>
+                <b>@item.Title</b>
+                <p>@item.Message</p>
+                <small>@item.PublishedAtUtc.ToLocalTime().ToString("dd MMM yyyy · hh:mm tt")</small>
+                @if (item.CreatedByUserId == User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value)
+                {
+                    <div class="ra-row-actions">
+                        <a class="ra-row-action" asp-action="EditAnnouncement" asp-route-id="@item.Id">Edit</a>
+                        <form asp-action="ToggleAnnouncement" method="post"><input type="hidden" name="id" value="@item.Id" /><button class="ra-row-action ra-link-button" type="submit">@(item.IsPublished ? "Unpublish" : "Publish")</button></form>
+                    </div>
+                }
+            </article>
+        }
+    }
 </section>

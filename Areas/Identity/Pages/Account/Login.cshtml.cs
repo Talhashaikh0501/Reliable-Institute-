@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
+using ReliableAcademy.Data;
+using ReliableAcademy.Models;
 using ReliableAcademy.Services;
 
 namespace ReliableAcademy.IdentityPages.Account;
@@ -10,7 +13,8 @@ namespace ReliableAcademy.IdentityPages.Account;
 [AllowAnonymous]
 public sealed class LoginModel(
     SignInManager<IdentityUser> signInManager,
-    UserManager<IdentityUser> userManager) : PageModel
+    UserManager<IdentityUser> userManager,
+    ApplicationDbContext db) : PageModel
 {
     [BindProperty]
     public LoginInput Input { get; set; } = new();
@@ -62,12 +66,25 @@ public sealed class LoginModel(
             if (roles.Contains("Student"))
             {
                 var claims = await userManager.GetClaimsAsync(user);
-                var hasStudentLink = claims.Any(x =>
-                    x.Type == StudentAccountAccess.StudentIdClaim &&
-                    int.TryParse(x.Value, out var studentId) && studentId > 0);
+                var studentIdClaim = claims.FirstOrDefault(x =>
+                    x.Type == StudentAccountAccess.StudentIdClaim);
+                var hasStudentLink = studentIdClaim is not null &&
+                    int.TryParse(studentIdClaim.Value, out var studentId) && studentId > 0;
 
                 if (hasStudentLink)
                 {
+                    var activeStudent = await db.Students.AsNoTracking().AnyAsync(x =>
+                        x.Id == studentId && x.IsActive &&
+                        (x.Standard == StudentStandard.Tenth ||
+                         x.Standard == StudentStandard.Eleventh ||
+                         x.Standard == StudentStandard.Twelfth));
+                    if (!activeStudent)
+                    {
+                        await signInManager.SignOutAsync();
+                        ErrorMessage = "This student account is not linked to an active student record. Please contact the institute administrator.";
+                        return Page();
+                    }
+
                     var mustChangePassword = claims.Any(x =>
                         x.Type == StudentAccountAccess.MustChangePasswordClaim && x.Value == "true");
                     if (mustChangePassword)

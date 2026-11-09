@@ -68,8 +68,9 @@ public sealed class LoginModel(
                 var claims = await userManager.GetClaimsAsync(user);
                 var studentIdClaim = claims.FirstOrDefault(x =>
                     x.Type == StudentAccountAccess.StudentIdClaim);
+                var studentId = 0;
                 var hasStudentLink = studentIdClaim is not null &&
-                    int.TryParse(studentIdClaim.Value, out var studentId) && studentId > 0;
+                    int.TryParse(studentIdClaim.Value, out studentId) && studentId > 0;
 
                 if (hasStudentLink)
                 {

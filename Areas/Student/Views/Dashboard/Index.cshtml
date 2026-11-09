@@ -20,7 +20,7 @@
 </div>
 
 <div class="ra-student-dashboard-grid">
-    <section class="ra-panel">
+    <section class="ra-panel" id="announcements">
         <div class="ra-panel-heading"><div><span>INSTITUTE COMMUNICATION</span><h3>Announcements</h3></div><span class="ra-panel-note">@Model.Announcements.Count update(s)</span></div>
         @if (Model.Announcements.Count == 0)
         {
@@ -44,7 +44,7 @@
         }
     </section>
 
-    <section class="ra-panel">
+    <section class="ra-panel" id="attendance">
         <div class="ra-panel-heading"><div><span>ATTENDANCE RECORD</span><h3>Recent attendance</h3></div></div>
         @if (Model.RecentAttendance.Count == 0)
         {
@@ -61,7 +61,7 @@
         }
     </section>
 
-    <section class="ra-panel">
+    <section class="ra-panel" id="results">
         <div class="ra-panel-heading"><div><span>ACADEMIC PERFORMANCE</span><h3>Recent exam results</h3></div></div>
         @if (Model.RecentResults.Count == 0)
         {
@@ -78,7 +78,7 @@
         }
     </section>
 
-    <section class="ra-panel">
+    <section class="ra-panel" id="fees">
         <div class="ra-panel-heading"><div><span>FEE INFORMATION</span><h3>My fee plans</h3></div></div>
         @if (Model.FeePlans.Count == 0)
         {

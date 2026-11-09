@@ -14,6 +14,9 @@ public sealed class DashboardController(ApplicationDbContext db) : Controller
 {
     public async Task<IActionResult> Index()
     {
+        if (User.HasClaim(StudentAccountAccess.MustChangePasswordClaim, "true"))
+            return RedirectToAction("ChangePassword", "Account");
+
         var studentId = StudentAccountAccess.GetStudentId(User);
         if (!studentId.HasValue) return Forbid();
 

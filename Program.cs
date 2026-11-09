@@ -11,7 +11,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlSer
     sqlServerOptions => sqlServerOptions.MigrationsHistoryTable("RCI_EFMigrationsHistory")));
 builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
 {
-    options.User.RequireUniqueEmail = true;
+    // Student portal accounts use generated usernames and do not require email addresses.
+    options.User.RequireUniqueEmail = false;
     options.Password.RequiredLength = 8;
     options.Password.RequireDigit = true;
     options.Password.RequireUppercase = true;

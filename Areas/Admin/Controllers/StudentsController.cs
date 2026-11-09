@@ -170,6 +170,7 @@ public sealed class StudentsController(
         var linkedUsers = await users.GetUsersForClaimAsync(
             new Claim(StudentAccountAccess.StudentIdClaim, student.Id.ToString()));
         ViewBag.StudentPortalUserName = linkedUsers.FirstOrDefault()?.UserName;
+        ViewBag.StudentPortalUserId = linkedUsers.FirstOrDefault()?.Id;
         return View(student);
     }
 
@@ -245,6 +246,65 @@ public sealed class StudentsController(
         TempData["PortalUsername"] = username;
         TempData["PortalTemporaryPassword"] = temporaryPassword;
         TempData["Success"] = "Student portal account created. Copy the temporary password now; it will not be shown again.";
+        return RedirectToAction(nameof(Details), new { id });
+    }
+
+
+    [HttpGet]
+    public async Task<IActionResult> ResetPortalPassword(int id)
+    {
+        var student = await db.Students.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
+        if (student is null) return NotFound();
+
+        var linkedUsers = await users.GetUsersForClaimAsync(
+            new Claim(StudentAccountAccess.StudentIdClaim, student.Id.ToString()));
+        var account = linkedUsers.FirstOrDefault();
+        if (account is null)
+        {
+            TempData["Error"] = "This student does not have a linked portal account.";
+            return RedirectToAction(nameof(Details), new { id });
+        }
+
+        ViewBag.AccountLabel = $"{student.FullName} ({account.UserName})";
+        ViewBag.Controller = "Students";
+        ViewBag.PostAction = "SetPortalPassword";
+        ViewBag.AccountId = id;
+        ViewBag.CancelUrl = Url.Action(nameof(Details), new { id });
+        return View("~/Areas/Admin/Views/Shared/ResetAccountPassword.cshtml", new AdminResetPasswordViewModel());
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> SetPortalPassword(int id, AdminResetPasswordViewModel model)
+    {
+        var student = await db.Students.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
+        if (student is null) return NotFound();
+
+        var linkedUsers = await users.GetUsersForClaimAsync(
+            new Claim(StudentAccountAccess.StudentIdClaim, student.Id.ToString()));
+        var account = linkedUsers.FirstOrDefault();
+        if (account is null) return NotFound();
+
+        ViewBag.AccountLabel = $"{student.FullName} ({account.UserName})";
+        ViewBag.Controller = "Students";
+        ViewBag.PostAction = "SetPortalPassword";
+        ViewBag.AccountId = id;
+        ViewBag.CancelUrl = Url.Action(nameof(Details), new { id });
+
+        if (!ModelState.IsValid)
+            return View("~/Areas/Admin/Views/Shared/ResetAccountPassword.cshtml", model);
+
+        var token = await users.GeneratePasswordResetTokenAsync(account);
+        var result = await users.ResetPasswordAsync(account, token, model.NewPassword);
+        if (!result.Succeeded)
+        {
+            foreach (var error in result.Errors)
+                ModelState.AddModelError(string.Empty, error.Description);
+            return View("~/Areas/Admin/Views/Shared/ResetAccountPassword.cshtml", model);
+        }
+
+        await users.UpdateSecurityStampAsync(account);
+        TempData["Success"] = $"Portal password updated for {student.FullName}. Share the new password with the student securely.";
         return RedirectToAction(nameof(Details), new { id });
     }
 

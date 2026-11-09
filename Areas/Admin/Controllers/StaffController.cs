@@ -207,6 +207,51 @@ public sealed class StaffController(
         return RedirectToAction(nameof(Index));
     }
 
+
+    [HttpGet]
+    public async Task<IActionResult> ResetPassword(string id)
+    {
+        var teacher = await users.FindByIdAsync(id);
+        if (teacher is null || !await users.IsInRoleAsync(teacher, "Teacher")) return NotFound();
+
+        ViewBag.AccountLabel = teacher.Email ?? teacher.UserName ?? "Teacher account";
+        ViewBag.Controller = "Staff";
+        ViewBag.PostAction = "SetTeacherPassword";
+        ViewBag.AccountId = id;
+        ViewBag.CancelUrl = Url.Action(nameof(Index));
+        return View("~/Areas/Admin/Views/Shared/ResetAccountPassword.cshtml", new AdminResetPasswordViewModel());
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> SetTeacherPassword(string id, AdminResetPasswordViewModel model)
+    {
+        var teacher = await users.FindByIdAsync(id);
+        if (teacher is null || !await users.IsInRoleAsync(teacher, "Teacher")) return NotFound();
+
+        ViewBag.AccountLabel = teacher.Email ?? teacher.UserName ?? "Teacher account";
+        ViewBag.Controller = "Staff";
+        ViewBag.PostAction = "SetTeacherPassword";
+        ViewBag.AccountId = id;
+        ViewBag.CancelUrl = Url.Action(nameof(Index));
+
+        if (!ModelState.IsValid)
+            return View("~/Areas/Admin/Views/Shared/ResetAccountPassword.cshtml", model);
+
+        var token = await users.GeneratePasswordResetTokenAsync(teacher);
+        var result = await users.ResetPasswordAsync(teacher, token, model.NewPassword);
+        if (!result.Succeeded)
+        {
+            foreach (var error in result.Errors)
+                ModelState.AddModelError(string.Empty, error.Description);
+            return View("~/Areas/Admin/Views/Shared/ResetAccountPassword.cshtml", model);
+        }
+
+        await users.UpdateSecurityStampAsync(teacher);
+        TempData["Success"] = $"Password updated for {teacher.Email ?? teacher.UserName}. Share the new password securely.";
+        return RedirectToAction(nameof(Index));
+    }
+
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> ToggleAccess(string id)

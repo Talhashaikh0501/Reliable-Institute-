@@ -803,3 +803,17 @@
     .ra-workspace-body .ra-teacher-mark-input{width:78px}
     .ra-workspace-body .ra-teacher-remarks{min-width:95px}
 }
+
+
+/* Teacher batch announcement composer and ownership actions */
+.ra-teacher-announcement-form{display:grid;gap:18px;padding:22px}
+.ra-teacher-announcement-form .ra-filter-field{display:grid;gap:8px;min-width:0}
+.ra-teacher-announcement-form .ra-filter-field>span{font-size:.78rem;font-weight:700;color:var(--ws-text)}
+.ra-teacher-announcement-form input,.ra-teacher-announcement-form select,.ra-teacher-announcement-form textarea{width:100%;min-width:0;border:1px solid var(--ws-line);border-radius:12px;background:#fff;padding:12px 14px;color:var(--ws-ink);font:inherit;outline:none}
+.ra-teacher-announcement-form input:focus,.ra-teacher-announcement-form select:focus,.ra-teacher-announcement-form textarea:focus{border-color:var(--ws-accent);box-shadow:0 0 0 3px rgba(98,116,95,.12)}
+.ra-teacher-announcement-form textarea{resize:vertical;min-height:112px}
+.ra-announcement-meta{display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap}
+.ra-announcement .ra-row-actions{display:flex;gap:14px;margin-top:14px;align-items:center}
+.ra-announcement .ra-row-actions form{margin:0}
+.ra-announcement .ra-row-actions a,.ra-announcement .ra-row-actions button{font-size:.8rem}
+@media(max-width:640px){.ra-teacher-announcement-form{padding:16px}.ra-teacher-announcement-form .ra-form-actions{align-items:stretch;flex-direction:column}.ra-teacher-announcement-form .ra-form-actions button{width:100%}}

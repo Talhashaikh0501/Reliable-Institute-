@@ -28,7 +28,7 @@
                     <td>@if (student.MarksObtained.HasValue) { <span class="ra-status-pill @(student.IsPassing ? "is-active" : "is-inactive")">@(student.IsPassing ? "Pass" : "Below pass mark")</span> } else { <span class="ra-panel-note">Not entered</span> }</td>
                     <td><button form="@formId" class="ra-row-action ra-link-button" type="submit">Save result</button></td>
                 </tr>
-            }
+            }</tbody>
         </table></div>
     }
 </section>

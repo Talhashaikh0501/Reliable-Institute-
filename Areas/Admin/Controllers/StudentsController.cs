@@ -1,17 +1,36 @@
+using System.Security.Claims;
+using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ReliableAcademy.Data;
 using ReliableAcademy.Models;
+using ReliableAcademy.Services;
 using ReliableAcademy.ViewModels;
 
 namespace ReliableAcademy.Areas.Admin.Controllers;
 
 [Area("Admin")]
 [Authorize(Roles = "Admin")]
-public sealed class StudentsController(ApplicationDbContext db) : Controller
+public sealed class StudentsController(
+    ApplicationDbContext db,
+    UserManager<IdentityUser> users) : Controller
 {
+    private static readonly string[] DemoNames =
+    {
+        "Aarav Patil", "Anaya Deshmukh", "Aditya Kulkarni", "Isha Joshi",
+        "Vivaan Shah", "Saanvi More", "Arjun Pawar", "Aadhya Jadhav",
+        "Reyansh Shinde", "Myra Chavan", "Atharv Gaikwad", "Kiara Patil",
+        "Sai Kulkarni", "Anvi Deshmukh", "Kabir Shaikh", "Riya Khan",
+        "Ibrahim Shaikh", "Zoya Pathan", "Ayaan Qureshi", "Inaya Momin",
+        "Vedant Joshi", "Sara Merchant", "Omkar Pawar", "Aarohi Jadhav",
+        "Rudra More", "Mira Kulkarni", "Dev Shah", "Ayesha Khan",
+        "Yash Patil", "Naira Deshmukh", "Ishaan Shaikh", "Mahira Pathan",
+        "Atharva Chavan", "Fatima Qureshi", "Krish Gaikwad", "Amina Momin"
+    };
+
     public async Task<IActionResult> Index(string? search, StudentStandard? standard, bool includeInactive = false)
     {
         var query = db.Students.AsNoTracking().Include(x => x.Batch).AsQueryable();
@@ -37,7 +56,57 @@ public sealed class StudentsController(ApplicationDbContext db) : Controller
         });
     }
 
-    [Authorize(Roles = "Admin")]
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> GenerateDemoStudents()
+    {
+        var academicYear = GetCurrentAcademicYear();
+        var today = DateOnly.FromDateTime(DateTime.Today);
+        var existingNumbers = await db.Students
+            .Where(x => x.AdmissionNumber.StartsWith("DEMO-RCI-"))
+            .Select(x => x.AdmissionNumber)
+            .ToListAsync();
+        var existing = existingNumbers.ToHashSet(StringComparer.OrdinalIgnoreCase);
+        var batches = await db.TeachingBatches.AsNoTracking()
+            .Where(x => x.IsActive)
+            .OrderBy(x => x.Name)
+            .ToListAsync();
+
+        var added = 0;
+        for (var index = 0; index < DemoNames.Length; index++)
+        {
+            var admissionNumber = $"DEMO-RCI-{index + 1:000}";
+            if (existing.Contains(admissionNumber)) continue;
+
+            var standard = index < 12
+                ? StudentStandard.Tenth
+                : index < 24 ? StudentStandard.Eleventh : StudentStandard.Twelfth;
+            var batch = batches.FirstOrDefault(x =>
+                x.Standard == standard && x.AcademicYear == academicYear)
+                ?? batches.FirstOrDefault(x => x.Standard == standard);
+
+            db.Students.Add(new Student
+            {
+                AdmissionNumber = admissionNumber,
+                FullName = DemoNames[index],
+                Standard = standard,
+                AcademicYear = academicYear,
+                AdmissionDate = today,
+                BatchId = batch?.Id,
+                IsActive = true
+            });
+            added++;
+        }
+
+        if (added > 0)
+            await db.SaveChangesAsync();
+
+        TempData["Success"] = added == 0
+            ? "The 36 demo student records already exist. No duplicates were created."
+            : $"{added} sample student records were added (12 each for 10th, 11th and 12th). You can safely run this again; duplicates are skipped.";
+        return RedirectToAction(nameof(Index));
+    }
+
     [HttpGet]
     public async Task<IActionResult> Create()
     {
@@ -49,7 +118,6 @@ public sealed class StudentsController(ApplicationDbContext db) : Controller
         });
     }
 
-    [Authorize(Roles = "Admin")]
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(StudentFormViewModel model)
@@ -88,7 +156,6 @@ public sealed class StudentsController(ApplicationDbContext db) : Controller
         return RedirectToAction(nameof(Details), new { id = student.Id });
     }
 
-    [Authorize(Roles = "Admin")]
     [HttpGet]
     public async Task<IActionResult> Edit(int id)
     {
@@ -113,7 +180,6 @@ public sealed class StudentsController(ApplicationDbContext db) : Controller
         });
     }
 
-    [Authorize(Roles = "Admin")]
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit(int id, StudentFormViewModel model)
@@ -162,11 +228,83 @@ public sealed class StudentsController(ApplicationDbContext db) : Controller
             query = query.Include(x => x.FeePlans).ThenInclude(x => x.Payments);
 
         var student = await query.FirstOrDefaultAsync(x => x.Id == id);
+        if (student is null) return NotFound();
 
-        return student is null ? NotFound() : View(student);
+        var linkedUsers = await users.GetUsersForClaimAsync(
+            new Claim(StudentAccountAccess.StudentIdClaim, student.Id.ToString()));
+        ViewBag.StudentPortalUserName = linkedUsers.FirstOrDefault()?.UserName;
+        return View(student);
     }
 
-    [Authorize(Roles = "Admin")]
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> CreatePortalAccount(int id)
+    {
+        var student = await db.Students.FirstOrDefaultAsync(x => x.Id == id);
+        if (student is null) return NotFound();
+
+        if (!student.IsActive || student.Standard is not (
+            StudentStandard.Tenth or StudentStandard.Eleventh or StudentStandard.Twelfth))
+        {
+            TempData["Error"] = "Student portal accounts are available only for active 10th, 11th and 12th standard students.";
+            return RedirectToAction(nameof(Details), new { id });
+        }
+
+        var studentClaim = new Claim(StudentAccountAccess.StudentIdClaim, student.Id.ToString());
+        if ((await users.GetUsersForClaimAsync(studentClaim)).Count > 0)
+        {
+            TempData["Error"] = "This student record is already linked to a portal account.";
+            return RedirectToAction(nameof(Details), new { id });
+        }
+
+        var usernameSuffix = Regex.Replace(student.AdmissionNumber, "[^A-Za-z0-9]", "");
+        var username = $"student.{usernameSuffix}";
+        if (await users.FindByNameAsync(username) is not null)
+        {
+            TempData["Error"] = "The generated student username is already in use. Contact the administrator.";
+            return RedirectToAction(nameof(Details), new { id });
+        }
+
+        var temporaryPassword = $"Rci{RandomNumberGenerator.GetInt32(10_000_000, 99_999_999)}";
+        var account = new IdentityUser
+        {
+            UserName = username,
+            Email = null,
+            EmailConfirmed = false,
+            LockoutEnabled = true
+        };
+
+        var createResult = await users.CreateAsync(account, temporaryPassword);
+        if (!createResult.Succeeded)
+        {
+            TempData["Error"] = string.Join(" ", createResult.Errors.Select(x => x.Description));
+            return RedirectToAction(nameof(Details), new { id });
+        }
+
+        var roleResult = await users.AddToRoleAsync(account, "Student");
+        if (!roleResult.Succeeded)
+        {
+            await users.DeleteAsync(account);
+            TempData["Error"] = "The student account could not be assigned the Student role. " +
+                string.Join(" ", roleResult.Errors.Select(x => x.Description));
+            return RedirectToAction(nameof(Details), new { id });
+        }
+
+        var claimResult = await users.AddClaimAsync(account, studentClaim);
+        if (!claimResult.Succeeded)
+        {
+            await users.RemoveFromRoleAsync(account, "Student");
+            await users.DeleteAsync(account);
+            TempData["Error"] = "The student record could not be securely linked to the new account.";
+            return RedirectToAction(nameof(Details), new { id });
+        }
+
+        TempData["PortalUsername"] = username;
+        TempData["PortalTemporaryPassword"] = temporaryPassword;
+        TempData["Success"] = "Student portal account created. Copy the temporary password now; it will not be shown again.";
+        return RedirectToAction(nameof(Details), new { id });
+    }
+
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> ToggleStatus(int id)
@@ -178,7 +316,7 @@ public sealed class StudentsController(ApplicationDbContext db) : Controller
         await db.SaveChangesAsync();
         TempData["Success"] = student.IsActive
             ? $"{student.FullName} has been reactivated."
-            : $"{student.FullName} has been archived. Their history is preserved.";
+            : $"{student.FullName} has been archived. Their history is preserved and portal access is blocked.";
         return RedirectToAction(nameof(Index), new { includeInactive = !student.IsActive });
     }
 

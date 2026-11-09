@@ -19,6 +19,31 @@ public sealed class StudentsController(
     ApplicationDbContext db,
     UserManager<IdentityUser> users) : Controller
 {
+    public async Task<IActionResult> Index(string? search, StudentStandard? standard, bool includeInactive = false)
+    {
+        var query = db.Students.AsNoTracking().Include(x => x.Batch).AsQueryable();
+        if (!includeInactive) query = query.Where(x => x.IsActive);
+        if (standard.HasValue) query = query.Where(x => x.Standard == standard.Value);
+
+        if (!string.IsNullOrWhiteSpace(search))
+        {
+            var term = search.Trim();
+            query = query.Where(x =>
+                x.FullName.Contains(term) ||
+                x.AdmissionNumber.Contains(term) ||
+                (x.PhoneNumber != null && x.PhoneNumber.Contains(term)) ||
+                (x.GuardianPhone != null && x.GuardianPhone.Contains(term)));
+        }
+
+        return View(new StudentListViewModel
+        {
+            Students = await query.OrderBy(x => x.Standard).ThenBy(x => x.FullName).Take(300).ToListAsync(),
+            Search = search,
+            Standard = standard,
+            IncludeInactive = includeInactive
+        });
+    }
+
     [HttpGet]
     public async Task<IActionResult> Create()
     {

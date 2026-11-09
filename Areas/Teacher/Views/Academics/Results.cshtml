@@ -13,17 +13,22 @@
         <div class="table-responsive"><table class="ra-data-table">
             <thead><tr><th>STUDENT</th><th>ADMISSION NO.</th><th>MARKS / @Model.Exam.MaximumMarks.ToString("0.##")</th><th>REMARKS</th><th>STATUS</th><th></th></tr></thead>
             <tbody>@foreach (var student in Model.Students) {
+                var formId = $"result-form-{student.StudentId}";
                 <tr>
-                    <td><b class="ra-student-name">@student.FullName</b></td><td><span class="ra-mono">@student.AdmissionNumber</span></td>
-                    <td><form asp-action="RecordResult" method="post" class="ra-teacher-marks-form">
-                        <input type="hidden" name="examId" value="@Model.Exam.Id" /><input type="hidden" name="batchId" value="@Model.BatchId" /><input type="hidden" name="studentId" value="@student.StudentId" />
-                        <input type="number" name="marksObtained" min="0" max="@Model.Exam.MaximumMarks" step="0.01" value="@student.MarksObtained?.ToString("0.##", System.Globalization.CultureInfo.InvariantCulture)" required aria-label="Marks for @student.FullName" />
+                    <td>
+                        <form id="@formId" asp-action="RecordResult" method="post"></form>
+                        <input form="@formId" type="hidden" name="examId" value="@Model.Exam.Id" />
+                        <input form="@formId" type="hidden" name="batchId" value="@Model.BatchId" />
+                        <input form="@formId" type="hidden" name="studentId" value="@student.StudentId" />
+                        <b class="ra-student-name">@student.FullName</b>
                     </td>
-                    <td><input class="ra-teacher-remarks" type="text" name="remarks" maxlength="500" value="@student.Remarks" placeholder="Optional remark" aria-label="Remarks for @student.FullName" /></td>
+                    <td><span class="ra-mono">@student.AdmissionNumber</span></td>
+                    <td><input form="@formId" class="ra-teacher-mark-input" type="number" name="marksObtained" min="0" max="@Model.Exam.MaximumMarks" step="0.01" value="@student.MarksObtained?.ToString("0.##", System.Globalization.CultureInfo.InvariantCulture)" required aria-label="Marks for @student.FullName" /></td>
+                    <td><input form="@formId" class="ra-teacher-remarks" type="text" name="remarks" maxlength="500" value="@student.Remarks" placeholder="Optional remark" aria-label="Remarks for @student.FullName" /></td>
                     <td>@if (student.MarksObtained.HasValue) { <span class="ra-status-pill @(student.IsPassing ? "is-active" : "is-inactive")">@(student.IsPassing ? "Pass" : "Below pass mark")</span> } else { <span class="ra-panel-note">Not entered</span> }</td>
-                    <td><button class="ra-row-action ra-link-button" type="submit">Save result</button></form></td>
+                    <td><button form="@formId" class="ra-row-action ra-link-button" type="submit">Save result</button></td>
                 </tr>
-            }</tbody>
+            }
         </table></div>
     }
 </section>

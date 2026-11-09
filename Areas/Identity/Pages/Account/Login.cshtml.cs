@@ -67,9 +67,16 @@ public sealed class LoginModel(
                     int.TryParse(x.Value, out var studentId) && studentId > 0);
 
                 if (hasStudentLink)
+                {
+                    var mustChangePassword = claims.Any(x =>
+                        x.Type == StudentAccountAccess.MustChangePasswordClaim && x.Value == "true");
+                    if (mustChangePassword)
+                        return LocalRedirect("/Student/Account/ChangePassword");
+
                     return LocalRedirect(safeReturnUrl is not null &&
                         safeReturnUrl.StartsWith("/Student/", StringComparison.OrdinalIgnoreCase)
                         ? safeReturnUrl : "/Student/Dashboard");
+                }
             }
 
             await signInManager.SignOutAsync();

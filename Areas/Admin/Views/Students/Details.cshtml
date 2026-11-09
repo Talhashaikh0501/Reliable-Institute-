@@ -25,7 +25,10 @@
 {
     <section class="ra-panel ra-student-portal-status">
         <div><span class="ra-eyebrow">STUDENT PORTAL</span><h3>Login account linked</h3><p>This student record is linked to a secure Student role account.</p></div>
-        <span class="ra-status-pill is-active">@existingPortalUser</span>
+        <div class="ra-heading-actions">
+            <span class="ra-status-pill is-active">@existingPortalUser</span>
+            <a class="ra-secondary-button" asp-action="ResetPortalPassword" asp-route-id="@Model.Id">Change student password</a>
+        </div>
     </section>
 }
 else if (Model.IsActive && Model.Standard is StudentStandard.Tenth or StudentStandard.Eleventh or StudentStandard.Twelfth)

@@ -5,6 +5,7 @@ namespace ReliableAcademy.Services;
 public static class StudentAccountAccess
 {
     public const string StudentIdClaim = "rci:student_id";
+    public const string MustChangePasswordClaim = "rci:must_change_password";
 
     public static int? GetStudentId(ClaimsPrincipal principal)
     {

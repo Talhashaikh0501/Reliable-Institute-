@@ -37,7 +37,7 @@
     else
     {
         <div class="table-responsive"><table class="ra-data-table">
-            <thead><tr><th>STUDENT</th><th>ADMISSION NO.</th><th>STANDARD</th><th>BATCH</th><th>CONTACT</th><th>STATUS</th><th></th></tr></thead>
+            <thead><tr><th>STUDENT</th><th>ADMISSION NO.</th><th>STANDARD</th><th>BATCH</th><th>CONTACT</th><th>STATUS</th><th>ACTIONS</th></tr></thead>
             <tbody>
             @foreach (var student in Model.Students)
             {
@@ -46,7 +46,17 @@
                     <td><span class="ra-mono">@student.AdmissionNumber</span></td><td><span class="ra-standard-pill">@((int)student.Standard)th</span></td>
                     <td>@(student.Batch?.Name ?? "—")</td><td>@(student.PhoneNumber ?? student.GuardianPhone ?? "—")</td>
                     <td><span class="ra-status-pill @(student.IsActive ? "is-active" : "is-inactive")">@(student.IsActive ? "Active" : "Archived")</span></td>
-                    <td><a class="ra-row-action" asp-action="Details" asp-route-id="@student.Id">View <span>↗</span></a></td>
+                    <td>
+                        <div class="ra-heading-actions">
+                            <a class="ra-row-action" asp-action="Details" asp-route-id="@student.Id">View <span>↗</span></a>
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <form asp-action="ToggleStatus" asp-route-id="@student.Id" method="post">
+                                    <button type="submit" class="ra-secondary-button" aria-label="@(student.IsActive ? $"Remove {student.FullName} from active students" : $"Restore {student.FullName}")">@(student.IsActive ? "Remove" : "Restore")</button>
+                                </form>
+                            }
+                        </div>
+                    </td>
                 </tr>
             }
             </tbody>

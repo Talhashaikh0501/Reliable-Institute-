@@ -22,8 +22,6 @@ public class ApplicationDbContext : IdentityDbContext
     {
         base.OnModelCreating(builder);
 
-        // Keep every table owned by this application isolated on the shared SQL database.
-        // This includes ASP.NET Core Identity tables as well as coaching-management tables.
         builder.Entity<IdentityUser>().ToTable("RCI_AspNetUsers");
         builder.Entity<IdentityRole>().ToTable("RCI_AspNetRoles");
         builder.Entity<IdentityUserClaim<string>>().ToTable("RCI_AspNetUserClaims");
@@ -41,6 +39,7 @@ public class ApplicationDbContext : IdentityDbContext
         builder.Entity<Exam>().ToTable("RCI_Exams");
         builder.Entity<ExamResult>().ToTable("RCI_ExamResults");
         builder.Entity<Announcement>().ToTable("RCI_Announcements");
+
         builder.Entity<Student>(e =>
         {
             e.HasIndex(x => x.AdmissionNumber).IsUnique();
@@ -100,6 +99,12 @@ public class ApplicationDbContext : IdentityDbContext
         {
             e.Property(x => x.Title).HasMaxLength(160).IsRequired();
             e.Property(x => x.Message).HasMaxLength(3000).IsRequired();
+            e.HasIndex(x => x.BatchId);
+            e.HasIndex(x => x.CreatedByUserId);
+            e.HasOne(x => x.Batch).WithMany(x => x.Announcements)
+                .HasForeignKey(x => x.BatchId).OnDelete(DeleteBehavior.SetNull);
+            e.HasOne(x => x.CreatedBy).WithMany()
+                .HasForeignKey(x => x.CreatedByUserId).OnDelete(DeleteBehavior.SetNull);
         });
     }
 }

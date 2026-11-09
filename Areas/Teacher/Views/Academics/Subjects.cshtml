@@ -3,9 +3,9 @@
     ViewData["Title"] = "My subjects";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<div class="ra-page-heading"><div><div class="ra-eyebrow">TEACHING <span>•</span> CURRICULUM</div><h1>My subjects</h1><p>Active subjects for the standards covered by your assigned batches.</p></div></div>
+<div class="ra-page-heading"><div><div class="ra-eyebrow">TEACHING <span>•</span> CURRICULUM</div><h1>My subjects</h1><p>Only subjects explicitly assigned to you by an administrator appear here.</p></div></div>
 <section class="ra-panel ra-table-panel">
-    <div class="ra-panel-heading"><div><span>ASSIGNED STANDARDS</span><h3>Subject directory</h3></div><span class="ra-panel-note">@Model.Count subject(s)</span></div>
-    @if (Model.Count == 0) { <div class="ra-empty"><span>▤</span><b>No subjects available</b><p>Active subjects for your assigned standards will appear here.</p></div> }
-    else { <div class="ra-teacher-subject-grid">@foreach (var subject in Model) { <article><span class="ra-standard-pill">@((int)subject.Standard)th standard</span><b>@subject.Name</b><small>Active curriculum subject</small></article> }</div> }
+    <div class="ra-panel-heading"><div><span>YOUR TEACHING RESPONSIBILITIES</span><h3>Assigned subjects</h3></div><span class="ra-panel-note">@Model.Count subject(s)</span></div>
+    @if (Model.Count == 0) { <div class="ra-empty"><span>▤</span><b>No subjects assigned yet</b><p>Ask an administrator to assign your teaching batches and then select your subjects under Teachers & Staff.</p></div> }
+    else { <div class="ra-teacher-subject-grid">@foreach (var subject in Model) { <article><span class="ra-standard-pill">@((int)subject.Standard)th standard</span><b>@subject.Name</b><small>Assigned subject</small></article> }</div> }
 </section>

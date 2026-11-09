@@ -1,0 +1,25 @@
+@model TeacherAssignmentViewModel
+@{
+    ViewData["Title"] = "Teacher batch assignments";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="ra-page-heading"><div><div class="ra-eyebrow">PEOPLE <span>•</span> ACCESS CONTROL</div><h1>Assign teaching batches</h1><p>Choose which active batches this teacher can access. Changes take effect on the next request.</p></div><a class="ra-secondary-button" asp-action="Index">← Back to teachers</a></div>
+@if (TempData["Error"] is string error) { <div class="ra-alert-error" role="alert">@error</div> }
+<section class="ra-panel">
+    <div class="ra-panel-heading"><div><span>TEACHER ACCOUNT</span><h3>@Model.Email</h3></div><span class="ra-panel-note">@Model.Batches.Count(x => x.IsAssigned) assigned</span></div>
+    <form asp-action="SaveAssignments" method="post">
+        <input type="hidden" asp-for="UserId" />
+        <div class="ra-teacher-assignment-list">
+            @foreach (var batch in Model.Batches)
+            {
+                <label class="ra-teacher-assignment-option @(batch.IsActive ? "" : "is-disabled")">
+                    <input type="checkbox" name="BatchIds" value="@batch.Id" checked="@batch.IsAssigned" disabled="@(!batch.IsActive)" />
+                    <span><b>@batch.Name</b><small>@((int)batch.Standard)th standard · @batch.AcademicYear · @(batch.IsActive ? "Active" : "Archived")</small></span>
+                    <span class="ra-status-pill @(batch.IsActive ? "is-active" : "is-inactive")">@(batch.IsActive ? "Available" : "Archived")</span>
+                </label>
+            }
+        </div>
+        @if (Model.Batches.Count == 0) { <div class="ra-empty"><span>▦</span><b>No batches created</b><p>Create an active batch before assigning teachers.</p></div> }
+        <div class="ra-form-actions"><a class="ra-secondary-button" asp-action="Index">Cancel</a><button class="ra-primary-button" type="submit">Save batch access <span>→</span></button></div>
+    </form>
+</section>

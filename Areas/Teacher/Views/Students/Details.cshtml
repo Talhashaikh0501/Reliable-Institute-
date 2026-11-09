@@ -1,0 +1,28 @@
+@model TeacherStudentDetailsViewModel
+@{
+    ViewData["Title"] = "Student record";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="ra-page-heading"><div><div class="ra-eyebrow">TEACHING <span>•</span> STUDENT RECORD</div><h1>@Model.Student.FullName</h1><p>Academic and attendance information for a student in your assigned batch.</p></div><a class="ra-secondary-button" asp-action="Index">← Back to students</a></div>
+<div class="ra-content-grid">
+    <section class="ra-panel">
+        <div class="ra-panel-heading"><div><span>STUDENT PROFILE</span><h3>Academic details</h3></div></div>
+        <dl class="ra-teacher-detail-list">
+            <div><dt>Admission number</dt><dd>@Model.Student.AdmissionNumber</dd></div>
+            <div><dt>Standard</dt><dd>@((int)Model.Student.Standard)th</dd></div>
+            <div><dt>Batch</dt><dd>@(Model.Student.Batch?.Name ?? "—")</dd></div>
+            <div><dt>Academic year</dt><dd>@Model.Student.AcademicYear</dd></div>
+            <div><dt>Admission date</dt><dd>@Model.Student.AdmissionDate.ToString("dd MMM yyyy")</dd></div>
+            <div><dt>Status</dt><dd><span class="ra-status-pill is-active">Active</span></dd></div>
+        </dl>
+    </section>
+    <section class="ra-panel">
+        <div class="ra-panel-heading"><div><span>ATTENDANCE HISTORY</span><h3>Recent records</h3></div><span class="ra-panel-note">Last 12 entries</span></div>
+        @if (Model.RecentAttendance.Count == 0) { <div class="ra-empty"><span>✓</span><b>No attendance records</b><p>Attendance history will appear after the first register is submitted.</p></div> }
+        else {
+            <div class="ra-teacher-history-list">@foreach (var item in Model.RecentAttendance) {
+                <div><span>@item.AttendanceDate.ToString("dd MMM yyyy")</span><span class="ra-status-pill @(item.Status == AttendanceStatus.Present ? "is-active" : "is-inactive")">@item.Status</span></div>
+            }</div>
+        }
+    </section>
+</div>

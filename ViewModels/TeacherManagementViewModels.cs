@@ -26,4 +26,5 @@ public sealed class TeacherAccountViewModel
     public string Email { get; init; } = "";
     public string? PhoneNumber { get; init; }
     public bool IsLocked { get; init; }
+    public int AssignedBatchCount { get; init; }
 }

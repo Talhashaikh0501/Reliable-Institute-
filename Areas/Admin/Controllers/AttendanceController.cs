@@ -10,7 +10,7 @@ using ReliableAcademy.ViewModels;
 namespace ReliableAcademy.Areas.Admin.Controllers;
 
 [Area("Admin")]
-[Authorize(Roles = "Admin,Teacher")]
+[Authorize(Roles = "Admin")]
 public sealed class AttendanceController(ApplicationDbContext db) : Controller
 {
     [HttpGet]

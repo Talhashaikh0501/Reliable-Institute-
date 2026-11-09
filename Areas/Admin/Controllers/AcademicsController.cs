@@ -8,7 +8,7 @@ using ReliableAcademy.Models;
 namespace ReliableAcademy.Areas.Admin.Controllers;
 
 [Area("Admin")]
-[Authorize(Roles = "Admin,Teacher")]
+[Authorize(Roles = "Admin")]
 public sealed class AcademicsController(ApplicationDbContext db) : Controller
 {
     public async Task<IActionResult> Subjects(string? search, StudentStandard? standard, bool includeInactive = false)

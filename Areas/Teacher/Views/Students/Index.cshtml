@@ -1,0 +1,31 @@
+@model TeacherStudentsViewModel
+@{
+    ViewData["Title"] = "My students";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="ra-page-heading"><div><div class="ra-eyebrow">TEACHING <span>•</span> STUDENT DIRECTORY</div><h1>My students</h1><p>Browse students in batches assigned to your teacher account.</p></div></div>
+@if (TempData["Success"] is string success) { <div class="ra-alert-success" role="status">@success</div> }
+<section class="ra-panel ra-student-toolbar">
+    <form method="get" asp-action="Index" class="ra-filter-form">
+        <div class="ra-filter-field ra-batch-filter"><label for="batchId">Assigned batch</label><select id="batchId" name="batchId"><option value="">All my batches</option>@foreach (var batch in Model.Batches) { <option value="@batch.Id" selected="@(Model.BatchId == batch.Id)">@((int)batch.Standard)th · @batch.Name · @batch.AcademicYear</option> }</select></div>
+        <div class="ra-filter-field ra-search-field"><label for="search">Search students</label><input id="search" name="search" value="@Model.Search" placeholder="Name or admission number" /></div>
+        <button class="ra-secondary-button" type="submit">Apply filters</button>
+        <a class="ra-text-link" asp-action="Index">Clear</a>
+    </form>
+</section>
+<section class="ra-panel ra-table-panel">
+    <div class="ra-panel-heading"><div><span>ASSIGNED STUDENTS</span><h3>Student directory</h3></div><span class="ra-panel-note">@Model.Students.Count student(s)</span></div>
+    @if (Model.Students.Count == 0)
+    {
+        <div class="ra-empty ra-student-empty"><span>♙</span><b>No students found</b><p>Students appear here only when they belong to one of your assigned batches.</p></div>
+    }
+    else
+    {
+        <div class="table-responsive"><table class="ra-data-table">
+            <thead><tr><th>STUDENT</th><th>ADMISSION NO.</th><th>STANDARD</th><th>BATCH</th><th></th></tr></thead>
+            <tbody>@foreach (var student in Model.Students) {
+                <tr><td><b class="ra-student-name">@student.FullName</b></td><td><span class="ra-mono">@student.AdmissionNumber</span></td><td><span class="ra-standard-pill">@((int)student.Standard)th</span></td><td>@student.BatchName</td><td><a class="ra-row-action" asp-action="Details" asp-route-id="@student.Id">View record ↗</a></td></tr>
+            }</tbody>
+        </table></div>
+    }
+</section>

@@ -736,3 +736,70 @@
     .ra-workspace-body *::before,
     .ra-workspace-body *::after{scroll-behavior:auto!important;transition:none!important;animation:none!important}
 }
+
+
+/* Teacher workspace additions — inherits the shared admin workspace shell. */
+.ra-workspace-body .ra-teacher-hero-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:18px}
+.ra-workspace-body .ra-teacher-welcome{align-items:center}
+.ra-workspace-body .ra-teacher-no-assignments{margin:18px 0;padding:34px 22px}
+.ra-workspace-body .ra-teacher-main-grid{grid-template-columns:minmax(0,1.15fr) minmax(320px,.85fr);align-items:start}
+.ra-workspace-body .ra-teacher-lower-grid{grid-template-columns:minmax(0,1fr) minmax(320px,.9fr);align-items:start;margin-top:15px}
+.ra-workspace-body .ra-teacher-batch-list{display:flex;flex-direction:column;gap:10px}
+.ra-workspace-body .ra-teacher-batch-card{display:flex;align-items:center;gap:13px;min-width:0;padding:13px;border:1px solid #edf0eb;border-radius:12px;background:#fff}
+.ra-workspace-body .ra-teacher-batch-mark{display:grid;place-items:center;flex:none;width:42px;height:42px;border-radius:11px;background:#edf2eb;color:#52664e;font:800 14px 'Manrope',sans-serif}
+.ra-workspace-body .ra-teacher-batch-copy{flex:1;min-width:0}
+.ra-workspace-body .ra-teacher-batch-copy>b{display:block;color:#354037;font-size:12px;font-weight:800}
+.ra-workspace-body .ra-teacher-batch-copy>small{display:block;margin-top:3px;color:#8a958b;font-size:9px}
+.ra-workspace-body .ra-teacher-batch-progress{height:5px;overflow:hidden;margin:8px 0 4px;border-radius:99px;background:#edf1eb}
+.ra-workspace-body .ra-teacher-batch-progress>span{display:block;height:100%;border-radius:inherit;background:#789071}
+.ra-workspace-body .ra-teacher-exam-item{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.ra-workspace-body .ra-teacher-exam-item>div{min-width:0}
+.ra-workspace-body .ra-teacher-exam-item .ra-row-action{flex:none}
+.ra-workspace-body .ra-teacher-trend{display:grid;grid-template-columns:repeat(14,minmax(0,1fr));align-items:end;gap:7px;height:145px;padding:14px 2px 0}
+.ra-workspace-body .ra-teacher-trend-day{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:7px;height:100%;min-width:0}
+.ra-workspace-body .ra-teacher-trend-bar{display:flex;align-items:flex-end;width:100%;height:112px;overflow:hidden;border-radius:5px 5px 2px 2px;background:#f0f3ee}
+.ra-workspace-body .ra-teacher-trend-bar>span{display:block;width:100%;min-height:2px;border-radius:5px 5px 0 0;background:linear-gradient(180deg,#9eaf95,#657c60)}
+.ra-workspace-body .ra-teacher-trend-day>small{color:#8b958c;font-size:8px}
+.ra-workspace-body .ra-teacher-trend-legend{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:13px;color:#879187;font-size:9px}
+.ra-workspace-body .ra-teacher-trend-legend>span:first-child{display:inline-flex;align-items:center;gap:7px}
+.ra-workspace-body .ra-teacher-trend-legend i{width:8px;height:8px;border-radius:50%;background:#789071}
+.ra-workspace-body .ra-teacher-detail-list{display:flex;flex-direction:column;gap:0;margin:0}
+.ra-workspace-body .ra-teacher-detail-list>div{display:grid;grid-template-columns:150px minmax(0,1fr);gap:12px;padding:12px 0;border-bottom:1px solid #edf0eb}
+.ra-workspace-body .ra-teacher-detail-list>div:last-child{border-bottom:0}
+.ra-workspace-body .ra-teacher-detail-list dt{color:#8b958c;font-size:10px;font-weight:600}
+.ra-workspace-body .ra-teacher-detail-list dd{margin:0;color:#354037;font-size:11px;font-weight:700}
+.ra-workspace-body .ra-teacher-history-list{display:flex;flex-direction:column}
+.ra-workspace-body .ra-teacher-history-list>div{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid #edf0eb;color:#58645b;font-size:11px}
+.ra-workspace-body .ra-teacher-subject-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.ra-workspace-body .ra-teacher-subject-grid>article{display:flex;flex-direction:column;align-items:flex-start;gap:9px;padding:15px;border:1px solid #edf0eb;border-radius:11px;background:#fff}
+.ra-workspace-body .ra-teacher-subject-grid>article>b{color:#354037;font-size:13px}
+.ra-workspace-body .ra-teacher-subject-grid>article>small{color:#8b958c;font-size:9px}
+.ra-workspace-body .ra-teacher-assignment-list{display:flex;flex-direction:column;gap:8px}
+.ra-workspace-body .ra-teacher-assignment-option{display:flex;align-items:center;gap:12px;min-height:64px;padding:12px 14px;border:1px solid #e9ede8;border-radius:11px;background:#fff;cursor:pointer}
+.ra-workspace-body .ra-teacher-assignment-option>input{width:17px;height:17px;flex:none;accent-color:#657b60}
+.ra-workspace-body .ra-teacher-assignment-option>span:nth-child(2){display:flex;flex:1;min-width:0;flex-direction:column;gap:4px}
+.ra-workspace-body .ra-teacher-assignment-option b{color:#354037;font-size:11px}
+.ra-workspace-body .ra-teacher-assignment-option small{color:#8b958c;font-size:9px}
+.ra-workspace-body .ra-teacher-assignment-option.is-disabled{opacity:.58;cursor:not-allowed;background:#fafbf9}
+.ra-workspace-body .ra-teacher-mark-input{width:100px;min-height:34px;padding:6px 8px;border:1px solid #e5eae4;border-radius:7px;background:#fff;color:#354037;font-size:11px}
+.ra-workspace-body .ra-teacher-remarks{width:100%;min-width:120px;min-height:34px;padding:6px 8px;border:1px solid #e5eae4;border-radius:7px;background:#fff;color:#354037;font-size:10px}
+@media(max-width:1100px){
+    .ra-workspace-body .ra-teacher-main-grid,
+    .ra-workspace-body .ra-teacher-lower-grid{grid-template-columns:1fr}
+}
+@media(max-width:900px){
+    .ra-workspace-body .ra-teacher-hero-actions{width:100%;align-items:stretch;flex-direction:column}
+    .ra-workspace-body .ra-teacher-hero-actions>*{width:100%;justify-content:center}
+    .ra-workspace-body .ra-teacher-batch-card{align-items:flex-start;flex-wrap:wrap}
+    .ra-workspace-body .ra-teacher-batch-card>.ra-row-action{margin-left:55px}
+    .ra-workspace-body .ra-teacher-trend{gap:4px}
+    .ra-workspace-body .ra-teacher-trend-legend{align-items:flex-start;flex-direction:column}
+}
+@media(max-width:560px){
+    .ra-workspace-body .ra-teacher-subject-grid{grid-template-columns:1fr}
+    .ra-workspace-body .ra-teacher-detail-list>div{grid-template-columns:115px minmax(0,1fr)}
+    .ra-workspace-body .ra-teacher-exam-item{align-items:flex-start;flex-direction:column}
+    .ra-workspace-body .ra-teacher-exam-item .ra-row-action{margin-top:3px}
+    .ra-workspace-body .ra-teacher-mark-input{width:78px}
+    .ra-workspace-body .ra-teacher-remarks{min-width:95px}
+}

@@ -57,7 +57,6 @@ else if (Model.IsActive && Model.Standard is StudentStandard.Tenth or StudentSta
             <div><dt>Student phone</dt><dd>@(Model.PhoneNumber ?? "Not provided")</dd></div>
             <div><dt>Email</dt><dd>@(Model.Email ?? "Not provided")</dd></div>
             <div><dt>Date of birth</dt><dd>@(Model.DateOfBirth?.ToString("dd MMM yyyy") ?? "Not provided")</dd></div>
-            <div><dt>Division</dt><dd>@(Model.Division ?? "Not assigned")</dd></div>
             <div><dt>Parent / guardian</dt><dd>@(Model.GuardianName ?? "Not provided")</dd></div>
             <div><dt>Guardian phone</dt><dd>@(Model.GuardianPhone ?? "Not provided")</dd></div>
             <div><dt>Address</dt><dd>@(Model.Address ?? "Not provided")</dd></div>

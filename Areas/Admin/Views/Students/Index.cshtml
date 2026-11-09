@@ -4,17 +4,12 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <div class="ra-page-heading">
-    <div><div class="ra-eyebrow">INSTITUTE <span>•</span> STUDENT RECORDS</div><h1>Students</h1><p>Manage admissions, student details and class allocation.</p></div>
+    <div><div class="ra-eyebrow">INSTITUTE <span>•</span> STUDENT RECORDS</div><h1>Students</h1><p>Add and manage real student admissions, academic details and class allocation.</p></div>
     @if (User.IsInRole("Admin")) { <a class="ra-primary-button" asp-action="Create"><span>＋</span> Add student</a> }
 </div>
 @if (TempData["Success"] is string success) { <div class="ra-alert-success" role="status">@success</div> }
 @if (TempData["Error"] is string error) { <div class="ra-alert-error" role="alert">@error</div> }
-<section class="ra-panel ra-demo-seed-panel">
-    <div><span class="ra-eyebrow">QUICK TEST DATA</span><h3>Populate sample students</h3><p>Add 36 fictional student records — 12 each for 10th, 11th and 12th standard. Existing demo records are detected and never duplicated. No student accounts or real contact details are created automatically.</p></div>
-    <form asp-action="GenerateDemoStudents" method="post">
-        <button type="submit" class="ra-secondary-button">Generate 36 sample students</button>
-    </form>
-</section>
+
 <section class="ra-panel ra-student-toolbar">
     <form method="get" class="ra-filter-form">
         <div class="ra-search-field"><label for="search">Search students</label><input id="search" name="search" value="@Model.Search" placeholder="Name, admission no. or phone…" /></div>

@@ -849,18 +849,17 @@
 .ra-student-fee-row>span:first-child b,.ra-student-fee-row>span:first-child small,.ra-student-fee-row>span:last-child b,.ra-student-fee-row>span:last-child small{display:block}
 .ra-student-fee-row>span:first-child small,.ra-student-fee-row>span:last-child small{margin-top:3px;color:#929c92;font-size:9px}
 .ra-student-fee-row>span:last-child{text-align:right}
-.ra-portal-credentials,.ra-student-portal-status,.ra-demo-seed-panel{display:flex;align-items:center;justify-content:space-between;gap:18px;margin:0 0 18px;padding:18px 20px}
-.ra-portal-credentials h3,.ra-student-portal-status h3,.ra-demo-seed-panel h3{margin:5px 0;color:#344036;font:700 15px 'Manrope',sans-serif}
-.ra-portal-credentials p,.ra-student-portal-status p,.ra-demo-seed-panel p{max-width:700px;margin:0;color:#778278;font-size:11px;line-height:1.6}
+.ra-portal-credentials,.ra-student-portal-status{display:flex;align-items:center;justify-content:space-between;gap:18px;margin:0 0 18px;padding:18px 20px}
+.ra-portal-credentials h3,.ra-student-portal-status h3{margin:5px 0;color:#344036;font:700 15px 'Manrope',sans-serif}
+.ra-portal-credentials p,.ra-student-portal-status p{max-width:700px;margin:0;color:#778278;font-size:11px;line-height:1.6}
 .ra-portal-credentials dl{display:flex;gap:18px;margin:0}
 .ra-portal-credentials dl>div{min-width:0}
 .ra-portal-credentials dt{color:#929c92;font-size:9px;font-weight:700;text-transform:uppercase}
 .ra-portal-credentials dd{margin:4px 0 0;color:#344036;font-size:12px}
 .ra-portal-credentials code{padding:5px 8px;border-radius:6px;background:#f3f5f1;color:#344036;overflow-wrap:anywhere}
 .ra-student-portal-status>span{flex:none}
-.ra-demo-seed-panel form{flex:none}
 @media(max-width:1050px){.ra-student-stat-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.ra-student-dashboard-grid{grid-template-columns:1fr}}
-@media(max-width:640px){.ra-student-welcome{align-items:flex-start;flex-direction:column}.ra-student-identity{width:100%}.ra-student-stat-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.ra-student-stat{padding:14px!important}.ra-student-stat strong{font-size:22px}.ra-student-dashboard-grid>.ra-panel{padding:15px}.ra-portal-credentials,.ra-student-portal-status,.ra-demo-seed-panel{align-items:stretch;flex-direction:column}.ra-portal-credentials dl{flex-direction:column;gap:10px}.ra-demo-seed-panel form{width:100%}.ra-demo-seed-panel form button{width:100%}}
+@media(max-width:640px){.ra-student-welcome{align-items:flex-start;flex-direction:column}.ra-student-identity{width:100%}.ra-student-stat-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.ra-student-stat{padding:14px!important}.ra-student-stat strong{font-size:22px}.ra-student-dashboard-grid>.ra-panel{padding:15px}.ra-portal-credentials,.ra-student-portal-status{align-items:stretch;flex-direction:column}.ra-portal-credentials dl{flex-direction:column;gap:10px}}
 
 .ra-student-password-panel{max-width:680px;padding:24px!important}
 .ra-student-password-note{padding:13px 15px;margin-bottom:20px;border:1px solid #e8eee5;border-radius:10px;background:#f8faf7}

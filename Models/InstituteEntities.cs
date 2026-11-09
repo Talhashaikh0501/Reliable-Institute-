@@ -15,7 +15,6 @@ public class Student
     [Required, StringLength(160)] public string FullName { get; set; } = "";
     public StudentStandard Standard { get; set; }
     [Required, StringLength(20)] public string AcademicYear { get; set; } = "";
-    [StringLength(80)] public string? Division { get; set; }
     [StringLength(20)] public string? PhoneNumber { get; set; }
     [EmailAddress, StringLength(256)] public string? Email { get; set; }
     [StringLength(160)] public string? GuardianName { get; set; }

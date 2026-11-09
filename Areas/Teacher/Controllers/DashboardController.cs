@@ -67,6 +67,7 @@ public sealed class DashboardController(ApplicationDbContext db, UserManager<Ide
         var standards = model.Batches.Select(x => x.Standard).Distinct().ToList();
         var exams = await db.Exams.AsNoTracking()
             .Include(x => x.Subject).Include(x => x.Batch)
+            .Include(x => x.Results).ThenInclude(x => x.Student)
             .Where(x => x.ExamDate >= today &&
                 ((x.BatchId.HasValue && activeBatchIds.Contains(x.BatchId.Value)) ||
                  (!x.BatchId.HasValue && standards.Contains(x.Subject.Standard))))

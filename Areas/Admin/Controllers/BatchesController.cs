@@ -8,7 +8,7 @@ using ReliableAcademy.ViewModels;
 namespace ReliableAcademy.Areas.Admin.Controllers;
 
 [Area("Admin")]
-[Authorize(Roles = "Admin,Teacher")]
+[Authorize(Roles = "Admin")]
 public sealed class BatchesController(ApplicationDbContext db) : Controller
 {
     public async Task<IActionResult> Index(bool includeInactive = false)

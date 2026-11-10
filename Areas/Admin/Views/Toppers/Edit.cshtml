@@ -1,0 +1,9 @@
+@model ReliableAcademy.ViewModels.TopperFormViewModel
+@{
+    ViewData["Title"] = "Edit topper";
+    ViewData["FormAction"] = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="ra-page-heading"><div><div class="ra-eyebrow">WEBSITE CONTENT <span>•</span> STUDENT ACHIEVEMENTS</div><h1>Edit topper</h1><p>Update the student's details, result, photograph or homepage visibility.</p></div><a class="ra-secondary-button" asp-action="Index">← Back to toppers</a></div>
+<partial name="_TopperForm" model="Model" view-data="ViewData" />
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

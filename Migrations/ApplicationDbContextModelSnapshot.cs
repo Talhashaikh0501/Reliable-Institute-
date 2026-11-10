@@ -220,6 +220,26 @@ namespace ReliableAcademy.Migrations
                     b.ToTable("RCI_AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("ReliableAcademy.Models.Topper", b =>
+                {
+                    b.Property<int>("Id").ValueGeneratedOnAdd().HasColumnType("int");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<string>("StudentName").IsRequired().HasMaxLength(160).HasColumnType("nvarchar(160)");
+                    b.Property<int>("Standard").HasColumnType("int");
+                    b.Property<string>("AcademicYear").IsRequired().HasMaxLength(20).HasColumnType("nvarchar(20)");
+                    b.Property<string>("ExamName").IsRequired().HasMaxLength(100).HasColumnType("nvarchar(100)");
+                    b.Property<decimal>("MarksObtained").HasPrecision(9, 2).HasColumnType("decimal(9,2)");
+                    b.Property<decimal>("MaximumMarks").HasPrecision(9, 2).HasColumnType("decimal(9,2)");
+                    b.Property<string>("PhotoPath").IsRequired().HasMaxLength(500).HasColumnType("nvarchar(500)");
+                    b.Property<int>("DisplayOrder").HasColumnType("int");
+                    b.Property<bool>("IsPublished").HasColumnType("bit");
+                    b.Property<bool>("HasPublicationConsent").HasColumnType("bit");
+                    b.Property<DateTime>("CreatedAtUtc").HasColumnType("datetime2");
+                    b.HasKey("Id");
+                    b.HasIndex("IsPublished", "DisplayOrder");
+                    b.ToTable("RCI_Toppers", (string)null);
+                });
+
             modelBuilder.Entity("ReliableAcademy.Models.Announcement", b =>
                 {
                     b.Property<int>("Id")

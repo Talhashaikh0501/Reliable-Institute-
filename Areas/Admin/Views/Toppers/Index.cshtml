@@ -1,0 +1,36 @@
+@model IReadOnlyList<ReliableAcademy.Models.Topper>
+@{
+    ViewData["Title"] = "Manage toppers";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="ra-page-heading">
+    <div><div class="ra-eyebrow">WEBSITE CONTENT <span>•</span> STUDENT ACHIEVEMENTS</div><h1>Manage toppers</h1><p>Add achievers, update their photographs and marks, and control what appears on the public homepage.</p></div>
+    <a class="ra-primary-button" asp-action="Create"><span>＋</span> Add topper</a>
+</div>
+@if (TempData["Success"] is string success) { <div class="ra-alert-success" role="status">@success</div> }
+@if (TempData["Error"] is string error) { <div class="ra-alert-error" role="alert">@error</div> }
+<section class="ra-panel ra-table-panel">
+    <div class="ra-panel-heading"><div><span>PUBLIC HOMEPAGE</span><h3>Topper records</h3></div><span class="ra-panel-note">@Model.Count record(s)</span></div>
+    @if (Model.Count == 0)
+    {
+        <div class="ra-empty"><span>★</span><b>No toppers added yet</b><p>Add the first student achiever to start building the homepage topper wall.</p><a class="ra-primary-button" asp-action="Create">Add first topper</a></div>
+    }
+    else
+    {
+        <div class="table-responsive"><table class="ra-data-table">
+            <thead><tr><th>STUDENT</th><th>STANDARD / YEAR</th><th>RESULT</th><th>HOMEPAGE</th><th>ACTIONS</th></tr></thead>
+            <tbody>
+            @foreach (var topper in Model)
+            {
+                <tr>
+                    <td><div style="display:flex;align-items:center;gap:12px"><img src="@Url.Content("~/" + topper.PhotoPath.TrimStart('/'))" alt="" style="width:48px;height:56px;object-fit:cover;border-radius:8px" /><div><b>@topper.StudentName</b><small class="ra-table-sub">@topper.ExamName</small></div></div></td>
+                    <td>@((int)topper.Standard)th<br /><small class="ra-table-sub">@topper.AcademicYear</small></td>
+                    <td><b>@topper.Percentage.ToString("0.0")%</b><small class="ra-table-sub">@topper.MarksObtained.ToString("0.##") / @topper.MaximumMarks.ToString("0.##")</small></td>
+                    <td><span class="ra-status-pill @(topper.IsPublished && topper.HasPublicationConsent ? "is-active" : "is-inactive")">@(topper.IsPublished && topper.HasPublicationConsent ? "Visible" : "Hidden")</span></td>
+                    <td><div class="ra-heading-actions"><a class="ra-row-action" asp-action="Edit" asp-route-id="@topper.Id">Edit <span>↗</span></a><form asp-action="Delete" asp-route-id="@topper.Id" method="post" onsubmit="return confirm('Remove this topper record?');"><button type="submit" class="ra-secondary-button">Delete</button></form></div></td>
+                </tr>
+            }
+            </tbody>
+        </table></div>
+    }
+</section>

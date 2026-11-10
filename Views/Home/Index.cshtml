@@ -1,3 +1,4 @@
+@model IReadOnlyList<ReliableAcademy.Models.Topper>
 @{
     ViewData["Title"] = "Reliable Coaching Classes";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -115,40 +116,35 @@
         </div>
     </section>
 
+    @if (Model.Count > 0)
+    {
     <section class="rci-next-results" id="results">
         <div class="rci-next-results-inner">
             <div class="rci-next-results-copy">
                 <div class="rci-next-section-kicker rci-next-kicker-light"><span>04</span> A CELEBRATION OF EFFORT</div>
                 <h2>Every achievement<br />begins with <em>effort.</em></h2>
-                <p>We believe every student's progress deserves recognition. This sample topper display shows how verified student achievements can be presented on the website.</p>
-                <div class="rci-next-demo-notice"><span>DEMO CONTENT</span><b>Illustrative names and marks only.</b><small>These are not actual Reliable student results. Replace every sample with verified results and obtain permission before publishing.</small></div>
+                <p>We are proud to recognise the dedication, discipline and hard work of our students. Meet some of our achievers.</p>
+                <div class="rci-next-demo-notice"><span>STUDENT ACHIEVEMENTS</span><b>Celebrating effort and progress.</b><small>Results are published by the institute with permission from the student and their parent or guardian.</small></div>
             </div>
-            <div class="rci-next-topper-wall" aria-label="Demonstration topper cards, not actual results">
-                <div class="rci-next-topper-wall-head"><span>THE TOPPER WALL</span><span>LAYOUT PREVIEW / SAMPLE DATA</span></div>
+            <div class="rci-next-topper-wall" aria-label="Reliable Coaching Classes student achievers">
+                <div class="rci-next-topper-wall-head"><span>THE TOPPER WALL</span><span>RELIABLE ACHIEVERS</span></div>
                 <div class="rci-next-topper-grid">
-                    <article class="rci-next-topper-card rci-next-topper-main">
-                        <span class="rci-next-topper-rank">01 <i>· SAMPLE</i></span>
-                        <strong>96.8<small>%</small></strong>
-                        <b>Sample Student A</b>
-                        <span>STANDARD X · DEMO SCORE</span>
-                    </article>
-                    <article class="rci-next-topper-card">
-                        <span class="rci-next-topper-rank">02 <i>· SAMPLE</i></span>
-                        <strong>95.4<small>%</small></strong>
-                        <b>Sample Student B</b>
-                        <span>STANDARD XII · DEMO SCORE</span>
-                    </article>
-                    <article class="rci-next-topper-card">
-                        <span class="rci-next-topper-rank">03 <i>· SAMPLE</i></span>
-                        <strong>94.2<small>%</small></strong>
-                        <b>Sample Student C</b>
-                        <span>STANDARD X · DEMO SCORE</span>
-                    </article>
+                    @foreach (var topper in Model)
+                    {
+                        <article class="rci-next-topper-card">
+                            <div class="rci-next-topper-photo"><img src="@Url.Content("~/" + topper.PhotoPath.TrimStart('/'))" alt="Photograph of @topper.StudentName" loading="lazy" /></div>
+                            <span class="rci-next-topper-rank">@((int)topper.Standard)TH STANDARD <i>· @topper.AcademicYear</i></span>
+                            <strong>@topper.Percentage.ToString("0.0")<small>%</small></strong>
+                            <b>@topper.StudentName</b>
+                            <span>@topper.ExamName · @topper.MarksObtained.ToString("0.##") / @topper.MaximumMarks.ToString("0.##") MARKS</span>
+                        </article>
+                    }
                 </div>
-                <div class="rci-next-topper-foot"><span>RECOGNISING DEDICATION</span><span>REPLACE WITH VERIFIED RESULTS</span></div>
+                <div class="rci-next-topper-foot"><span>RECOGNISING DEDICATION</span><span>RELIABLE COACHING CLASSES</span></div>
             </div>
         </div>
     </section>
+    }
 
     <section class="rci-next-section rci-next-gallery">
         <div class="rci-next-gallery-heading">

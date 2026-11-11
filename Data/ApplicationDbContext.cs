@@ -17,6 +17,7 @@ public class ApplicationDbContext : IdentityDbContext
     public DbSet<Exam> Exams => Set<Exam>();
     public DbSet<ExamResult> ExamResults => Set<ExamResult>();
     public DbSet<Announcement> Announcements => Set<Announcement>();
+    public DbSet<Topper> Toppers => Set<Topper>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -39,6 +40,7 @@ public class ApplicationDbContext : IdentityDbContext
         builder.Entity<Exam>().ToTable("RCI_Exams");
         builder.Entity<ExamResult>().ToTable("RCI_ExamResults");
         builder.Entity<Announcement>().ToTable("RCI_Announcements");
+        builder.Entity<Topper>().ToTable("RCI_Toppers");
 
         builder.Entity<Student>(e =>
         {
@@ -94,6 +96,16 @@ public class ApplicationDbContext : IdentityDbContext
             e.HasIndex(x => new { x.ExamId, x.StudentId }).IsUnique();
             e.HasOne(x => x.Exam).WithMany(x => x.Results).HasForeignKey(x => x.ExamId).OnDelete(DeleteBehavior.Cascade);
             e.HasOne(x => x.Student).WithMany().HasForeignKey(x => x.StudentId).OnDelete(DeleteBehavior.Cascade);
+        });
+        builder.Entity<Topper>(e =>
+        {
+            e.Property(x => x.StudentName).HasMaxLength(160).IsRequired();
+            e.Property(x => x.AcademicYear).HasMaxLength(20).IsRequired();
+            e.Property(x => x.ExamName).HasMaxLength(100).IsRequired();
+            e.Property(x => x.MarksObtained).HasPrecision(9, 2);
+            e.Property(x => x.MaximumMarks).HasPrecision(9, 2);
+            e.Property(x => x.PhotoPath).HasMaxLength(500).IsRequired();
+            e.HasIndex(x => new { x.IsPublished, x.DisplayOrder });
         });
         builder.Entity<Announcement>(e =>
         {

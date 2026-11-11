@@ -1,0 +1,9 @@
+@model ReliableAcademy.ViewModels.TopperFormViewModel
+@{
+    ViewData["Title"] = "Add topper";
+    ViewData["FormAction"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="ra-page-heading"><div><div class="ra-eyebrow">WEBSITE CONTENT <span>•</span> STUDENT ACHIEVEMENTS</div><h1>Add topper</h1><p>Enter verified result details and choose the photograph to display on the homepage.</p></div><a class="ra-secondary-button" asp-action="Index">← Back to toppers</a></div>
+<partial name="_TopperForm" model="Model" view-data="ViewData" />
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

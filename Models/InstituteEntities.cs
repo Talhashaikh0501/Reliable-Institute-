@@ -8,6 +8,23 @@ public enum StudentStandard { Eighth = 8, Ninth = 9, Tenth = 10, Eleventh = 11, 
 public enum AttendanceStatus { Present, Absent, Late, Leave }
 public enum AnnouncementAudience { Everyone, Teachers, Students }
 
+public class Topper
+{
+    public int Id { get; set; }
+    [Required, StringLength(160)] public string StudentName { get; set; } = "";
+    public StudentStandard Standard { get; set; }
+    [Required, StringLength(20)] public string AcademicYear { get; set; } = "";
+    [Required, StringLength(100)] public string ExamName { get; set; } = "";
+    [Range(typeof(decimal), "0", "100000")] public decimal MarksObtained { get; set; }
+    [Range(typeof(decimal), "0.01", "100000")] public decimal MaximumMarks { get; set; }
+    [Required, StringLength(500)] public string PhotoPath { get; set; } = "";
+    public int DisplayOrder { get; set; }
+    public bool IsPublished { get; set; }
+    public bool HasPublicationConsent { get; set; }
+    public DateTime CreatedAtUtc { get; set; } = DateTime.UtcNow;
+    [NotMapped] public decimal Percentage => MaximumMarks <= 0 ? 0 : Math.Round(MarksObtained / MaximumMarks * 100, 1);
+}
+
 public class Student
 {
     public int Id { get; set; }

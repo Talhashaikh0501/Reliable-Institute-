@@ -15,6 +15,7 @@ public class Topper
     public StudentStandard Standard { get; set; }
     [Required, StringLength(20)] public string AcademicYear { get; set; } = "";
     [Required, StringLength(100)] public string ExamName { get; set; } = "";
+    [StringLength(240)] public string? AchievementNote { get; set; }
     [Range(typeof(decimal), "0", "100000")] public decimal MarksObtained { get; set; }
     [Range(typeof(decimal), "0.01", "100000")] public decimal MaximumMarks { get; set; }
     [Required, StringLength(500)] public string PhotoPath { get; set; } = "";

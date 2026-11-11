@@ -23,6 +23,10 @@ public sealed class TopperFormViewModel
     [Display(Name = "Exam / result title")]
     public string ExamName { get; set; } = "Board Examination";
 
+    [StringLength(240)]
+    [Display(Name = "Special achievement (optional)")]
+    public string? AchievementNote { get; set; }
+
     [Range(typeof(decimal), "0", "100000")]
     [Display(Name = "Marks obtained")]
     public decimal MarksObtained { get; set; }

@@ -2037,3 +2037,44 @@ html{scroll-behavior:smooth}::selection{background:#e9d5a7;color:#172338}
   .rci-next-topper-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
   .rci-next-topper-photo{height:125px}
 }
+
+
+/* Topper cards: portrait-first photos for passport and everyday phone pictures. */
+.rci-next-topper-photo{
+  width:100%;
+  height:auto;
+  aspect-ratio:4 / 5;
+  max-height:260px;
+  margin-bottom:14px;
+  overflow:hidden;
+  background:#dedbd3;
+}
+.rci-next-topper-photo img{
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center 25%;
+}
+.rci-next-topper-achievement{
+  display:flex;
+  align-items:flex-start;
+  gap:8px;
+  margin-top:13px;
+  padding:10px 11px;
+  border:1px solid #d8c49a;
+  background:#f5edda;
+  color:#6f542c;
+  font-size:10px;
+  line-height:1.5;
+}
+.rci-next-topper-achievement>span{
+  flex:0 0 auto;
+  color:#ad8248;
+  font-size:13px;
+  line-height:1.2;
+}
+.rci-next-topper-achievement>b{font-weight:800}
+@media(max-width:560px){
+  .rci-next-topper-photo{height:auto;aspect-ratio:4 / 5;max-height:220px}
+}

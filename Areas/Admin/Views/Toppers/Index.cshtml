@@ -23,7 +23,7 @@
             @foreach (var topper in Model)
             {
                 <tr>
-                    <td><div style="display:flex;align-items:center;gap:12px"><img src="@Url.Content("~/" + topper.PhotoPath.TrimStart('/'))" alt="" style="width:48px;height:56px;object-fit:cover;border-radius:8px" /><div><b>@topper.StudentName</b><small class="ra-table-sub">@topper.ExamName</small></div></div></td>
+                    <td><div style="display:flex;align-items:center;gap:12px"><img src="@Url.Content("~/" + topper.PhotoPath.TrimStart('/'))" alt="" style="width:48px;height:56px;object-fit:contain;background:#f1f0ec;border-radius:8px" /><div><b>@topper.StudentName</b><small class="ra-table-sub">@topper.ExamName</small></div></div></td>
                     <td>@((int)topper.Standard)th<br /><small class="ra-table-sub">@topper.AcademicYear</small></td>
                     <td><b>@topper.Percentage.ToString("0.0")%</b><small class="ra-table-sub">@topper.MarksObtained.ToString("0.##") / @topper.MaximumMarks.ToString("0.##")</small></td>
                     <td><span class="ra-status-pill @(topper.IsPublished && topper.HasPublicationConsent ? "is-active" : "is-inactive")">@(topper.IsPublished && topper.HasPublicationConsent ? "Visible" : "Hidden")</span></td>

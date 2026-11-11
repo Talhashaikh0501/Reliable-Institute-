@@ -137,6 +137,10 @@
                             <strong>@topper.Percentage.ToString("0.0")<small>%</small></strong>
                             <b>@topper.StudentName</b>
                             <span>@topper.ExamName · @topper.MarksObtained.ToString("0.##") / @topper.MaximumMarks.ToString("0.##") MARKS</span>
+                            @if (!string.IsNullOrWhiteSpace(topper.AchievementNote))
+                            {
+                                <div class="rci-next-topper-achievement"><span aria-hidden="true">★</span><b>@topper.AchievementNote</b></div>
+                            }
                         </article>
                     }
                 </div>

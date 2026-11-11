@@ -18,7 +18,7 @@
             <div class="col-12"><label asp-for="Photo" class="form-label"></label><input asp-for="Photo" class="form-control" type="file" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp" /><div class="form-text">JPG, PNG or WebP · Maximum 5 MB. @(Model.ExistingPhotoPath is null ? "A photograph is required." : "Leave empty to keep the current photograph.")</div><span asp-validation-for="Photo" class="text-danger"></span></div>
             @if (!string.IsNullOrWhiteSpace(Model.ExistingPhotoPath))
             {
-                <div class="col-12"><div class="form-text mb-2">Current photograph</div><img src="@Url.Content("~/" + Model.ExistingPhotoPath.TrimStart('/'))" alt="Current topper photograph" style="width:110px;height:130px;object-fit:cover;border-radius:10px" /></div>
+                <div class="col-12"><div class="form-text mb-2">Current photograph</div><img src="@Url.Content("~/" + Model.ExistingPhotoPath.TrimStart('/'))" alt="Current topper photograph" style="width:110px;height:130px;object-fit:contain;background:#f1f0ec;border-radius:10px" /></div>
             }
             <div class="col-12"><div class="form-check"><input asp-for="IsPublished" class="form-check-input" /><label asp-for="IsPublished" class="form-check-label"></label></div></div>
             <div class="col-12"><div class="form-check"><input asp-for="HasPublicationConsent" class="form-check-input" /><label asp-for="HasPublicationConsent" class="form-check-label"></label><span asp-validation-for="HasPublicationConsent" class="text-danger d-block"></span></div><div class="form-text">A record is shown publicly only when it is marked visible and this permission is confirmed.</div></div>

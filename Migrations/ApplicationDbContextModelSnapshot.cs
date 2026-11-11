@@ -228,6 +228,7 @@ namespace ReliableAcademy.Migrations
                     b.Property<int>("Standard").HasColumnType("int");
                     b.Property<string>("AcademicYear").IsRequired().HasMaxLength(20).HasColumnType("nvarchar(20)");
                     b.Property<string>("ExamName").IsRequired().HasMaxLength(100).HasColumnType("nvarchar(100)");
+                    b.Property<string>("AchievementNote").HasMaxLength(240).HasColumnType("nvarchar(240)");
                     b.Property<decimal>("MarksObtained").HasPrecision(9, 2).HasColumnType("decimal(9,2)");
                     b.Property<decimal>("MaximumMarks").HasPrecision(9, 2).HasColumnType("decimal(9,2)");
                     b.Property<string>("PhotoPath").IsRequired().HasMaxLength(500).HasColumnType("nvarchar(500)");

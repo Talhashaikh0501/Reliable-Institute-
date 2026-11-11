@@ -58,6 +58,7 @@ public sealed class ToppersController(ApplicationDbContext db, IWebHostEnvironme
             Standard = model.Standard,
             AcademicYear = model.AcademicYear.Trim(),
             ExamName = model.ExamName.Trim(),
+            AchievementNote = string.IsNullOrWhiteSpace(model.AchievementNote) ? null : model.AchievementNote.Trim(),
             MarksObtained = model.MarksObtained,
             MaximumMarks = model.MaximumMarks,
             PhotoPath = photoPath,
@@ -85,6 +86,7 @@ public sealed class ToppersController(ApplicationDbContext db, IWebHostEnvironme
             Standard = topper.Standard,
             AcademicYear = topper.AcademicYear,
             ExamName = topper.ExamName,
+            AchievementNote = topper.AchievementNote,
             MarksObtained = topper.MarksObtained,
             MaximumMarks = topper.MaximumMarks,
             DisplayOrder = topper.DisplayOrder,
@@ -127,6 +129,7 @@ public sealed class ToppersController(ApplicationDbContext db, IWebHostEnvironme
         topper.Standard = model.Standard;
         topper.AcademicYear = model.AcademicYear.Trim();
         topper.ExamName = model.ExamName.Trim();
+        topper.AchievementNote = string.IsNullOrWhiteSpace(model.AchievementNote) ? null : model.AchievementNote.Trim();
         topper.MarksObtained = model.MarksObtained;
         topper.MaximumMarks = model.MaximumMarks;
         topper.DisplayOrder = model.DisplayOrder;

@@ -41,9 +41,13 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 
 // Keep encryption keys on the application data volume so encrypted assistant settings survive restarts.
-builder.Services.AddDataProtection()
+var dataProtection = builder.Services.AddDataProtection()
     .SetApplicationName("ReliableAcademy")
     .PersistKeysToFileSystem(new DirectoryInfo(dataProtectionKeysPath));
+if (OperatingSystem.IsWindows())
+{
+    dataProtection.ProtectKeysWithDpapi();
+}
 builder.Services.AddSingleton<AssistantSettingsStore>();
 builder.Services.AddScoped<AssistantDataTools>();
 builder.Services.AddHttpClient<AssistantAiService>(client =>

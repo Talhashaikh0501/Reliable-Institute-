@@ -482,3 +482,6 @@ $RECYCLE.BIN/
 
 # Vim temporary swap files
 *.swp
+
+# Runtime-only assistant settings and Data Protection key ring
+/App_Data/

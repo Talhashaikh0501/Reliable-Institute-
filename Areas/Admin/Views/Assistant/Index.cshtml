@@ -6,7 +6,7 @@
 }
 <div class="ra-assistant-page" id="ra-assistant"
      data-chat-url="@Url.Action("Chat", "Assistant", new { area = "Admin" })"
-     data-is-enabled="@isEnabled.ToString().ToLowerInvariant()">
+     data-is-ready="@((hasApiKey && isEnabled).ToString().ToLowerInvariant())">
     @Html.AntiForgeryToken()
     <header class="ra-assistant-header">
         <div class="ra-assistant-heading">
@@ -55,10 +55,10 @@
                 </div>
             </div>
             <form class="ra-assistant-composer" id="assistant-form">
-                <textarea id="assistant-input" rows="1" maxlength="2000" placeholder="Ask anything about your institute..." aria-label="Your question" required></textarea>
+                <textarea id="assistant-input" rows="1" maxlength="2000" placeholder="@(hasApiKey && isEnabled ? "Ask anything about your institute..." : "Open Assistant Settings to connect and enable the assistant.")" aria-label="Your question" required disabled="@(!(hasApiKey && isEnabled))"></textarea>
                 <div class="ra-assistant-composer-bottom">
                     <span><i></i> Connected to institute records when configured</span>
-                    <button type="submit" id="assistant-send" disabled><span>Send question</span><b>↑</b></button>
+                    <button type="submit" id="assistant-send" disabled="@(!(hasApiKey && isEnabled))"><span>Send question</span><b>↑</b></button>
                 </div>
             </form>
             <div class="ra-assistant-privacy-note"><span>◇</span> Only the records needed to answer a question are sent to the AI service. Avoid requesting sensitive contact details or passwords.</div>

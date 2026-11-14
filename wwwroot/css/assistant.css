@@ -155,3 +155,73 @@
  .ra-assistant-settings-actions>*{width:100%}
 }
 @media(prefers-reduced-motion:reduce){.ra-assistant-page *, .ra-assistant-settings-page *{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
+
+
+/* Structured, safe Markdown presentation for assistant answers */
+.ra-assistant-message-body.is-formatted{
+ white-space:normal;
+ font-size:12px;
+ line-height:1.75;
+ color:#435044;
+}
+.ra-assistant-message-body.is-formatted>p{margin:0 0 10px}
+.ra-assistant-message-body.is-formatted>p:last-child{margin-bottom:0}
+.ra-assistant-message-body.is-formatted h2,
+.ra-assistant-message-body.is-formatted h3,
+.ra-assistant-message-body.is-formatted h4{
+ color:#344638;
+ font-family:'Manrope',sans-serif;
+ font-weight:800;
+ line-height:1.3;
+ letter-spacing:-.2px;
+}
+.ra-assistant-message-body.is-formatted h2{font-size:16px;margin:0 0 8px}
+.ra-assistant-message-body.is-formatted h3{font-size:12px;margin:16px 0 8px}
+.ra-assistant-message-body.is-formatted h4{font-size:11px;margin:13px 0 6px}
+.ra-assistant-message-body.is-formatted strong{color:#354a38;font-weight:800}
+.ra-assistant-message-body.is-formatted em{color:#788777}
+.ra-assistant-message-body.is-formatted ul,
+.ra-assistant-message-body.is-formatted ol{margin:5px 0 12px;padding-left:20px}
+.ra-assistant-message-body.is-formatted li{padding-left:3px;margin:4px 0}
+.ra-assistant-message-body.is-formatted li::marker{color:#91a287}
+.ra-assistant-message-body.is-formatted blockquote{
+ margin:12px 0;
+ padding:10px 13px;
+ border-left:3px solid #9cad91;
+ border-radius:0 8px 8px 0;
+ background:#f3f6f0;
+ color:#4c5d4b;
+}
+.ra-assistant-message-body.is-formatted blockquote p{margin:0}
+.ra-assistant-message-body.is-formatted hr{height:1px;margin:13px 0;border:0;background:#e8ede6}
+.ra-assistant-table-wrap{
+ max-width:100%;
+ margin:9px 0 13px;
+ overflow-x:auto;
+ border:1px solid #e7ece5;
+ border-radius:9px;
+ background:#fff;
+}
+.ra-assistant-table-wrap table{width:100%;border-collapse:separate;border-spacing:0;font-size:10.5px;line-height:1.55}
+.ra-assistant-table-wrap th{
+ padding:9px 11px;
+ background:#f3f6f1;
+ color:#61745d;
+ font-size:9px;
+ font-weight:800;
+ text-align:left;
+ white-space:nowrap;
+}
+.ra-assistant-table-wrap td{
+ padding:8px 11px;
+ border-top:1px solid #edf1eb;
+ color:#4c594d;
+ vertical-align:top;
+}
+.ra-assistant-table-wrap tr:nth-child(even) td{background:#fbfcfa}
+.ra-assistant-table-wrap td:last-child{font-variant-numeric:tabular-nums}
+@media(max-width:640px){
+ .ra-assistant-message-body.is-formatted{font-size:11.5px}
+ .ra-assistant-table-wrap table{min-width:300px}
+ .ra-assistant-table-wrap th,.ra-assistant-table-wrap td{padding:8px}
+}

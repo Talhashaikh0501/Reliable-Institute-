@@ -257,7 +257,7 @@ public sealed class AssistantDataTools(ApplicationDbContext db, UserManager<Iden
         minimum = Math.Clamp(minimum, 0m, 100m);
         var standard = GetStandard(args, "standard");
         var batchName = GetString(args, "batch_name");
-        var (from, to) = GetDateRange(args, defaultToMonth: false);
+        var (from, to) = GetOptionalDateRange(args);
         var limit = Math.Clamp(GetInteger(args, "max_results", 20), 1, 25);
 
         var query = db.Students.AsNoTracking().Where(x => x.IsActive);
@@ -637,6 +637,27 @@ public sealed class AssistantDataTools(ApplicationDbContext db, UserManager<Iden
                 x.AchievementNote
             })
         };
+    }
+
+    private static (DateOnly? From, DateOnly? To) GetOptionalDateRange(JsonElement args)
+    {
+        var today = DateOnly.FromDateTime(DateTime.Today);
+        var from = GetDate(args, "from_date");
+        var to = GetDate(args, "to_date");
+
+        // No dates means analyse the complete attendance history.
+        // A supplied start date without an end date runs through today.
+        if (from.HasValue && !to.HasValue)
+            to = today;
+
+        if (from.HasValue && to.HasValue && from.Value > to.Value)
+            (from, to) = (to, from);
+
+        // Keep broad date filters bounded while preserving the requested end date.
+        if (from.HasValue && to.HasValue && to.Value.DayNumber - from.Value.DayNumber > 366)
+            from = to.Value.AddDays(-366);
+
+        return (from, to);
     }
 
     private static (DateOnly From, DateOnly To) GetDateRange(JsonElement args, bool defaultToMonth)

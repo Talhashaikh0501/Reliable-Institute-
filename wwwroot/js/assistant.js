@@ -13,6 +13,150 @@ document.addEventListener("DOMContentLoaded", function () {
         let isBusy = false;
         const assistantReady = chatRoot.dataset.isReady === "true";
 
+        function appendInlineFormatting(parent, text) {
+            const pattern = /(\*\*[^*]+\*\*|\*[^*\n]+\*)/g;
+            let lastIndex = 0;
+            let match;
+
+            while ((match = pattern.exec(text)) !== null) {
+                if (match.index > lastIndex) {
+                    parent.appendChild(document.createTextNode(text.slice(lastIndex, match.index)));
+                }
+
+                const token = match[0];
+                const element = document.createElement(token.startsWith("**") ? "strong" : "em");
+                element.textContent = token.startsWith("**")
+                    ? token.slice(2, -2)
+                    : token.slice(1, -1);
+                parent.appendChild(element);
+                lastIndex = pattern.lastIndex;
+            }
+
+            if (lastIndex < text.length) {
+                parent.appendChild(document.createTextNode(text.slice(lastIndex)));
+            }
+        }
+
+        function renderAssistantMarkdown(container, markdown) {
+            const lines = String(markdown || "").replace(/\r\n?/g, "\n").split("\n");
+            let index = 0;
+
+            function isTableSeparator(line) {
+                return /^\s*\|?\s*:?-{3,}:?\s*(\|\s*:?-{3,}:?\s*)+\|?\s*$/.test(line);
+            }
+
+            function tableCells(line) {
+                return line.trim().replace(/^\|/, "").replace(/\|$/, "")
+                    .split("|").map(cell => cell.trim());
+            }
+
+            function startsBlock(line, nextLine) {
+                return /^#{1,3}\s+/.test(line) ||
+                    /^[-*_]{3,}\s*$/.test(line) ||
+                    /^>\s?/.test(line) ||
+                    /^\s*(?:[-+*]|\d+[.)])\s+/.test(line) ||
+                    (line.includes("|") && nextLine !== undefined && isTableSeparator(nextLine));
+            }
+
+            while (index < lines.length) {
+                const line = lines[index];
+                if (!line.trim()) {
+                    index++;
+                    continue;
+                }
+
+                const heading = line.match(/^(#{1,3})\s+(.+)$/);
+                if (heading) {
+                    const level = heading[1].length;
+                    const element = document.createElement(level === 1 ? "h2" : level === 2 ? "h3" : "h4");
+                    appendInlineFormatting(element, heading[2].trim());
+                    container.appendChild(element);
+                    index++;
+                    continue;
+                }
+
+                if (/^[-*_]{3,}\s*$/.test(line)) {
+                    container.appendChild(document.createElement("hr"));
+                    index++;
+                    continue;
+                }
+
+                if (line.includes("|") && index + 1 < lines.length && isTableSeparator(lines[index + 1])) {
+                    const wrapper = document.createElement("div");
+                    wrapper.className = "ra-assistant-table-wrap";
+                    const table = document.createElement("table");
+                    const head = document.createElement("thead");
+                    const headerRow = document.createElement("tr");
+
+                    tableCells(line).forEach(cell => {
+                        const th = document.createElement("th");
+                        appendInlineFormatting(th, cell);
+                        headerRow.appendChild(th);
+                    });
+
+                    head.appendChild(headerRow);
+                    table.appendChild(head);
+                    const body = document.createElement("tbody");
+                    index += 2;
+
+                    while (index < lines.length && lines[index].trim() && lines[index].includes("|")) {
+                        const row = document.createElement("tr");
+                        tableCells(lines[index]).forEach(cell => {
+                            const td = document.createElement("td");
+                            appendInlineFormatting(td, cell);
+                            row.appendChild(td);
+                        });
+                        body.appendChild(row);
+                        index++;
+                    }
+
+                    table.appendChild(body);
+                    wrapper.appendChild(table);
+                    container.appendChild(wrapper);
+                    continue;
+                }
+
+                if (/^>\s?/.test(line)) {
+                    const quote = document.createElement("blockquote");
+                    while (index < lines.length && /^>\s?/.test(lines[index])) {
+                        const paragraph = document.createElement("p");
+                        appendInlineFormatting(paragraph, lines[index].replace(/^>\s?/, "").trim());
+                        quote.appendChild(paragraph);
+                        index++;
+                    }
+                    container.appendChild(quote);
+                    continue;
+                }
+
+                const listMatch = line.match(/^\s*([-+*]|\d+[.)])\s+(.+)$/);
+                if (listMatch) {
+                    const ordered = /^\d/.test(listMatch[1]);
+                    const list = document.createElement(ordered ? "ol" : "ul");
+                    while (index < lines.length) {
+                        const itemMatch = lines[index].match(/^\s*([-+*]|\d+[.)])\s+(.+)$/);
+                        if (!itemMatch || /^\d/.test(itemMatch[1]) !== ordered) break;
+                        const item = document.createElement("li");
+                        appendInlineFormatting(item, itemMatch[2].trim());
+                        list.appendChild(item);
+                        index++;
+                    }
+                    container.appendChild(list);
+                    continue;
+                }
+
+                const paragraphLines = [];
+                while (index < lines.length && lines[index].trim() &&
+                    !(paragraphLines.length > 0 && startsBlock(lines[index], lines[index + 1]))) {
+                    paragraphLines.push(lines[index].trim());
+                    index++;
+                }
+
+                const paragraph = document.createElement("p");
+                appendInlineFormatting(paragraph, paragraphLines.join(" "));
+                container.appendChild(paragraph);
+            }
+        }
+
         try {
             const saved = JSON.parse(sessionStorage.getItem(storageKey) || "[]");
             if (Array.isArray(saved)) {
@@ -54,8 +198,13 @@ document.addEventListener("DOMContentLoaded", function () {
             label.textContent = role === "user" ? "You" : "Reliable Assistant";
 
             const body = document.createElement("div");
-            body.className = "ra-assistant-message-body";
-            body.textContent = content;
+            body.className = "ra-assistant-message-body" +
+                (role === "assistant" && !isError ? " is-formatted" : "");
+            if (role === "assistant" && !isError) {
+                renderAssistantMarkdown(body, content);
+            } else {
+                body.textContent = content;
+            }
 
             contentWrap.append(label, body);
             article.append(avatar, contentWrap);

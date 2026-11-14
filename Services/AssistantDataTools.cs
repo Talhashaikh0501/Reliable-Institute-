@@ -458,6 +458,7 @@ public sealed class AssistantDataTools(ApplicationDbContext db, UserManager<Iden
     private async Task<object> GetPublishedToppersAsync(CancellationToken ct)
     {
         var totalRecords = await db.Toppers.CountAsync(ct);
+        var publishedCount = await db.Toppers.CountAsync(x => x.IsPublished && x.HasPublicationConsent, ct);
         var published = await db.Toppers.AsNoTracking()
             .Where(x => x.IsPublished && x.HasPublicationConsent)
             .OrderByDescending(x => x.MarksObtained / x.MaximumMarks)
@@ -477,7 +478,7 @@ public sealed class AssistantDataTools(ApplicationDbContext db, UserManager<Iden
         return new
         {
             totalTopperRecords = totalRecords,
-            publiclyVisibleWithConsent = published.Count,
+            publiclyVisibleWithConsent = publishedCount,
             publishedAchievers = published.Select(x => new
             {
                 x.StudentName,

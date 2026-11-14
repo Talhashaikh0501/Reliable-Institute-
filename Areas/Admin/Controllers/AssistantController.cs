@@ -14,6 +14,8 @@ public sealed class AssistantController(
     [HttpGet]
     public async Task<IActionResult> Index(CancellationToken cancellationToken)
     {
+        Response.Headers.CacheControl = "no-store, no-cache";
+        Response.Headers.Pragma = "no-cache";
         var settings = await settingsStore.GetAsync(cancellationToken);
         ViewBag.HasApiKey = !string.IsNullOrWhiteSpace(settings.ApiKey);
         ViewBag.AssistantEnabled = settings.IsEnabled;
@@ -23,6 +25,8 @@ public sealed class AssistantController(
     [HttpGet]
     public async Task<IActionResult> Settings(CancellationToken cancellationToken)
     {
+        Response.Headers.CacheControl = "no-store, no-cache";
+        Response.Headers.Pragma = "no-cache";
         var settings = await settingsStore.GetAsync(cancellationToken);
         return View(new AssistantSettingsViewModel
         {
@@ -79,6 +83,8 @@ public sealed class AssistantController(
 
     [HttpPost]
     [ValidateAntiForgeryToken]
+    [RequestSizeLimit(64_000)]
+    [Microsoft.AspNetCore.RateLimiting.EnableRateLimiting("assistant-chat")]
     public async Task<IActionResult> Chat([FromBody] AssistantChatRequest request, CancellationToken cancellationToken)
     {
         if (!ModelState.IsValid || request is null || string.IsNullOrWhiteSpace(request.Message))

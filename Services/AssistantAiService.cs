@@ -37,7 +37,8 @@ public sealed class AssistantAiService(HttpClient httpClient, AssistantDataTools
           {"type":"function","function":{"name":"get_top_exam_results","description":"Find the highest recorded student results, ranked by percentage, optionally filtered by subject or standard.","parameters":{"type":"object","properties":{"subject_name":{"type":"string"},"standard":{"type":"integer","enum":[8,9,10,11,12]},"max_results":{"type":"integer","minimum":1,"maximum":20}},"additionalProperties":false}}},
           {"type":"function","function":{"name":"get_batch_overview","description":"List institute batches with standards, academic years, active student counts and assigned teacher counts.","parameters":{"type":"object","properties":{},"additionalProperties":false}}},
           {"type":"function","function":{"name":"get_teacher_overview","description":"Summarise teacher accounts, assigned batch counts, assigned subject counts and access status.","parameters":{"type":"object","properties":{},"additionalProperties":false}}},
-          {"type":"function","function":{"name":"get_recent_announcements","description":"Read the latest published institute and batch announcements that have not expired.","parameters":{"type":"object","properties":{},"additionalProperties":false}}}
+          {"type":"function","function":{"name":"get_recent_announcements","description":"Read the latest published institute and batch announcements that have not expired.","parameters":{"type":"object","properties":{},"additionalProperties":false}}},
+          {"type":"function","function":{"name":"get_published_toppers","description":"Analyse topper records that are published with student or guardian consent. Return public achievement results only.","parameters":{"type":"object","properties":{},"additionalProperties":false}}}
         ]
         """;
 

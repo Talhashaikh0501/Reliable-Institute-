@@ -25,6 +25,7 @@ public sealed class AssistantDataTools(ApplicationDbContext db, UserManager<Iden
                 "get_batch_overview" => await GetBatchOverviewAsync(cancellationToken),
                 "get_teacher_overview" => await GetTeacherOverviewAsync(cancellationToken),
                 "get_recent_announcements" => await GetRecentAnnouncementsAsync(cancellationToken),
+                "get_published_toppers" => await GetPublishedToppersAsync(cancellationToken),
                 _ => new { error = "This analysis function is not available." }
             };
 
@@ -451,6 +452,44 @@ public sealed class AssistantDataTools(ApplicationDbContext db, UserManager<Iden
             }).ToListAsync(ct);
 
         return new { announcements = rows };
+    }
+
+
+    private async Task<object> GetPublishedToppersAsync(CancellationToken ct)
+    {
+        var totalRecords = await db.Toppers.CountAsync(ct);
+        var published = await db.Toppers.AsNoTracking()
+            .Where(x => x.IsPublished && x.HasPublicationConsent)
+            .OrderByDescending(x => x.MarksObtained / x.MaximumMarks)
+            .ThenBy(x => x.DisplayOrder)
+            .Take(20)
+            .Select(x => new
+            {
+                x.StudentName,
+                Standard = (int)x.Standard,
+                x.AcademicYear,
+                x.ExamName,
+                x.MarksObtained,
+                x.MaximumMarks,
+                x.AchievementNote
+            }).ToListAsync(ct);
+
+        return new
+        {
+            totalTopperRecords = totalRecords,
+            publiclyVisibleWithConsent = published.Count,
+            publishedAchievers = published.Select(x => new
+            {
+                x.StudentName,
+                x.Standard,
+                x.AcademicYear,
+                x.ExamName,
+                x.MarksObtained,
+                x.MaximumMarks,
+                percentage = x.MaximumMarks <= 0 ? 0 : Math.Round(x.MarksObtained / x.MaximumMarks * 100m, 1),
+                x.AchievementNote
+            })
+        };
     }
 
     private static (DateOnly From, DateOnly To) GetDateRange(JsonElement args, bool defaultToMonth)

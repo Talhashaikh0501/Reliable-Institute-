@@ -39,6 +39,7 @@ builder.Services.ConfigureApplicationCookie(options =>
 });
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
+builder.Services.AddAntiforgery(options => options.HeaderName = "RequestVerificationToken");
 
 // Keep encryption keys on the application data volume so encrypted assistant settings survive restarts.
 var dataProtection = builder.Services.AddDataProtection()

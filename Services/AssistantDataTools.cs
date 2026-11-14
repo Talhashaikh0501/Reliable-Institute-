@@ -259,7 +259,7 @@ public sealed class AssistantDataTools(ApplicationDbContext db, UserManager<Iden
         var today = DateOnly.FromDateTime(DateTime.Today);
 
         var plans = await db.FeePlans.AsNoTracking()
-            .Include(x => x.Student).Include(x => x.Payments)
+            .Include(x => x.Student).ThenInclude(x => x.Batch).Include(x => x.Payments)
             .ToListAsync(ct);
 
         var rows = plans.Select(x =>
@@ -271,7 +271,7 @@ public sealed class AssistantDataTools(ApplicationDbContext db, UserManager<Iden
                 student = x.Student.FullName,
                 admissionNumber = x.Student.AdmissionNumber,
                 standard = (int)x.Student.Standard,
-                batch = x.Student.BatchId,
+                batch = x.Student.Batch?.Name ?? "Not assigned",
                 academicYear = x.AcademicYear,
                 dueDate = x.DueDate.ToString("yyyy-MM-dd"),
                 netFee = net,

@@ -15,6 +15,7 @@ public sealed class AssistantDataTools(ApplicationDbContext db, UserManager<Iden
             object result = name switch
             {
                 "get_institute_overview" => await GetInstituteOverviewAsync(cancellationToken),
+                "get_subject_overview" => await GetSubjectOverviewAsync(cancellationToken),
                 "search_students" => await SearchStudentsAsync(arguments, cancellationToken),
                 "get_student_academic_profile" => await GetStudentAcademicProfileAsync(arguments, cancellationToken),
                 "get_attendance_summary" => await GetAttendanceSummaryAsync(arguments, cancellationToken),
@@ -72,12 +73,19 @@ public sealed class AssistantDataTools(ApplicationDbContext db, UserManager<Iden
         var outstanding = feeRows.Sum(x => Math.Max(0m, x.TotalAmount - x.DiscountAmount - x.Paid));
         var overdue = feeRows.Where(x => x.DueDate < today)
             .Sum(x => Math.Max(0m, x.TotalAmount - x.DiscountAmount - x.Paid));
+        var activeStudentsByStandard = await db.Students.AsNoTracking()
+            .Where(x => x.IsActive)
+            .GroupBy(x => x.Standard)
+            .Select(g => new { standard = (int)g.Key, students = g.Count() })
+            .OrderBy(x => x.standard)
+            .ToListAsync(ct);
         var withoutBatch = await db.Students.CountAsync(x => x.IsActive && x.BatchId == null, ct);
 
         return new
         {
             asOf = today.ToString("yyyy-MM-dd"),
             activeStudents,
+            activeStudentsByStandard,
             inactiveStudents,
             activeBatches,
             activeSubjects = subjects,
@@ -87,6 +95,29 @@ public sealed class AssistantDataTools(ApplicationDbContext db, UserManager<Iden
             outstandingFeeBalance = outstanding,
             overdueFeeBalance = overdue,
             activeStudentsWithoutBatch = withoutBatch
+        };
+    }
+
+    private async Task<object> GetSubjectOverviewAsync(CancellationToken ct)
+    {
+        var subjects = await db.Subjects.AsNoTracking()
+            .OrderBy(x => x.Standard).ThenBy(x => x.Name)
+            .Select(x => new
+            {
+                x.Name,
+                standard = (int)x.Standard,
+                x.IsActive,
+                examCount = db.Exams.Count(e => e.SubjectId == x.Id),
+                resultEntries = db.Exams.Where(e => e.SubjectId == x.Id)
+                    .SelectMany(e => e.Results).Count()
+            }).ToListAsync(ct);
+
+        return new
+        {
+            totalSubjects = subjects.Count,
+            activeSubjects = subjects.Count(x => x.IsActive),
+            inactiveSubjects = subjects.Count(x => !x.IsActive),
+            subjects
         };
     }
 

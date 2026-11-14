@@ -14,6 +14,7 @@
     var reportsIsActive = currentController.Equals("Reports", StringComparison.OrdinalIgnoreCase);
     var feesIsActive = currentController.Equals("Fees", StringComparison.OrdinalIgnoreCase);
     var staffIsActive = currentController.Equals("Staff", StringComparison.OrdinalIgnoreCase);
+    var assistantIsActive = currentController.Equals("Assistant", StringComparison.OrdinalIgnoreCase);
     var isAdmin = User.IsInRole("Admin");
     var isTeacher = User.IsInRole("Teacher");
     var isStudent = User.IsInRole("Student");
@@ -41,6 +42,10 @@
     @if (isWorkspaceArea)
     {
         <link rel="stylesheet" href="~/css/admin-workspace.css" asp-append-version="true" />
+        @if (currentArea == "Admin")
+        {
+            <link rel="stylesheet" href="~/css/assistant.css" asp-append-version="true" />
+        }
     }
 </head>
 <body class="@(isWorkspaceArea ? "ra-app-body ra-workspace-body" : "ra-public-body")">
@@ -79,6 +84,13 @@
 
             @if (isAdmin)
             {
+            <div class="ra-workspace-nav-group">
+                <div class="ra-workspace-nav-label">INTELLIGENCE</div>
+                <a class="ra-workspace-nav-link@(assistantIsActive ? " is-active" : "")" aria-current="@(assistantIsActive ? "page" : null)" asp-area="Admin" asp-controller="Assistant" asp-action="Index">
+                    <span class="ra-workspace-nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 5.5A3.5 3.5 0 0 1 8.5 2h7A3.5 3.5 0 0 1 19 5.5v8a3.5 3.5 0 0 1-3.5 3.5H11l-5 4v-4.4A3.5 3.5 0 0 1 3 13.5v-8A3.5 3.5 0 0 1 5 5.5Z"/><path d="M8 8h8M8 12h5"/></svg></span>
+                    <span class="ra-workspace-nav-text">AI Assistant</span>
+                </a>
+            </div>
             <div class="ra-workspace-nav-group">
                 <div class="ra-workspace-nav-label">ACADEMIC OPERATIONS</div>
                 <a class="ra-workspace-nav-link@(studentsIsActive ? " is-active" : "")" aria-current="@(studentsIsActive ? "page" : null)" asp-area="Admin" asp-controller="Students" asp-action="Index">

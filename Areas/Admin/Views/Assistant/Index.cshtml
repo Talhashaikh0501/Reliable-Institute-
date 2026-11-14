@@ -1,0 +1,85 @@
+@{
+    ViewData["Title"] = "AI Assistant";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var hasApiKey = ViewBag.HasApiKey is bool configured && configured;
+    var isEnabled = ViewBag.AssistantEnabled is bool enabled && enabled;
+}
+<div class="ra-assistant-page" id="ra-assistant"
+     data-chat-url="@Url.Action("Chat", "Assistant", new { area = "Admin" })"
+     data-is-enabled="@isEnabled.ToString().ToLowerInvariant()">
+    @Html.AntiForgeryToken()
+    <header class="ra-assistant-header">
+        <div class="ra-assistant-heading">
+            <span class="ra-assistant-kicker"><span class="ra-assistant-kicker-dot"></span> RELIABLE ACADEMY INTELLIGENCE</span>
+            <h1>AI Assistant</h1>
+            <p>Your institute's numbers, records and operations — ready to explore through conversation.</p>
+        </div>
+        <div class="ra-assistant-header-actions">
+            <a class="ra-assistant-icon-button" asp-action="Settings" aria-label="Assistant settings" title="Assistant settings">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="m19.4 15 .1.1a1.8 1.8 0 0 1-2.5 2.5l-.1-.1a1.8 1.8 0 0 0-3 .9v.2a1.8 1.8 0 0 1-3.6 0v-.2a1.8 1.8 0 0 0-3-.9l-.1.1a1.8 1.8 0 0 1-2.5-2.5l.1-.1a1.8 1.8 0 0 0-.9-3H3.7a1.8 1.8 0 0 1 0-3.6h.2a1.8 1.8 0 0 0 .9-3l-.1-.1a1.8 1.8 0 0 1 2.5-2.5l.1.1a1.8 1.8 0 0 0 3-.9v-.2a1.8 1.8 0 0 1 3.6 0v.2a1.8 1.8 0 0 0 3 .9l.1-.1a1.8 1.8 0 0 1 2.5 2.5l-.1.1a1.8 1.8 0 0 0 .9 3h.2a1.8 1.8 0 0 1 0 3.6h-.2a1.8 1.8 0 0 0-.9 3Z"/></svg>
+            </a>
+            <button type="button" class="ra-assistant-new-chat" data-new-chat><span>＋</span> New chat</button>
+        </div>
+    </header>
+
+    @if (!hasApiKey || !isEnabled)
+    {
+        <section class="ra-assistant-setup-banner">
+            <span class="ra-assistant-setup-icon">!</span>
+            <div>
+                <b>@(!hasApiKey ? "Connect your assistant" : "Assistant is currently disabled")</b>
+                <p>@(!hasApiKey ? "Add your private API key in settings to start asking questions about institute records." : "Enable the assistant in settings when you are ready to use it.")</p>
+            </div>
+            <a asp-action="Settings">Open settings <span>↗</span></a>
+        </section>
+    }
+
+    <section class="ra-assistant-workspace">
+        <div class="ra-assistant-conversation">
+            <div class="ra-assistant-conversation-top">
+                <div><span class="ra-assistant-avatar">R.</span><span><b>Reliable Assistant</b><small><i class="@(hasApiKey && isEnabled ? "is-online" : "is-offline")"></i>@(hasApiKey && isEnabled ? "Ready to help" : "Setup required")</small></span></div>
+                <button type="button" class="ra-assistant-clear" data-clear-chat>Clear conversation</button>
+            </div>
+            <div class="ra-assistant-messages" id="assistant-messages" aria-live="polite" aria-relevant="additions text">
+                <div class="ra-assistant-welcome" data-welcome>
+                    <span class="ra-assistant-welcome-mark">R.</span>
+                    <span class="ra-assistant-welcome-kicker">YOUR INSTITUTE, UNDERSTOOD</span>
+                    <h2>Good day, Administrator.</h2>
+                    <p>Ask questions about students, attendance, fees, examinations, batches, teachers and institute activity. I will check the relevant saved records before answering.</p>
+                    <div class="ra-assistant-suggestions">
+                        <button type="button" data-prompt="Give me a complete overview of the institute."><span>◫</span><b>Institute overview</b><small>Students, batches and finances</small><i>↗</i></button>
+                        <button type="button" data-prompt="Which active students have attendance below 75%?"><span>✓</span><b>Attendance concerns</b><small>Find students who need attention</small><i>↗</i></button>
+                        <button type="button" data-prompt="Summarise our outstanding and overdue fee balances."><span>₹</span><b>Fee collections</b><small>Outstanding and overdue balances</small><i>↗</i></button>
+                        <button type="button" data-prompt="Analyse examination performance by subject."><span>∑</span><b>Academic performance</b><small>Subject averages and pass rates</small><i>↗</i></button>
+                    </div>
+                </div>
+            </div>
+            <form class="ra-assistant-composer" id="assistant-form">
+                <textarea id="assistant-input" rows="1" maxlength="2000" placeholder="Ask anything about your institute..." aria-label="Your question" required></textarea>
+                <div class="ra-assistant-composer-bottom">
+                    <span><i></i> Connected to institute records when configured</span>
+                    <button type="submit" id="assistant-send" disabled><span>Send question</span><b>↑</b></button>
+                </div>
+            </form>
+            <div class="ra-assistant-privacy-note"><span>◇</span> Only the records needed to answer a question are sent to the AI service. Avoid requesting sensitive contact details or passwords.</div>
+        </div>
+        <aside class="ra-assistant-side-panel">
+            <div class="ra-assistant-side-card">
+                <span class="ra-assistant-side-label">WHAT I CAN ANALYSE</span>
+                <div class="ra-assistant-capability"><span>01</span><div><b>Students</b><small>Admissions, active records and class allocation</small></div></div>
+                <div class="ra-assistant-capability"><span>02</span><div><b>Attendance</b><small>Daily registers, trends and low attendance</small></div></div>
+                <div class="ra-assistant-capability"><span>03</span><div><b>Fees</b><small>Collections, balances and overdue plans</small></div></div>
+                <div class="ra-assistant-capability"><span>04</span><div><b>Examinations</b><small>Marks, pass rates and subject performance</small></div></div>
+                <div class="ra-assistant-capability"><span>05</span><div><b>People & batches</b><small>Teacher assignments and batch strength</small></div></div>
+                <div class="ra-assistant-capability"><span>06</span><div><b>Announcements</b><small>Published institute updates</small></div></div>
+            </div>
+            <div class="ra-assistant-side-note">
+                <span>READ-ONLY DATA ACCESS</span>
+                <p>The assistant can analyse saved records. It cannot create, edit, archive or delete institute data.</p>
+            </div>
+        </aside>
+    </section>
+</div>
+@section Scripts {
+    <script src="~/js/assistant.js" asp-append-version="true"></script>
+}

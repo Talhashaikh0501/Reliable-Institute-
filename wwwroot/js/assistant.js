@@ -11,6 +11,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const storageKey = "reliable-assistant-chat-v1";
         let messages = [];
         let isBusy = false;
+        const assistantReady = chatRoot.dataset.isReady === "true";
 
         try {
             const saved = JSON.parse(sessionStorage.getItem(storageKey) || "[]");
@@ -71,8 +72,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
         function setBusy(value) {
             isBusy = value;
-            sendButton.disabled = value || input.value.trim().length === 0;
-            input.disabled = value;
+            sendButton.disabled = value || !assistantReady || input.value.trim().length === 0;
+            input.disabled = value || !assistantReady;
             sendButton.querySelector("span").textContent = value ? "Thinking..." : "Send question";
             messagesHost.querySelector("[data-typing]")?.remove();
 
@@ -137,7 +138,7 @@ document.addEventListener("DOMContentLoaded", function () {
         input.addEventListener("input", function () {
             input.style.height = "auto";
             input.style.height = Math.min(input.scrollHeight, 150) + "px";
-            sendButton.disabled = isBusy || input.value.trim().length === 0;
+            sendButton.disabled = isBusy || !assistantReady || input.value.trim().length === 0;
         });
 
         input.addEventListener("keydown", function (event) {

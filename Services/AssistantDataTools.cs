@@ -16,6 +16,7 @@ public sealed class AssistantDataTools(ApplicationDbContext db, UserManager<Iden
             {
                 "get_institute_overview" => await GetInstituteOverviewAsync(cancellationToken),
                 "search_students" => await SearchStudentsAsync(arguments, cancellationToken),
+                "get_student_academic_profile" => await GetStudentAcademicProfileAsync(arguments, cancellationToken),
                 "get_attendance_summary" => await GetAttendanceSummaryAsync(arguments, cancellationToken),
                 "find_low_attendance_students" => await FindLowAttendanceStudentsAsync(arguments, cancellationToken),
                 "get_fee_summary" => await GetFeeSummaryAsync(arguments, cancellationToken),
@@ -24,6 +25,7 @@ public sealed class AssistantDataTools(ApplicationDbContext db, UserManager<Iden
                 "get_top_exam_results" => await GetTopExamResultsAsync(arguments, cancellationToken),
                 "get_batch_overview" => await GetBatchOverviewAsync(cancellationToken),
                 "get_teacher_overview" => await GetTeacherOverviewAsync(cancellationToken),
+                "get_teacher_assignments" => await GetTeacherAssignmentsAsync(arguments, cancellationToken),
                 "get_recent_announcements" => await GetRecentAnnouncementsAsync(cancellationToken),
                 "get_published_toppers" => await GetPublishedToppersAsync(cancellationToken),
                 _ => new { error = "This analysis function is not available." }
@@ -113,6 +115,102 @@ public sealed class AssistantDataTools(ApplicationDbContext db, UserManager<Iden
             }).ToListAsync(ct);
 
         return new { matchedRecords = rows.Count, results = rows };
+    }
+
+
+    private async Task<object> GetStudentAcademicProfileAsync(JsonElement args, CancellationToken ct)
+    {
+        var search = GetString(args, "student");
+        if (string.IsNullOrWhiteSpace(search))
+            return new { error = "Provide a student's name or admission number." };
+
+        var matches = await db.Students.AsNoTracking()
+            .Include(x => x.Batch)
+            .Where(x => x.AdmissionNumber == search || x.FullName.Contains(search))
+            .OrderByDescending(x => x.AdmissionNumber == search)
+            .ThenBy(x => x.FullName)
+            .Take(5)
+            .ToListAsync(ct);
+
+        if (matches.Count == 0)
+            return new { error = "No student record matched that search." };
+
+        if (matches.Count > 1)
+        {
+            return new
+            {
+                ambiguous = true,
+                message = "More than one student matched. Ask for an admission number or a more specific name.",
+                candidates = matches.Select(x => new
+                {
+                    x.FullName,
+                    x.AdmissionNumber,
+                    standard = (int)x.Standard,
+                    batch = x.Batch?.Name ?? "Not assigned"
+                })
+            };
+        }
+
+        var student = matches[0];
+        var attendance = await db.AttendanceRecords.AsNoTracking()
+            .Where(x => x.StudentId == student.Id)
+            .GroupBy(x => x.Status)
+            .Select(g => new { Status = g.Key, Count = g.Count() })
+            .ToListAsync(ct);
+        var attendanceTotal = attendance.Sum(x => x.Count);
+        var attended = attendance.Where(x =>
+            x.Status == AttendanceStatus.Present || x.Status == AttendanceStatus.Late).Sum(x => x.Count);
+
+        var examResults = await db.ExamResults.AsNoTracking()
+            .Where(x => x.StudentId == student.Id)
+            .Include(x => x.Exam).ThenInclude(x => x.Subject)
+            .OrderByDescending(x => x.Exam.ExamDate)
+            .Take(12)
+            .Select(x => new
+            {
+                exam = x.Exam.Name,
+                subject = x.Exam.Subject.Name,
+                date = x.Exam.ExamDate,
+                marks = x.MarksObtained,
+                maximumMarks = x.Exam.MaximumMarks,
+                percentage = x.Exam.MaximumMarks <= 0 ? 0 : Math.Round(x.MarksObtained / x.Exam.MaximumMarks * 100m, 1),
+                passed = x.MarksObtained >= x.Exam.PassingMarks
+            }).ToListAsync(ct);
+
+        var feePlans = await db.FeePlans.AsNoTracking()
+            .Where(x => x.StudentId == student.Id)
+            .Include(x => x.Payments)
+            .OrderByDescending(x => x.DueDate)
+            .ToListAsync(ct);
+
+        return new
+        {
+            student = student.FullName,
+            student.AdmissionNumber,
+            standard = (int)student.Standard,
+            student.AcademicYear,
+            batch = student.Batch?.Name ?? "Not assigned",
+            student.IsActive,
+            attendance = new
+            {
+                totalMarked = attendanceTotal,
+                present = attendance.FirstOrDefault(x => x.Status == AttendanceStatus.Present)?.Count ?? 0,
+                late = attendance.FirstOrDefault(x => x.Status == AttendanceStatus.Late)?.Count ?? 0,
+                absent = attendance.FirstOrDefault(x => x.Status == AttendanceStatus.Absent)?.Count ?? 0,
+                leave = attendance.FirstOrDefault(x => x.Status == AttendanceStatus.Leave)?.Count ?? 0,
+                attendancePercentage = attendanceTotal == 0 ? 0 : Math.Round(attended * 100d / attendanceTotal, 1),
+                percentageRule = "Present and Late count as attended."
+            },
+            recentExamResults = examResults,
+            feePlans = feePlans.Select(x => new
+            {
+                x.AcademicYear,
+                dueDate = x.DueDate.ToString("yyyy-MM-dd"),
+                netFee = Math.Max(0m, x.TotalAmount - x.DiscountAmount),
+                paid = x.Payments.Sum(p => p.Amount),
+                balance = Math.Max(0m, x.TotalAmount - x.DiscountAmount - x.Payments.Sum(p => p.Amount))
+            })
+        };
     }
 
     private async Task<object> GetAttendanceSummaryAsync(JsonElement args, CancellationToken ct)
@@ -436,6 +534,54 @@ public sealed class AssistantDataTools(ApplicationDbContext db, UserManager<Iden
         }
 
         return new { teacherCount = rows.Count, teachers = rows };
+    }
+
+
+    private async Task<object> GetTeacherAssignmentsAsync(JsonElement args, CancellationToken ct)
+    {
+        var search = GetString(args, "teacher");
+        var teacherUsers = await users.GetUsersInRoleAsync("Teacher");
+        if (!string.IsNullOrWhiteSpace(search))
+        {
+            teacherUsers = teacherUsers.Where(x =>
+                (x.UserName?.Contains(search, StringComparison.OrdinalIgnoreCase) ?? false) ||
+                (x.Email?.Contains(search, StringComparison.OrdinalIgnoreCase) ?? false)).ToList();
+        }
+
+        var rows = new List<object>();
+        foreach (var teacher in teacherUsers.Take(15))
+        {
+            var claims = await users.GetClaimsAsync(teacher);
+            var batchIds = claims.Where(x => x.Type == TeacherBatchAccess.ClaimType)
+                .Select(x => int.TryParse(x.Value, out var id) ? id : 0).Where(x => x > 0).Distinct().ToList();
+            var subjectIds = claims.Where(x => x.Type == TeacherSubjectAccess.ClaimType)
+                .Select(x => int.TryParse(x.Value, out var id) ? id : 0).Where(x => x > 0).Distinct().ToList();
+
+            var batches = await db.TeachingBatches.AsNoTracking()
+                .Where(x => batchIds.Contains(x.Id))
+                .OrderBy(x => x.Standard).ThenBy(x => x.Name)
+                .Select(x => new { x.Name, Standard = (int)x.Standard, x.AcademicYear, x.IsActive })
+                .ToListAsync(ct);
+            var subjects = await db.Subjects.AsNoTracking()
+                .Where(x => subjectIds.Contains(x.Id))
+                .OrderBy(x => x.Standard).ThenBy(x => x.Name)
+                .Select(x => new { x.Name, Standard = (int)x.Standard, x.IsActive })
+                .ToListAsync(ct);
+
+            rows.Add(new
+            {
+                teacher = teacher.UserName?.Split('@')[0] ?? "Teacher",
+                assignedBatches = batches,
+                assignedSubjects = subjects
+            });
+        }
+
+        return new
+        {
+            matchedTeachers = rows.Count,
+            teachers = rows,
+            note = string.IsNullOrWhiteSpace(search) ? "Showing up to 15 teacher accounts." : null
+        };
     }
 
     private async Task<object> GetRecentAnnouncementsAsync(CancellationToken ct)

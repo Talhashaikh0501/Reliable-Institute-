@@ -1,0 +1,59 @@
+@model ReliableAcademy.ViewModels.AssistantSettingsViewModel
+@{
+    ViewData["Title"] = "Assistant settings";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="ra-assistant-settings-page">
+    <div class="ra-assistant-settings-heading">
+        <div><span class="ra-assistant-kicker">RELIABLE ACADEMY INTELLIGENCE</span><h1>Assistant settings</h1><p>Connect or replace the private API key used by the admin assistant.</p></div>
+        <a class="ra-assistant-back-link" asp-action="Index">← Back to assistant</a>
+    </div>
+
+    @if (TempData["AssistantSettingsSuccess"] is string success)
+    {
+        <div class="ra-assistant-settings-alert is-success" role="status">@success</div>
+    }
+    <section class="ra-assistant-settings-card">
+        <div class="ra-assistant-settings-card-head">
+            <span class="ra-assistant-settings-icon">⌘</span>
+            <div><h2>AI connection</h2><p>Your API key is encrypted before it is saved on the application server.</p></div>
+            <span class="ra-assistant-connection-state @(Model.HasApiKey ? "is-configured" : "is-missing")"><i></i>@(Model.HasApiKey ? "Key configured" : "Not configured")</span>
+        </div>
+        <form asp-action="SaveSettings" method="post" id="assistant-settings-form" data-test-url="@Url.Action("TestConnection", "Assistant", new { area = "Admin" })">
+            @Html.AntiForgeryToken()
+            <div asp-validation-summary="ModelOnly" class="ra-assistant-validation"></div>
+            <div class="ra-assistant-settings-field">
+                <label for="assistant-api-key">API key</label>
+                <div class="ra-assistant-key-wrap">
+                    <input asp-for="ApiKey" id="assistant-api-key" type="password" autocomplete="new-password" spellcheck="false"
+                           placeholder="Paste your API key here" />
+                    <button type="button" data-toggle-key aria-label="Show API key">Show</button>
+                </div>
+                <span asp-validation-for="ApiKey" class="ra-assistant-field-error"></span>
+                <small>@(Model.HasApiKey ? "A key is already saved. Leave this field empty to keep it, or enter a new key to replace it." : "Your key is never sent to the browser after it has been saved.")</small>
+            </div>
+            <div class="ra-assistant-settings-toggle">
+                <div><b>Enable AI Assistant</b><small>Allow administrators to use the chat workspace.</small></div>
+                <label class="ra-assistant-switch"><input asp-for="IsEnabled" /><span></span></label>
+            </div>
+            <div class="ra-assistant-settings-actions">
+                <button type="button" class="ra-assistant-test-button" id="assistant-test-button">Test connection</button>
+                <button type="submit" class="ra-assistant-save-button">Save settings <span>→</span></button>
+            </div>
+            <div class="ra-assistant-test-result" id="assistant-test-result" role="status" aria-live="polite" hidden></div>
+        </form>
+    </section>
+
+    <section class="ra-assistant-security-card">
+        <div><span class="ra-assistant-security-icon">◇</span><b>Security and privacy</b></div>
+        <ul>
+            <li>The API key is encrypted using the application's data-protection system and is not included in source control.</li>
+            <li>The key is used only by the server. It is never embedded in page HTML or browser JavaScript.</li>
+            <li>The assistant uses approved, read-only database analysis functions. It cannot modify institute records.</li>
+            <li>Only the minimum record details needed for a question should be sent to the external AI service. Do not ask it to process passwords, contact numbers, addresses or dates of birth.</li>
+        </ul>
+    </section>
+</div>
+@section Scripts {
+    <script src="~/js/assistant.js" asp-append-version="true"></script>
+}

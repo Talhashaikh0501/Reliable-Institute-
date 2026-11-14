@@ -6,7 +6,8 @@
 }
 <div class="ra-assistant-page" id="ra-assistant"
      data-chat-url="@Url.Action("Chat", "Assistant", new { area = "Admin" })"
-     data-is-ready="@((hasApiKey && isEnabled).ToString().ToLowerInvariant())">
+     data-is-ready="@((hasApiKey && isEnabled).ToString().ToLowerInvariant())"
+     data-user-scope="@User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value">
     @Html.AntiForgeryToken()
     <header class="ra-assistant-header">
         <div class="ra-assistant-heading">

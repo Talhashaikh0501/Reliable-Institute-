@@ -1,8 +1,13 @@
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using ReliableAcademy.Data;
+using ReliableAcademy.Services;
 
 var builder = WebApplication.CreateBuilder(args);
+var dataProtectionKeysPath = Path.Combine(builder.Environment.ContentRootPath, "App_Data", "DataProtectionKeys");
+Directory.CreateDirectory(dataProtectionKeysPath);
+
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
     ?? throw new InvalidOperationException("DefaultConnection connection string is missing.");
 
@@ -34,6 +39,17 @@ builder.Services.ConfigureApplicationCookie(options =>
 });
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
+
+// Keep encryption keys on the application data volume so encrypted assistant settings survive restarts.
+builder.Services.AddDataProtection()
+    .SetApplicationName("ReliableAcademy")
+    .PersistKeysToFileSystem(new DirectoryInfo(dataProtectionKeysPath));
+builder.Services.AddSingleton<AssistantSettingsStore>();
+builder.Services.AddScoped<AssistantDataTools>();
+builder.Services.AddHttpClient<AssistantAiService>(client =>
+{
+    client.Timeout = TimeSpan.FromSeconds(50);
+});
 
 var app = builder.Build();
 if (app.Environment.IsDevelopment()) app.UseMigrationsEndPoint();

@@ -44,9 +44,11 @@ public sealed class AssistantDataTools(ApplicationDbContext db, UserManager<Iden
 
     private async Task<object> GetInstituteOverviewAsync(CancellationToken ct)
     {
-        var today = DateOnly.FromDateTime(DateTime.Today);
-        var monthStart = new DateTime(today.Year, today.Month, 1);
-        var nextMonth = monthStart.AddMonths(1);
+        var today = GetIndiaToday();
+        var monthStartDate = new DateOnly(today.Year, today.Month, 1);
+        var nextMonthDate = monthStartDate.AddMonths(1);
+        var monthStartUtc = IndiaMidnightUtc(monthStartDate);
+        var nextMonthUtc = IndiaMidnightUtc(nextMonthDate);
 
         var activeStudents = await db.Students.CountAsync(x => x.IsActive, ct);
         var inactiveStudents = await db.Students.CountAsync(x => !x.IsActive, ct);
@@ -54,10 +56,10 @@ public sealed class AssistantDataTools(ApplicationDbContext db, UserManager<Iden
         var subjects = await db.Subjects.CountAsync(x => x.IsActive, ct);
         var teachersCount = (await users.GetUsersInRoleAsync("Teacher")).Count;
         var admissionsThisMonth = await db.Students.CountAsync(x =>
-            x.AdmissionDate >= DateOnly.FromDateTime(monthStart) &&
-            x.AdmissionDate < DateOnly.FromDateTime(nextMonth), ct);
+            x.AdmissionDate >= monthStartDate &&
+            x.AdmissionDate < nextMonthDate, ct);
         var feesCollectedThisMonth = await db.FeePayments.AsNoTracking()
-            .Where(x => x.PaidAtUtc >= monthStart && x.PaidAtUtc < nextMonth)
+            .Where(x => x.PaidAtUtc >= monthStartUtc && x.PaidAtUtc < nextMonthUtc)
             .Select(x => (decimal?)x.Amount).SumAsync(ct) ?? 0m;
         var feeRows = await db.FeePlans.AsNoTracking()
             .Select(x => new
@@ -310,7 +312,7 @@ public sealed class AssistantDataTools(ApplicationDbContext db, UserManager<Iden
 
     private async Task<object> GetFeeSummaryAsync(JsonElement args, CancellationToken ct)
     {
-        var today = DateOnly.FromDateTime(DateTime.Today);
+        var today = GetIndiaToday();
         var (from, to) = GetDateRange(args, defaultToMonth: true);
         var plans = await db.FeePlans.AsNoTracking()
             .Select(x => new
@@ -329,8 +331,8 @@ public sealed class AssistantDataTools(ApplicationDbContext db, UserManager<Iden
             x.DueDate
         }).ToList();
 
-        var start = from.ToDateTime(TimeOnly.MinValue);
-        var end = to.AddDays(1).ToDateTime(TimeOnly.MinValue);
+        var start = IndiaMidnightUtc(from);
+        var end = IndiaMidnightUtc(to.AddDays(1));
         var payments = await db.FeePayments.AsNoTracking()
             .Where(x => x.PaidAtUtc >= start && x.PaidAtUtc < end)
             .Select(x => x.Amount).ToListAsync(ct);
@@ -355,7 +357,7 @@ public sealed class AssistantDataTools(ApplicationDbContext db, UserManager<Iden
         var overdueOnly = GetBoolean(args, "overdue_only", false);
         var outstandingOnly = GetBoolean(args, "outstanding_only", true);
         var limit = Math.Clamp(GetInteger(args, "max_results", 20), 1, 25);
-        var today = DateOnly.FromDateTime(DateTime.Today);
+        var today = GetIndiaToday();
 
         var plans = await db.FeePlans.AsNoTracking()
             .Include(x => x.Student).ThenInclude(x => x.Batch).Include(x => x.Payments)
@@ -639,9 +641,25 @@ public sealed class AssistantDataTools(ApplicationDbContext db, UserManager<Iden
         };
     }
 
+    private static TimeZoneInfo IndiaTimeZone =>
+        TimeZoneInfo.FindSystemTimeZoneById(
+            OperatingSystem.IsWindows() ? "India Standard Time" : "Asia/Kolkata");
+
+    private static DateOnly GetIndiaToday()
+    {
+        var indiaNow = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, IndiaTimeZone);
+        return DateOnly.FromDateTime(indiaNow);
+    }
+
+    private static DateTime IndiaMidnightUtc(DateOnly date)
+    {
+        var indiaMidnight = date.ToDateTime(TimeOnly.MinValue, DateTimeKind.Unspecified);
+        return TimeZoneInfo.ConvertTimeToUtc(indiaMidnight, IndiaTimeZone);
+    }
+
     private static (DateOnly? From, DateOnly? To) GetOptionalDateRange(JsonElement args)
     {
-        var today = DateOnly.FromDateTime(DateTime.Today);
+        var today = GetIndiaToday();
         var from = GetDate(args, "from_date");
         var to = GetDate(args, "to_date");
 
@@ -662,7 +680,7 @@ public sealed class AssistantDataTools(ApplicationDbContext db, UserManager<Iden
 
     private static (DateOnly From, DateOnly To) GetDateRange(JsonElement args, bool defaultToMonth)
     {
-        var today = DateOnly.FromDateTime(DateTime.Today);
+        var today = GetIndiaToday();
         var defaultFrom = defaultToMonth ? new DateOnly(today.Year, today.Month, 1) : today.AddDays(-29);
         var from = GetDate(args, "from_date") ?? defaultFrom;
         var to = GetDate(args, "to_date") ?? today;

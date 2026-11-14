@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const input = document.getElementById("assistant-input");
         const sendButton = document.getElementById("assistant-send");
         const tokenInput = chatRoot.querySelector('input[name="__RequestVerificationToken"]');
-        const storageKey = "reliable-assistant-chat-v1";
+        const storageKey = "reliable-assistant-chat-v1-" + (chatRoot.dataset.userScope || "admin");
         let messages = [];
         let isBusy = false;
         const assistantReady = chatRoot.dataset.isReady === "true";

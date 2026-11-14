@@ -55,7 +55,7 @@
                 </div>
             </div>
             <form class="ra-assistant-composer" id="assistant-form">
-                <textarea id="assistant-input" rows="1" maxlength="2000" placeholder="@(hasApiKey && isEnabled ? "Ask anything about your institute..." : "Open Assistant Settings to connect and enable the assistant.")" aria-label="Your question" required disabled="@(!(hasApiKey && isEnabled))"></textarea>
+                <textarea id="assistant-input" rows="1" maxlength="2000" placeholder="@(hasApiKey && isEnabled ? "Ask anything about your institute..." : "Open Assistant Settings to connect and enable the assistant.")" aria-label="Your question" required disabled="@(hasApiKey && isEnabled ? null : "disabled")"></textarea>
                 <div class="ra-assistant-composer-bottom">
                     <span><i></i> Connected to institute records when configured</span>
                     <button type="submit" id="assistant-send" disabled="@(!(hasApiKey && isEnabled))"><span>Send question</span><b>↑</b></button>

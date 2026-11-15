@@ -1,9 +1,12 @@
 @using Microsoft.AspNetCore.Identity
 @inject SignInManager<IdentityUser> SignInManager
 @{
-    var destinationArea = User.IsInRole("Teacher") ? "Teacher" : "Admin";
+    var destinationArea = User.IsInRole("Admin") ? "Admin"
+        : User.IsInRole("Teacher") ? "Teacher"
+        : User.IsInRole("Student") ? "Student"
+        : "";
 }
-@if (SignInManager.IsSignedIn(User))
+@if (SignInManager.IsSignedIn(User) && !string.IsNullOrEmpty(destinationArea))
 {
     <div class="rci-auth-actions">
         <a class="rci-workspace-action" asp-area="@destinationArea" asp-controller="Dashboard" asp-action="Index">

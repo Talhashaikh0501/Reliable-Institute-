@@ -112,7 +112,7 @@ public sealed class DashboardController(ApplicationDbContext db) : Controller
         return View(new FeeReceiptViewModel { Payment = payment, PaidAtIndia = paidAtIndia });
     }
 
-    private async Task<Student?> GetCurrentStudentAsync()
+    private async Task<ReliableAcademy.Models.Student?> GetCurrentStudentAsync()
     {
         var studentId = StudentAccountAccess.GetStudentId(User);
         if (!studentId.HasValue) return null;

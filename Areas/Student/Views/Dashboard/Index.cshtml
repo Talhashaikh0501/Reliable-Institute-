@@ -5,95 +5,115 @@
     var firstName = student.FullName.Split(' ', StringSplitOptions.RemoveEmptyEntries).FirstOrDefault() ?? student.FullName;
 }
 <div class="ra-student-welcome">
-    <div>
-        <div class="ra-eyebrow">STUDENT PORTAL <span>•</span> @((int)student.Standard)TH STANDARD</div>
+    <div><div class="ra-eyebrow">STUDENT PORTAL <span>•</span> @((int)student.Standard)TH STANDARD</div>
         <h1>Welcome, @firstName!</h1>
-        <p>Your learning, attendance, results and class updates — together in one place.</p>
+        <p>Keep track of your academics, attendance, fee payments and important class updates.</p>
     </div>
-    <div class="ra-student-identity"><span class="ra-student-avatar">@student.FullName.Trim().Substring(0, 1).ToUpperInvariant()</span><span><b>@student.FullName</b><small>@student.AdmissionNumber · @(student.Batch?.Name ?? "Batch not assigned")</small></span></div>
+    <div class="ra-student-identity"><span class="ra-student-avatar">@student.FullName.Trim().Substring(0, 1).ToUpperInvariant()</span>
+        <span><b>@student.FullName</b><small>@student.AdmissionNumber · @(student.Batch?.Name ?? "Batch not assigned")</small></span>
+    </div>
 </div>
 @if (TempData["Success"] is string success) { <div class="ra-alert-success" role="status">@success</div> }
-
 <div class="ra-student-stat-grid">
-    <article class="ra-panel ra-student-stat"><span>ATTENDANCE</span><strong>@Model.AttendanceRate%</strong><small>Based on the latest @Model.AttendanceCount records</small></article>
-    <article class="ra-panel ra-student-stat"><span>EXAM RESULTS</span><strong>@Model.RecentResults.Count</strong><small>Published marks available</small></article>
-    <article class="ra-panel ra-student-stat"><span>FEE BALANCE</span><strong>₹@Model.TotalFeeBalance.ToString("N0")</strong><small>Outstanding amount on your fee plans</small></article>
-    <article class="ra-panel ra-student-stat"><span>CLASS UPDATES</span><strong>@Model.Announcements.Count</strong><small>Institute and your batch announcements</small></article>
+    <article class="ra-panel ra-student-stat"><span>OVERALL ATTENDANCE</span><strong>@Model.AttendanceRate%</strong><small>@Model.PresentCount present/late out of @Model.AttendanceCount recorded days</small></article>
+    <article class="ra-panel ra-student-stat"><span>EXAM RESULTS</span><strong>@Model.AllExamCount</strong><small>All entered results on record</small></article>
+    <article class="ra-panel ra-student-stat"><span>FEE BALANCE</span><strong>₹@Model.TotalFeeBalance.ToString("N2")</strong><small>Across all your fee plans</small></article>
+    <article class="ra-panel ra-student-stat"><span>FEE PAYMENTS</span><strong>₹@Model.TotalFeePaid.ToString("N2")</strong><small>@Model.PaymentHistory.Count recorded payment(s)</small></article>
 </div>
-
 <div class="ra-student-dashboard-grid">
+    <section class="ra-panel" id="profile">
+        <div class="ra-panel-heading"><div><span>MY DETAILS</span><h3>Student profile</h3></div></div>
+        <div class="ra-student-record-list">
+            <div><span>Admission number</span><b>@student.AdmissionNumber</b></div>
+            <div><span>Standard &amp; batch</span><b>@((int)student.Standard)th · @(student.Batch?.Name ?? "Not assigned")</b></div>
+            <div><span>Academic year</span><b>@student.AcademicYear</b></div>
+            <div><span>Admission date</span><b>@student.AdmissionDate.ToString("dd MMM yyyy")</b></div>
+        </div>
+    </section>
     <section class="ra-panel" id="announcements">
-        <div class="ra-panel-heading"><div><span>INSTITUTE COMMUNICATION</span><h3>Announcements</h3></div><span class="ra-panel-note">@Model.Announcements.Count update(s)</span></div>
-        @if (Model.Announcements.Count == 0)
-        {
-            <div class="ra-empty"><span>✦</span><b>No announcements yet</b><p>New institute or class updates will appear here.</p></div>
-        }
-        else
-        {
+        <div class="ra-panel-heading"><div><span>INSTITUTE COMMUNICATION</span><h3>Announcements</h3></div><span class="ra-panel-note">@Model.Announcements.Count updates</span></div>
+        @if (Model.Announcements.Count == 0) {
+            <div class="ra-empty"><span>✦</span><b>No announcements yet</b><p>Your institute and batch announcements will appear here.</p></div>
+        } else {
             <div class="ra-student-announcements">
-                @foreach (var item in Model.Announcements)
-                {
-                    <article class="ra-student-announcement">
-                        <div class="ra-student-announcement-meta">
-                            <span class="ra-standard-pill">@(item.Batch?.Name ?? "Institute-wide")</span>
-                            <time datetime="@item.PublishedAtUtc.ToString("O")">@item.PublishedAtUtc.ToLocalTime().ToString("dd MMM yyyy · hh:mm tt")</time>
-                        </div>
-                        <h4>@item.Title</h4>
-                        <p>@item.Message</p>
-                    </article>
-                }
+            @foreach (var item in Model.Announcements) {
+                <article class="ra-student-announcement">
+                    <div class="ra-student-announcement-meta"><span class="ra-standard-pill">@(item.Batch?.Name ?? "Institute-wide")</span>
+                        <time datetime="@item.PublishedAtUtc.ToString("O")">@item.PublishedAtUtc.ToString("dd MMM yyyy") UTC</time></div>
+                    <h4>@item.Title</h4><p>@item.Message</p>
+                </article>
+            }
             </div>
         }
     </section>
-
     <section class="ra-panel" id="attendance">
-        <div class="ra-panel-heading"><div><span>ATTENDANCE RECORD</span><h3>Recent attendance</h3></div></div>
-        @if (Model.RecentAttendance.Count == 0)
-        {
-            <div class="ra-empty"><span>✓</span><b>No attendance records yet</b><p>Your attendance will appear after your teacher marks it.</p></div>
-        }
-        else
-        {
+        <div class="ra-panel-heading"><div><span>MY ATTENDANCE</span><h3>Attendance history</h3></div><span class="ra-panel-note">Overall: @Model.AttendanceRate%</span></div>
+        <form method="get" asp-action="Index" class="ra-student-history-filter">
+            <label for="attendance-month">Filter month</label>
+            <input id="attendance-month" type="month" name="month" value="@Model.AttendanceMonth" />
+            <button class="ra-secondary-button" type="submit">Apply</button>
+            <a class="ra-secondary-button" asp-action="Index" asp-fragment="attendance">All dates</a>
+        </form>
+        @if (Model.RecentAttendance.Count == 0) {
+            <div class="ra-empty"><span>✓</span><b>No attendance records found</b><p>Try another month, or ask your teacher about attendance entries.</p></div>
+        } else {
             <div class="ra-student-record-list">
-                @foreach (var item in Model.RecentAttendance)
-                {
-                    <div><span>@item.AttendanceDate.ToString("dd MMM yyyy")</span><span class="ra-status-pill @(item.Status == AttendanceStatus.Present || item.Status == AttendanceStatus.Late ? "is-active" : "is-inactive")">@item.Status</span></div>
-                }
+            @foreach (var item in Model.RecentAttendance) {
+                <div><span>@item.AttendanceDate.ToString("dd MMM yyyy")</span>
+                <span class="ra-status-pill @(item.Status == AttendanceStatus.Present || item.Status == AttendanceStatus.Late ? "is-active" : "is-inactive")">@item.Status</span></div>
+            }
             </div>
         }
     </section>
-
     <section class="ra-panel" id="results">
-        <div class="ra-panel-heading"><div><span>ACADEMIC PERFORMANCE</span><h3>Recent exam results</h3></div></div>
-        @if (Model.RecentResults.Count == 0)
-        {
-            <div class="ra-empty"><span>◎</span><b>No results published</b><p>Your exam marks will appear here when entered by your teacher.</p></div>
-        }
-        else
-        {
-            <div class="table-responsive"><table class="ra-data-table"><thead><tr><th>EXAM</th><th>SUBJECT</th><th>DATE</th><th>MARKS</th></tr></thead><tbody>
-            @foreach (var result in Model.RecentResults)
-            {
-                <tr><td>@result.Exam.Name</td><td>@result.Exam.Subject.Name</td><td>@result.Exam.ExamDate.ToString("dd MMM yyyy")</td><td><b>@result.MarksObtained.ToString("0.##") / @result.Exam.MaximumMarks.ToString("0.##")</b></td></tr>
+        <div class="ra-panel-heading"><div><span>ACADEMIC PERFORMANCE</span><h3>Exam result history</h3></div><span class="ra-panel-note">@Model.AllExamCount results</span></div>
+        @if (Model.RecentResults.Count == 0) {
+            <div class="ra-empty"><span>◎</span><b>No results entered yet</b><p>Recorded examination marks will appear here.</p></div>
+        } else {
+            <div class="table-responsive"><table class="ra-data-table"><thead><tr><th>EXAM</th><th>SUBJECT</th><th>DATE</th><th>MARKS</th><th>RESULT</th></tr></thead><tbody>
+            @foreach (var result in Model.RecentResults) {
+                <tr><td>@result.Exam.Name</td><td>@result.Exam.Subject.Name</td><td>@result.Exam.ExamDate.ToString("dd MMM yyyy")</td>
+                <td><b>@result.MarksObtained.ToString("0.##") / @result.Exam.MaximumMarks.ToString("0.##")</b></td>
+                <td>@(result.MarksObtained >= result.Exam.PassingMarks ? "Pass" : "Below pass mark")</td></tr>
             }
             </tbody></table></div>
         }
     </section>
-
     <section class="ra-panel" id="fees">
-        <div class="ra-panel-heading"><div><span>FEE INFORMATION</span><h3>My fee plans</h3></div></div>
-        @if (Model.FeePlans.Count == 0)
-        {
+        <div class="ra-panel-heading"><div><span>FEE INFORMATION</span><h3>Complete fee plans</h3></div></div>
+        @if (Model.FeePlans.Count == 0) {
             <div class="ra-empty"><span>₹</span><b>No fee plan available</b><p>Contact the institute office if you need fee details.</p></div>
-        }
-        else
-        {
+        } else {
             <div class="ra-student-record-list">
-                @foreach (var plan in Model.FeePlans)
-                {
-                    <div class="ra-student-fee-row"><span><b>@plan.AcademicYear</b><small>Due @plan.DueDate.ToString("dd MMM yyyy")</small></span><span><b>₹@plan.Balance.ToString("N0")</b><small>of ₹@plan.NetAmount.ToString("N0")</small></span></div>
-                }
+            @foreach (var plan in Model.FeePlans) {
+                <div class="ra-student-fee-row"><span><b>@plan.AcademicYear</b><small>Due @plan.DueDate.ToString("dd MMM yyyy")</small>
+                <small>@(plan.Balance <= 0 ? "Paid" : plan.PaidAmount > 0 ? "Partially paid" : plan.DueDate < DateOnly.FromDateTime(DateTime.Today) ? "Overdue" : "Pending")</small></span>
+                <span><b>₹@plan.Balance.ToString("N2") due</b><small>₹@plan.PaidAmount.ToString("N2") paid of ₹@plan.NetAmount.ToString("N2")</small></span></div>
+            }
             </div>
+            <p class="ra-panel-note">Total fees: ₹@Model.TotalFeeNet.ToString("N2") · Paid: ₹@Model.TotalFeePaid.ToString("N2") · Outstanding: ₹@Model.TotalFeeBalance.ToString("N2")</p>
+        }
+    </section>
+    <section class="ra-panel" id="payments">
+        <div class="ra-panel-heading"><div><span>PAYMENT RECORDS</span><h3>Payment history &amp; receipts</h3></div></div>
+        @if (Model.PaymentHistory.Count == 0) {
+            <div class="ra-empty"><span>₹</span><b>No recorded payments yet</b><p>Payments recorded by the institute will be listed here.</p></div>
+        } else {
+            <div class="table-responsive"><table class="ra-data-table"><thead><tr><th>RECEIPT</th><th>DATE (UTC)</th><th>METHOD</th><th>AMOUNT</th><th>ACTION</th></tr></thead><tbody>
+            @foreach (var payment in Model.PaymentHistory) {
+                <tr><td>@payment.ReceiptNumber</td><td>@payment.PaidAtUtc.ToString("dd MMM yyyy, HH:mm")</td>
+                <td>@payment.PaymentMethod</td><td><b>₹@payment.Amount.ToString("N2")</b></td>
+                <td><a class="ra-secondary-button" asp-action="Receipt" asp-route-id="@payment.Id">View receipt</a></td></tr>
+            }
+            </tbody></table></div>
         }
     </section>
 </div>
+<style>
+.ra-student-history-filter{display:flex;align-items:center;flex-wrap:wrap;gap:.65rem;margin:1rem 0}
+.ra-student-history-filter input{padding:.6rem;border:1px solid #cad5cb;border-radius:.65rem;background:#fff;max-width:180px}
+.ra-student-history-filter label{font-weight:650}
+.ra-panel-note{display:block;margin-top:.75rem}
+.ra-data-table td{vertical-align:middle}
+.ra-student-fee-row small{display:block}
+</style>

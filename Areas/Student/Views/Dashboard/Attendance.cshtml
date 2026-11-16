@@ -1,0 +1,36 @@
+@model StudentDashboardViewModel
+@{
+    ViewData["Title"] = "Attendance";
+    var student = Model.Student;
+}
+<div class="ra-page-heading"><div><div class="ra-eyebrow">STUDENT PORTAL <span>•</span> MY LEARNING</div><h1>Attendance</h1><p>Your recorded attendance with a month-wise filter.</p></div><a class="ra-secondary-button" asp-action="Index">← Overview</a></div>
+<div class="ra-student-section-page">
+    <section class="ra-panel" id="attendance">
+        <div class="ra-panel-heading"><div><span>MY ATTENDANCE</span><h3>Attendance history</h3></div><span class="ra-panel-note">Overall: @Model.AttendanceRate%</span></div>
+        <form method="get" asp-action="Attendance" class="ra-student-history-filter">
+            <label for="attendance-month">Filter month</label>
+            <input id="attendance-month" type="month" name="month" value="@Model.AttendanceMonth" />
+            <button class="ra-secondary-button" type="submit">Apply</button>
+            <a class="ra-secondary-button" asp-action="Attendance">All dates</a>
+        </form>
+        @if (Model.RecentAttendance.Count == 0) {
+            <div class="ra-empty"><span>✓</span><b>No attendance records found</b><p>Try another month, or ask your teacher about attendance entries.</p></div>
+        } else {
+            <div class="ra-student-record-list">
+            @foreach (var item in Model.RecentAttendance) {
+                <div><span>@item.AttendanceDate.ToString("dd MMM yyyy")</span>
+                <span class="ra-status-pill @(item.Status == AttendanceStatus.Present || item.Status == AttendanceStatus.Late ? "is-active" : "is-inactive")">@item.Status</span></div>
+            }
+            </div>
+        }
+    </section>
+
+</div>
+<style>
+.ra-student-history-filter{display:flex;align-items:center;flex-wrap:wrap;gap:.65rem;margin:1rem 0}
+.ra-student-history-filter input{padding:.6rem;border:1px solid #cad5cb;border-radius:.65rem;background:#fff;max-width:180px}
+.ra-student-history-filter label{font-weight:650}
+.ra-panel-note{display:block;margin-top:.75rem}
+.ra-data-table td{vertical-align:middle}
+.ra-student-fee-row small{display:block}
+.ra-student-subject-progress{display:grid;gap:1.1rem;margin-top:1rem}.ra-student-progress-caption{display:flex;justify-content:space-between;gap:.8rem;flex-wrap:wrap;margin-bottom:.4rem}.ra-student-progress-caption span{font-size:.875rem;opacity:.75}.ra-student-progress-track{height:10px;background:#e6ece8;border-radius:20px;overflow:hidden}.ra-student-progress-track>span{display:block;height:100%;border-radius:inherit;background:#5b846b}</style>

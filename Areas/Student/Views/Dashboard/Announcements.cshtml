@@ -1,0 +1,33 @@
+@model StudentDashboardViewModel
+@{
+    ViewData["Title"] = "Announcements";
+    var student = Model.Student;
+}
+<div class="ra-page-heading"><div><div class="ra-eyebrow">STUDENT PORTAL <span>•</span> MY LEARNING</div><h1>Announcements</h1><p>Notices from your institute and batch.</p></div><a class="ra-secondary-button" asp-action="Index">← Overview</a></div>
+<div class="ra-student-section-page">
+    <section class="ra-panel" id="announcements">
+        <div class="ra-panel-heading"><div><span>INSTITUTE COMMUNICATION</span><h3>Announcements</h3></div><span class="ra-panel-note">@Model.Announcements.Count updates</span></div>
+        @if (Model.Announcements.Count == 0) {
+            <div class="ra-empty"><span>✦</span><b>No announcements yet</b><p>Your institute and batch announcements will appear here.</p></div>
+        } else {
+            <div class="ra-student-announcements">
+            @foreach (var item in Model.Announcements) {
+                <article class="ra-student-announcement">
+                    <div class="ra-student-announcement-meta"><span class="ra-standard-pill">@(item.Batch?.Name ?? "Institute-wide")</span>
+                        <time datetime="@item.PublishedAtUtc.ToString("O")">@item.PublishedAtUtc.ToString("dd MMM yyyy") UTC</time></div>
+                    <h4>@item.Title</h4><p>@item.Message</p>
+                </article>
+            }
+            </div>
+        }
+    </section>
+
+</div>
+<style>
+.ra-student-history-filter{display:flex;align-items:center;flex-wrap:wrap;gap:.65rem;margin:1rem 0}
+.ra-student-history-filter input{padding:.6rem;border:1px solid #cad5cb;border-radius:.65rem;background:#fff;max-width:180px}
+.ra-student-history-filter label{font-weight:650}
+.ra-panel-note{display:block;margin-top:.75rem}
+.ra-data-table td{vertical-align:middle}
+.ra-student-fee-row small{display:block}
+.ra-student-subject-progress{display:grid;gap:1.1rem;margin-top:1rem}.ra-student-progress-caption{display:flex;justify-content:space-between;gap:.8rem;flex-wrap:wrap;margin-bottom:.4rem}.ra-student-progress-caption span{font-size:.875rem;opacity:.75}.ra-student-progress-track{height:10px;background:#e6ece8;border-radius:20px;overflow:hidden}.ra-student-progress-track>span{display:block;height:100%;border-radius:inherit;background:#5b846b}</style>

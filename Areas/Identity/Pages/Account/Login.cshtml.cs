@@ -39,6 +39,29 @@ public sealed class LoginModel(
         var user = await userManager.FindByEmailAsync(identifier)
             ?? await userManager.FindByNameAsync(identifier);
 
+        // Existing student portal accounts have a generated username and no Identity email.
+        // Resolve the email in the student record, but only when it identifies exactly
+        // one student with exactly one linked Student-role account.
+        if (user is null && identifier.Contains('@'))
+        {
+            var matchingStudents = await db.Students.AsNoTracking()
+                .Where(x => x.Email != null && x.Email.ToUpper() == identifier.ToUpper())
+                .Select(x => new { x.Id, x.IsActive, x.Standard })
+                .Take(2).ToListAsync();
+            if (matchingStudents.Count == 1)
+            {
+                var student = matchingStudents[0];
+                if (student.IsActive && student.Standard is
+                    (StudentStandard.Tenth or StudentStandard.Eleventh or StudentStandard.Twelfth))
+                {
+                    var linked = await userManager.GetUsersForClaimAsync(
+                        new System.Security.Claims.Claim(StudentAccountAccess.StudentIdClaim, student.Id.ToString()));
+                    if (linked.Count == 1 && await userManager.IsInRoleAsync(linked[0], "Student"))
+                        user = linked[0];
+                }
+            }
+        }
+
         if (user is null)
         {
             ErrorMessage = "The email address or username, or password, is incorrect. Please check your details and try again.";

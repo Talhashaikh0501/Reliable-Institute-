@@ -7,7 +7,7 @@
 <div class="ra-student-welcome">
     <div><div class="ra-eyebrow">STUDENT PORTAL <span>•</span> @((int)student.Standard)TH STANDARD</div>
         <h1>Welcome, @firstName!</h1>
-        <p>Keep track of your academics, attendance, fee payments and important class updates.</p>
+        <p>Here is your learning overview. Choose a section below or use the sidebar to open its own page.</p>
     </div>
     <div class="ra-student-identity"><span class="ra-student-avatar">@student.FullName.Trim().Substring(0, 1).ToUpperInvariant()</span>
         <span><b>@student.FullName</b><small>@student.AdmissionNumber · @(student.Batch?.Name ?? "Batch not assigned")</small></span>
@@ -15,122 +15,25 @@
 </div>
 @if (TempData["Success"] is string success) { <div class="ra-alert-success" role="status">@success</div> }
 <div class="ra-student-stat-grid">
-    <article class="ra-panel ra-student-stat"><span>OVERALL ATTENDANCE</span><strong>@Model.AttendanceRate%</strong><small>@Model.PresentCount present/late out of @Model.AttendanceCount recorded days</small></article>
-    <article class="ra-panel ra-student-stat"><span>EXAM RESULTS</span><strong>@Model.AllExamCount</strong><small>All entered results on record</small></article>
-    <article class="ra-panel ra-student-stat"><span>FEE BALANCE</span><strong>₹@Model.TotalFeeBalance.ToString("N2")</strong><small>Across all your fee plans</small></article>
-    <article class="ra-panel ra-student-stat"><span>FEE PAYMENTS</span><strong>₹@Model.TotalFeePaid.ToString("N2")</strong><small>@Model.PaymentHistory.Count recorded payment(s)</small></article>
+    <article class="ra-panel ra-student-stat"><span>OVERALL ATTENDANCE</span><strong>@Model.AttendanceRate%</strong><small>@Model.PresentCount present/late out of @Model.AttendanceCount records</small></article>
+    <article class="ra-panel ra-student-stat"><span>EXAM RESULTS</span><strong>@Model.AllExamCount</strong><small>Recorded examination results</small></article>
+    <article class="ra-panel ra-student-stat"><span>FEE BALANCE</span><strong>₹@Model.TotalFeeBalance.ToString("N2")</strong><small>Across all fee plans</small></article>
+    <article class="ra-panel ra-student-stat"><span>PAYMENTS</span><strong>₹@Model.TotalFeePaid.ToString("N2")</strong><small>@Model.PaymentHistory.Count transactions recorded</small></article>
 </div>
-<div class="ra-student-dashboard-grid">
-    <section class="ra-panel" id="profile">
-        <div class="ra-panel-heading"><div><span>MY DETAILS</span><h3>Student profile</h3></div></div>
-        <div class="ra-student-record-list">
-            <div><span>Admission number</span><b>@student.AdmissionNumber</b></div>
-            <div><span>Standard &amp; batch</span><b>@((int)student.Standard)th · @(student.Batch?.Name ?? "Not assigned")</b></div>
-            <div><span>Academic year</span><b>@student.AcademicYear</b></div>
-            <div><span>Admission date</span><b>@student.AdmissionDate.ToString("dd MMM yyyy")</b></div>
-        </div>
-    </section>
-    <section class="ra-panel" id="announcements">
-        <div class="ra-panel-heading"><div><span>INSTITUTE COMMUNICATION</span><h3>Announcements</h3></div><span class="ra-panel-note">@Model.Announcements.Count updates</span></div>
-        @if (Model.Announcements.Count == 0) {
-            <div class="ra-empty"><span>✦</span><b>No announcements yet</b><p>Your institute and batch announcements will appear here.</p></div>
-        } else {
-            <div class="ra-student-announcements">
-            @foreach (var item in Model.Announcements) {
-                <article class="ra-student-announcement">
-                    <div class="ra-student-announcement-meta"><span class="ra-standard-pill">@(item.Batch?.Name ?? "Institute-wide")</span>
-                        <time datetime="@item.PublishedAtUtc.ToString("O")">@item.PublishedAtUtc.ToString("dd MMM yyyy") UTC</time></div>
-                    <h4>@item.Title</h4><p>@item.Message</p>
-                </article>
-            }
-            </div>
-        }
-    </section>
-    <section class="ra-panel" id="attendance">
-        <div class="ra-panel-heading"><div><span>MY ATTENDANCE</span><h3>Attendance history</h3></div><span class="ra-panel-note">Overall: @Model.AttendanceRate%</span></div>
-        <form method="get" asp-action="Index" class="ra-student-history-filter">
-            <label for="attendance-month">Filter month</label>
-            <input id="attendance-month" type="month" name="month" value="@Model.AttendanceMonth" />
-            <button class="ra-secondary-button" type="submit">Apply</button>
-            <a class="ra-secondary-button" asp-action="Index" asp-fragment="attendance">All dates</a>
-        </form>
-        @if (Model.RecentAttendance.Count == 0) {
-            <div class="ra-empty"><span>✓</span><b>No attendance records found</b><p>Try another month, or ask your teacher about attendance entries.</p></div>
-        } else {
-            <div class="ra-student-record-list">
-            @foreach (var item in Model.RecentAttendance) {
-                <div><span>@item.AttendanceDate.ToString("dd MMM yyyy")</span>
-                <span class="ra-status-pill @(item.Status == AttendanceStatus.Present || item.Status == AttendanceStatus.Late ? "is-active" : "is-inactive")">@item.Status</span></div>
-            }
-            </div>
-        }
-    </section>
-    <section class="ra-panel" id="performance">
-        <div class="ra-panel-heading"><div><span>LEARNING PROGRESS</span><h3>Subject performance</h3></div></div>
-        @if (Model.RecentResults.Count == 0) {
-            <div class="ra-empty"><span>◎</span><b>No performance data yet</b><p>Subject averages will appear when exam results are recorded.</p></div>
-        } else {
-            <div class="ra-student-subject-progress">
-            @foreach (var subject in Model.RecentResults.GroupBy(x => new { x.Exam.SubjectId, x.Exam.Subject.Name }).OrderBy(x => x.Key.Name)) {
-                var percent = subject.Where(x => x.Exam.MaximumMarks > 0).Select(x => Math.Clamp((double)(x.MarksObtained / x.Exam.MaximumMarks * 100m), 0d, 100d)).DefaultIfEmpty(0).Average();
-                <div class="ra-student-progress-item">
-                    <div class="ra-student-progress-caption"><b>@subject.Key.Name</b><span>@percent.ToString("0.#")% average · @subject.Count() exam(s)</span></div>
-                    <div class="ra-student-progress-track" role="progressbar" aria-label="@subject.Key.Name performance" aria-valuemin="0" aria-valuemax="100" aria-valuenow="@percent.ToString("0", System.Globalization.CultureInfo.InvariantCulture)"><span style="width:@percent.ToString("0.#", System.Globalization.CultureInfo.InvariantCulture)%"></span></div>
-                </div>
-            }
-            </div>
-            <small class="ra-panel-note">Subject averages are calculated from recorded exam marks and maximum marks, with equal weight per exam.</small>
-        }
-    </section>
-    <section class="ra-panel" id="results">
-        <div class="ra-panel-heading"><div><span>ACADEMIC PERFORMANCE</span><h3>Exam result history</h3></div><span class="ra-panel-note">@Model.AllExamCount results</span></div>
-        @if (Model.RecentResults.Count == 0) {
-            <div class="ra-empty"><span>◎</span><b>No results entered yet</b><p>Recorded examination marks will appear here.</p></div>
-        } else {
-            <div class="table-responsive"><table class="ra-data-table"><thead><tr><th>EXAM</th><th>SUBJECT</th><th>DATE</th><th>MARKS</th><th>RESULT</th></tr></thead><tbody>
-            @foreach (var result in Model.RecentResults) {
-                <tr><td>@result.Exam.Name</td><td>@result.Exam.Subject.Name</td><td>@result.Exam.ExamDate.ToString("dd MMM yyyy")</td>
-                <td><b>@result.MarksObtained.ToString("0.##") / @result.Exam.MaximumMarks.ToString("0.##")</b></td>
-                <td>@(result.MarksObtained >= result.Exam.PassingMarks ? "Pass" : "Below pass mark")</td></tr>
-            }
-            </tbody></table></div>
-        }
-    </section>
-    <section class="ra-panel" id="fees">
-        <div class="ra-panel-heading"><div><span>FEE INFORMATION</span><h3>Complete fee plans</h3></div></div>
-        @if (Model.FeePlans.Count == 0) {
-            <div class="ra-empty"><span>₹</span><b>No fee plan available</b><p>Contact the institute office if you need fee details.</p></div>
-        } else {
-            <div class="ra-student-record-list">
-            @foreach (var plan in Model.FeePlans) {
-                <div class="ra-student-fee-row"><span><b>@plan.AcademicYear</b><small>Due @plan.DueDate.ToString("dd MMM yyyy")</small>
-                <small>@(plan.Balance <= 0 ? "Paid" : plan.PaidAmount > 0 ? "Partially paid" : plan.DueDate < DateOnly.FromDateTime(DateTime.Today) ? "Overdue" : "Pending")</small></span>
-                <span><b>₹@plan.Balance.ToString("N2") due</b><small>₹@plan.PaidAmount.ToString("N2") paid of ₹@plan.NetAmount.ToString("N2")</small></span></div>
-            }
-            </div>
-            <p class="ra-panel-note">Total fees: ₹@Model.TotalFeeNet.ToString("N2") · Paid: ₹@Model.TotalFeePaid.ToString("N2") · Outstanding: ₹@Model.TotalFeeBalance.ToString("N2")</p>
-        }
-    </section>
-    <section class="ra-panel" id="payments">
-        <div class="ra-panel-heading"><div><span>PAYMENT RECORDS</span><h3>Payment history &amp; receipts</h3></div></div>
-        @if (Model.PaymentHistory.Count == 0) {
-            <div class="ra-empty"><span>₹</span><b>No recorded payments yet</b><p>Payments recorded by the institute will be listed here.</p></div>
-        } else {
-            <div class="table-responsive"><table class="ra-data-table"><thead><tr><th>RECEIPT</th><th>DATE (UTC)</th><th>METHOD</th><th>AMOUNT</th><th>ACTION</th></tr></thead><tbody>
-            @foreach (var payment in Model.PaymentHistory) {
-                <tr><td>@payment.ReceiptNumber</td><td>@payment.PaidAtUtc.ToString("dd MMM yyyy, HH:mm")</td>
-                <td>@payment.PaymentMethod</td><td><b>₹@payment.Amount.ToString("N2")</b></td>
-                <td><a class="ra-secondary-button" asp-action="Receipt" asp-route-id="@payment.Id">View receipt</a></td></tr>
-            }
-            </tbody></table></div>
-        }
-    </section>
+<div class="ra-student-page-links">
+    <a class="ra-panel ra-student-page-link" asp-action="Profile"><span>◉</span><div><b>My profile</b><small>Admission and batch details</small></div><strong>↗</strong></a>
+    <a class="ra-panel ra-student-page-link" asp-action="Attendance"><span>✓</span><div><b>Attendance</b><small>Full history and month filter</small></div><strong>↗</strong></a>
+    <a class="ra-panel ra-student-page-link" asp-action="Results"><span>◎</span><div><b>Exam results</b><small>Marks and subject performance</small></div><strong>↗</strong></a>
+    <a class="ra-panel ra-student-page-link" asp-action="Fees"><span>₹</span><div><b>Fee details</b><small>Fee plans and outstanding amounts</small></div><strong>↗</strong></a>
+    <a class="ra-panel ra-student-page-link" asp-action="Payments"><span>▤</span><div><b>Payments &amp; receipts</b><small>Transactions and printable receipts</small></div><strong>↗</strong></a>
+    <a class="ra-panel ra-student-page-link" asp-action="Announcements"><span>✦</span><div><b>Announcements</b><small>Institute and batch notices</small></div><strong>↗</strong></a>
 </div>
 <style>
-.ra-student-history-filter{display:flex;align-items:center;flex-wrap:wrap;gap:.65rem;margin:1rem 0}
-.ra-student-history-filter input{padding:.6rem;border:1px solid #cad5cb;border-radius:.65rem;background:#fff;max-width:180px}
-.ra-student-history-filter label{font-weight:650}
-.ra-panel-note{display:block;margin-top:.75rem}
-.ra-data-table td{vertical-align:middle}
-.ra-student-fee-row small{display:block}
-.ra-student-subject-progress{display:grid;gap:1.1rem;margin-top:1rem}.ra-student-progress-caption{display:flex;justify-content:space-between;gap:.8rem;flex-wrap:wrap;margin-bottom:.4rem}.ra-student-progress-caption span{font-size:.875rem;opacity:.75}.ra-student-progress-track{height:10px;background:#e6ece8;border-radius:20px;overflow:hidden}.ra-student-progress-track>span{display:block;height:100%;border-radius:inherit;background:#5b846b}</style>
+.ra-student-page-links{display:grid;grid-template-columns:repeat(auto-fit,minmax(245px,1fr));gap:1rem;margin-top:1.2rem}
+.ra-student-page-link{display:flex;align-items:center;gap:1rem;padding:1.25rem;text-decoration:none;color:inherit;transition:transform .2s ease,box-shadow .2s ease}
+.ra-student-page-link:hover{transform:translateY(-3px);color:inherit;box-shadow:0 12px 28px rgba(27,62,45,.1)}
+.ra-student-page-link>span{width:44px;height:44px;border-radius:12px;background:#e8f0e7;color:#416b50;display:grid;place-items:center;font-weight:750;font-size:1.25rem;flex-shrink:0}
+.ra-student-page-link>div{display:grid;gap:.2rem;flex:1;min-width:0}
+.ra-student-page-link small{color:#67776d;font-size:.84rem}
+.ra-student-page-link>strong{color:#67816d}
+</style>

@@ -88,6 +88,21 @@ public sealed class DashboardController(ApplicationDbContext db) : Controller
         return View(model);
     }
 
+    public Task<IActionResult> Profile() => RenderPageAsync("Profile", null);
+    public Task<IActionResult> Announcements() => RenderPageAsync("Announcements", null);
+    public Task<IActionResult> Attendance(string? month) => RenderPageAsync("Attendance", month);
+    public Task<IActionResult> Results() => RenderPageAsync("Results", null);
+    public Task<IActionResult> Fees() => RenderPageAsync("Fees", null);
+    public Task<IActionResult> Payments() => RenderPageAsync("Payments", null);
+
+    private async Task<IActionResult> RenderPageAsync(string viewName, string? month)
+    {
+        var result = await Index(month);
+        if (result is ViewResult view)
+            return View(viewName, view.Model);
+        return result;
+    }
+
     [HttpGet]
     public async Task<IActionResult> Receipt(int id)
     {

@@ -64,6 +64,8 @@ public sealed class StudentsController(
         if (admissionNumber.Length > 0 && await db.Students.AnyAsync(x => x.AdmissionNumber == admissionNumber))
             ModelState.AddModelError(nameof(model.AdmissionNumber), "This admission number is already in use.");
 
+        await ValidateStudentLoginEmailAsync(model.Email, null);
+
         if (!ModelState.IsValid)
         {
             await PopulateBatchesAsync(model.Standard, model.BatchId);
@@ -128,6 +130,8 @@ public sealed class StudentsController(
         var admissionNumber = model.AdmissionNumber?.Trim() ?? "";
         if (admissionNumber.Length > 0 && await db.Students.AnyAsync(x => x.Id != id && x.AdmissionNumber == admissionNumber))
             ModelState.AddModelError(nameof(model.AdmissionNumber), "This admission number is already in use.");
+
+        await ValidateStudentLoginEmailAsync(model.Email, id);
 
         if (!ModelState.IsValid)
         {
@@ -321,6 +325,32 @@ public sealed class StudentsController(
             ? $"{student.FullName} has been reactivated."
             : $"{student.FullName} has been archived. Their history is preserved and portal access is blocked.";
         return RedirectToAction(nameof(Index), new { includeInactive = !student.IsActive });
+    }
+
+    private async Task ValidateStudentLoginEmailAsync(string? email, int? currentStudentId)
+    {
+        if (string.IsNullOrWhiteSpace(email)) return;
+        var value = email.Trim();
+        // Email aliases must not collide with other student records or Identity accounts.
+        // Existing data may contain duplicates; fail closed until an administrator corrects them.
+        if (await db.Students.AnyAsync(x =>
+                (!currentStudentId.HasValue || x.Id != currentStudentId.Value) &&
+                x.Email != null && x.Email.ToUpper() == value.ToUpper()))
+            ModelState.AddModelError(nameof(StudentFormViewModel.Email),
+                "This email already belongs to another student. Use a unique email for student login.");
+
+        var identityUser = await users.FindByEmailAsync(value);
+        if (identityUser is null) return;
+        var ownAccount = false;
+        if (currentStudentId.HasValue)
+        {
+            var accounts = await users.GetUsersForClaimAsync(
+                new Claim(StudentAccountAccess.StudentIdClaim, currentStudentId.Value.ToString()));
+            ownAccount = accounts.Any(x => x.Id == identityUser.Id);
+        }
+        if (!ownAccount)
+            ModelState.AddModelError(nameof(StudentFormViewModel.Email),
+                "This email is already used by another login account.");
     }
 
     private async Task PopulateBatchesAsync(StudentStandard standard, int? selectedId = null)

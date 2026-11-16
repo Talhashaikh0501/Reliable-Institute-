@@ -65,6 +65,23 @@
             </div>
         }
     </section>
+    <section class="ra-panel" id="performance">
+        <div class="ra-panel-heading"><div><span>LEARNING PROGRESS</span><h3>Subject performance</h3></div></div>
+        @if (Model.RecentResults.Count == 0) {
+            <div class="ra-empty"><span>◎</span><b>No performance data yet</b><p>Subject averages will appear when exam results are recorded.</p></div>
+        } else {
+            <div class="ra-student-subject-progress">
+            @foreach (var subject in Model.RecentResults.GroupBy(x => new { x.Exam.SubjectId, x.Exam.Subject.Name }).OrderBy(x => x.Key.Name)) {
+                var percent = subject.Where(x => x.Exam.MaximumMarks > 0).Select(x => Math.Clamp((double)(x.MarksObtained / x.Exam.MaximumMarks * 100m), 0d, 100d)).DefaultIfEmpty(0).Average();
+                <div class="ra-student-progress-item">
+                    <div class="ra-student-progress-caption"><b>@subject.Key.Name</b><span>@percent.ToString("0.#")% average · @subject.Count() exam(s)</span></div>
+                    <div class="ra-student-progress-track" role="progressbar" aria-label="@subject.Key.Name performance" aria-valuemin="0" aria-valuemax="100" aria-valuenow="@percent.ToString("0", System.Globalization.CultureInfo.InvariantCulture)"><span style="width:@percent.ToString("0.#", System.Globalization.CultureInfo.InvariantCulture)%"></span></div>
+                </div>
+            }
+            </div>
+            <small class="ra-panel-note">Subject averages are calculated from recorded exam marks and maximum marks, with equal weight per exam.</small>
+        }
+    </section>
     <section class="ra-panel" id="results">
         <div class="ra-panel-heading"><div><span>ACADEMIC PERFORMANCE</span><h3>Exam result history</h3></div><span class="ra-panel-note">@Model.AllExamCount results</span></div>
         @if (Model.RecentResults.Count == 0) {
@@ -116,4 +133,4 @@
 .ra-panel-note{display:block;margin-top:.75rem}
 .ra-data-table td{vertical-align:middle}
 .ra-student-fee-row small{display:block}
-</style>
+.ra-student-subject-progress{display:grid;gap:1.1rem;margin-top:1rem}.ra-student-progress-caption{display:flex;justify-content:space-between;gap:.8rem;flex-wrap:wrap;margin-bottom:.4rem}.ra-student-progress-caption span{font-size:.875rem;opacity:.75}.ra-student-progress-track{height:10px;background:#e6ece8;border-radius:20px;overflow:hidden}.ra-student-progress-track>span{display:block;height:100%;border-radius:inherit;background:#5b846b}</style>

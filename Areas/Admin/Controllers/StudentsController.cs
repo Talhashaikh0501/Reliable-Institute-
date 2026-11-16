@@ -192,6 +192,18 @@ public sealed class StudentsController(
             return RedirectToAction(nameof(Details), new { id });
         }
 
+        if (!string.IsNullOrWhiteSpace(student.Email))
+        {
+            var email = student.Email.Trim();
+            if (await db.Students.AsNoTracking().AnyAsync(x =>
+                    x.Id != student.Id && x.Email != null && x.Email.ToUpper() == email.ToUpper()) ||
+                await users.FindByEmailAsync(email) is not null)
+            {
+                TempData["Error"] = "The student email is already assigned to another student or login account. Correct it before creating a portal account.";
+                return RedirectToAction(nameof(Details), new { id });
+            }
+        }
+
         var studentClaim = new Claim(StudentAccountAccess.StudentIdClaim, student.Id.ToString());
         if ((await users.GetUsersForClaimAsync(studentClaim)).Count > 0)
         {

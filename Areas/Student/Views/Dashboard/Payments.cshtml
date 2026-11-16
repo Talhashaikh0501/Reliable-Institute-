@@ -1,0 +1,30 @@
+@model StudentDashboardViewModel
+@{
+    ViewData["Title"] = "Payments & receipts";
+    var student = Model.Student;
+}
+<div class="ra-page-heading"><div><div class="ra-eyebrow">STUDENT PORTAL <span>•</span> MY LEARNING</div><h1>Payments & receipts</h1><p>Your payment history and printable receipts.</p></div><a class="ra-secondary-button" asp-action="Index">← Overview</a></div>
+<div class="ra-student-section-page">
+    <section class="ra-panel" id="payments">
+        <div class="ra-panel-heading"><div><span>PAYMENT RECORDS</span><h3>Payment history &amp; receipts</h3></div></div>
+        @if (Model.PaymentHistory.Count == 0) {
+            <div class="ra-empty"><span>₹</span><b>No recorded payments yet</b><p>Payments recorded by the institute will be listed here.</p></div>
+        } else {
+            <div class="table-responsive"><table class="ra-data-table"><thead><tr><th>RECEIPT</th><th>DATE (UTC)</th><th>METHOD</th><th>AMOUNT</th><th>ACTION</th></tr></thead><tbody>
+            @foreach (var payment in Model.PaymentHistory) {
+                <tr><td>@payment.ReceiptNumber</td><td>@payment.PaidAtUtc.ToString("dd MMM yyyy, HH:mm")</td>
+                <td>@payment.PaymentMethod</td><td><b>₹@payment.Amount.ToString("N2")</b></td>
+                <td><a class="ra-secondary-button" asp-action="Receipt" asp-route-id="@payment.Id">View receipt</a></td></tr>
+            }
+            </tbody></table></div>
+        }
+    </section>
+</div>
+<style>
+.ra-student-history-filter{display:flex;align-items:center;flex-wrap:wrap;gap:.65rem;margin:1rem 0}
+.ra-student-history-filter input{padding:.6rem;border:1px solid #cad5cb;border-radius:.65rem;background:#fff;max-width:180px}
+.ra-student-history-filter label{font-weight:650}
+.ra-panel-note{display:block;margin-top:.75rem}
+.ra-data-table td{vertical-align:middle}
+.ra-student-fee-row small{display:block}
+.ra-student-subject-progress{display:grid;gap:1.1rem;margin-top:1rem}.ra-student-progress-caption{display:flex;justify-content:space-between;gap:.8rem;flex-wrap:wrap;margin-bottom:.4rem}.ra-student-progress-caption span{font-size:.875rem;opacity:.75}.ra-student-progress-track{height:10px;background:#e6ece8;border-radius:20px;overflow:hidden}.ra-student-progress-track>span{display:block;height:100%;border-radius:inherit;background:#5b846b}</style>
